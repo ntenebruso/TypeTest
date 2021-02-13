@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@400;700&display=swap');
+
+:root {
+    --bg-color: #262a33;
+    --fg-color: #43ffaf;
+    --sub-color: #526777;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto Mono", sans-serif;
+    background: var(--bg-color);
+    color: #fff;
+}
+
+.correct {
+    color: #fff !important;
+}
+
+.incorrect {
+    color: var(--fg-color) !important;
+}
+
+h1 {
+    font-family: Oxygen, sans-serif;
+    font-size: 55px;
+    margin: 15px auto;
+}
+
+button {
+    background: rgba(0,0,0,.1);
+    color: #fff;
+    padding: 5px 15px;
+    border: none;
+    font-family: "Roboto Mono", sans-serif;
+    border-radius: 5px;
+    transition: all .3s;
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--fg-color);
+    color: var(--sub-color);
+}
+
+.app {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.prompt {
+    position: relative;
+    font-size: 25px;
+    color: var(--sub-color);
+  }
+
+.caret {
+    display: inline-block;
+    vertical-align: middle;
+    position: absolute;
+    height: 30px;
+    width: 3px;
+    background: var(--fg-color);
+    left: 0;
+    top: 7px;
+    transition: left .1s;
+    animation: caret-animation 1s infinite;
+}
+
+input.type-input {
+    height: 0;
+    padding: 0;
+    margin: 0;
+    display: block;
+    border: none;
+    outline: none;
+}
+
+.words {
+    display: flex;
+    flex-wrap: wrap;
+    line-height: 1.7;
+    height: 125px;
+    overflow: hidden;
+    user-select: none;
+}
+
+.words .word {
+    margin: 0 5px;
+}
+
+@keyframes caret-animation {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.blur {
+    filter: blur(2px);
+}
+
+.forms {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.form {
+    display: block;
+}
+
+.form input {
+    display: block;
+    padding: 10px 15px;
+    font-family: "Roboto Mono", sans-serif;
+    background: rgba(0,0,0,.1);
+    border: none;
+    outline: none;
+    color: var(--fg-color);
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+.form input::placeholder {
+    color: var(--sub-color);
+}
