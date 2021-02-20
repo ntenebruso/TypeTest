@@ -3,6 +3,7 @@
         <Loader v-if="loading" />
         <div v-else>
             <h1>Hello, {{this.$store.state.user.email}}</h1>
+            <h2>Our account section is still under development. Please check back later. Thank you!</h2>
         </div>
     </div>
 </template>

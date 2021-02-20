@@ -1,10 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@400;700&display=swap');
 
 :root {
     --bg-color: #262a33;
     --fg-color: #43ffaf;
     --sub-color: #526777;
+    --text-color: #fff;
+    --correct-color: #fff;
+    --incorrect-color: #43ffaf;
+    --main-font: "Roboto";
 }
 
 * {
@@ -14,31 +18,82 @@
 }
 
 body {
-    font-family: "Roboto Mono", sans-serif;
+    font-family: var(--main-font), sans-serif;
     background: var(--bg-color);
-    color: #fff;
+    color: var(--text-color);
+}
+
+[aria-label] {
+    position: relative;
+    cursor: pointer;
+}
+
+[aria-label]:after {
+    opacity: 0;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: 80%;
+    pointer-events: none;
+    transition: all .18s ease-out 0s;
+    text-indent: 0;
+    font-weight: 400;
+    font-style: normal;
+    text-shadow: none;
+    font-size: 20px;
+    background: #000;
+    border-radius: 2px;
+    color: var(--text-color);
+    content: attr(aria-label);
+    padding: 20px 10px;
+    position: absolute;
+    white-space: nowrap;
+    z-index: 10;
+    line-height: 0;
+}
+
+[aria-label]:hover:after {
+    opacity: 1;
+    transform: translate(-50%, -25%);
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--fg-color);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header div a {
+    font-size: 20px;
 }
 
 .correct {
-    color: #fff !important;
+    color: var(--correct-color) !important;
 }
 
 .incorrect {
-    color: var(--fg-color) !important;
+    color: var(--incorrect-color) !important;
 }
 
 h1 {
     font-family: Oxygen, sans-serif;
     font-size: 55px;
-    margin: 15px auto;
 }
 
 button {
     background: rgba(0,0,0,.1);
-    color: #fff;
+    color: var(--text-color);
     padding: 5px 15px;
     border: none;
-    font-family: "Roboto Mono", sans-serif;
+    font-family: var(--main-font), sans-serif;
     border-radius: 5px;
     transition: all .3s;
     cursor: pointer;
@@ -51,7 +106,7 @@ button:hover {
 
 .app {
     width: 90%;
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -61,20 +116,32 @@ button:hover {
 
 .prompt {
     position: relative;
-    font-size: 25px;
+    font-size: 27px;
     color: var(--sub-color);
-  }
+}
+
+#test-time {
+    font-size: 100px;
+    text-align: center;
+    line-height: 0;
+    position: relative;
+    bottom: 100px;
+    color: var(--sub-color);
+    user-select: none;
+}
 
 .caret {
     display: inline-block;
     vertical-align: middle;
     position: absolute;
-    height: 30px;
-    width: 3px;
+    height: 32px;
+    width: 2px;
     background: var(--fg-color);
     left: 0;
     top: 7px;
-    transition: left .1s;
+}
+
+.caret.flashing {
     animation: caret-animation 1s infinite;
 }
 
@@ -120,7 +187,7 @@ input.type-input {
 
 .forms {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     height: 100%;
 }
 
@@ -131,7 +198,7 @@ input.type-input {
 .form input {
     display: block;
     padding: 10px 15px;
-    font-family: "Roboto Mono", sans-serif;
+    font-family: var(--main-font), sans-serif;
     background: rgba(0,0,0,.1);
     border: none;
     outline: none;
@@ -142,4 +209,54 @@ input.type-input {
 
 .form input::placeholder {
     color: var(--sub-color);
+}
+
+.results {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 50px;
+    grid-template-areas: 
+        "stats chart"
+        "extra-stats extra-stats";
+}
+
+.stats {
+    grid-area: stats;
+}
+
+.stats .group {
+    margin-bottom: 25px;
+}
+
+.stats .top {
+    line-height: .5;
+    font-size: 40px;
+}
+
+.stats .bottom {
+    font-size: 80px;
+    color: var(--fg-color);
+}
+
+.chart {
+    grid-area: chart;
+}
+
+.extra-stats {
+    grid-area: extra-stats;
+}
+
+.extra-stats {
+    display: flex;
+    justify-content: space-between;
+}
+
+.extra-stats .top {
+    line-height: .5;
+    font-size: 20px;
+}
+
+.extra-stats .bottom {
+    font-size: 40px;
+    color: var(--fg-color);
 }
