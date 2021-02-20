@@ -1,7 +1,7 @@
-<center><h1>Welcome to TypeTest!</h1>
-<p>The best typing analysis tool</p>
-<img src="https://img.shields.io/github/license/ntenebruso/TypeTest">
-<img src="https://img.shields.io/github/watchers/ntenebruso/TypeTest"></center>
+<h1 align="center">Welcome to TypeTest!</h1>
+<p align="center">The best typing analysis tool</p>
+<p align="center"><img src="https://img.shields.io/github/license/ntenebruso/TypeTest">
+<img src="https://img.shields.io/github/watchers/ntenebruso/TypeTest"></p>
 
 # Current Features
 
