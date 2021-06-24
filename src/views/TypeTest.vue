@@ -1,5 +1,5 @@
 <template>
-    <div class="container" :key="componentKey">
+    <div class="container" :key="this.$store.state.componentKey">
         <div class="type-test" v-if="!testFinished">
             <div id="test-time" v-if="testStarted">{{testTime}}</div>
             <div class="prompt" ref="prompt" @click="focusInput" :class="{ 'blur' : !focus }">
@@ -45,14 +45,13 @@ export default {
             testTime: 15,
             testSeconds: 0,
             testFinished: false,
-            ignoredKeycodes: [37, 38, 39, 40, 16, 17, 18, 91, 93],
+            ignoredKeycodes: [37, 38, 39, 40, 16, 17, 18, 91, 92, 93],
             testStarted: false,
-            componentKey: 0
         }
     },
     methods: {
         forceRerender() {
-            this.componentKey += 1;
+            this.$store.state.componentKey += 1;
         },
         startTest() {
             var timerInterval = setInterval(() => {
@@ -110,7 +109,7 @@ export default {
             var wordElement = this.$refs['prompt'].querySelectorAll('div#word');
             var letters = Array.from(wordElement[this.currentWordElementIndex].children);
 
-            if (this.totalChars == 0 && this.currentWordElementIndex == 0) {
+            if (this.totalChars == 0 && this.currentWordElementIndex == 0 && !this.ignoredKeycodes.find(code => code == e.keyCode)) {
                 this.startTest();
             }
 
@@ -149,7 +148,7 @@ export default {
                 } else {
                     e.preventDefault();
                 }
-            } else if (e.keyCode == this.ignoredKeycodes.filter(code => code == e.keyCode)[0]) {
+            } else if (this.ignoredKeycodes.find(code => code == e.keyCode)) {
                 e.preventDefault();
             } else if (e.keyCode == 27) {
                 this.forceRerender();

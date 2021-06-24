@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <div class="header">
-            <h1><router-link to="/" style="color: var(--text-color); text-decoration: none;">TypeTest</router-link></h1>
+            <h1 @click="handleClick" style="color: var(--text-color); text-decoration: none;">TypeTest</h1>
             <div>
                 <router-link to="/login">Login</router-link>
             </div>
@@ -13,5 +13,10 @@
 <script>
 export default {
     name: 'App',
+    methods: {
+        handleClick() {
+            this.$store.state.componentKey += 1;
+        }
+    }
 }
 </script>
