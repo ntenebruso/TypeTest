@@ -8,17 +8,17 @@ export default new Router({
     routes: [
         {
             path: '/',
-            component: () => import("./views/TypeTest")
+            component: () => import("./views/TypeTest.vue")
         },
         {
             name: "login",
             path: '/login',
-            component: () => import("./views/Login")
+            component: () => import("./views/Login.vue")
         },
         {
             name: "dashboard",
             path: '/dashboard',
-            component: () => import("./views/Dashboard")
+            component: () => import("./views/Dashboard.vue")
         }
     ]
 })

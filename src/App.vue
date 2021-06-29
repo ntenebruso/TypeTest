@@ -1,7 +1,9 @@
 <template>
     <div class="app">
         <div class="header">
-            <h1 @click="handleClick" style="color: var(--text-color); text-decoration: none;">TypeTest</h1>
+            <router-link to="/">
+                <h1 style="color: var(--text-color); text-decoration: none;">TypeTest</h1>
+            </router-link>
             <div>
                 <router-link to="/login">Login</router-link>
             </div>
