@@ -130,6 +130,31 @@ button:hover {
     user-select: none;
 }
 
+.select-time-container {
+    height: 0;
+    position: relative;
+    top: 50px;
+    color: var(--sub-color);
+}
+
+.select-time-container .times {
+    display: flex;
+    column-gap: 10px;
+}
+
+.select-time-container .times div {
+    cursor: pointer;
+    transition: color .3s;
+}
+
+.select-time-container .times div:hover {
+    color: var(--text-color);
+}
+
+.select-time-container div.selected {
+    color: var(--fg-color);
+}
+
 .caret {
     display: inline-block;
     vertical-align: middle;

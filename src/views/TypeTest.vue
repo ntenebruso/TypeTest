@@ -1,18 +1,28 @@
 <template>
-    <div class="container" :key="this.$store.state.componentKey">
-        <div class="type-test" v-if="!testFinished">
-            <div id="test-time" v-if="testStarted">{{testTime}}</div>
-            <div class="prompt" ref="prompt" @click="focusInput" :class="{ 'blur' : !focus }">
-                <div :class="{ caret: true, flashing: !testStarted }" ref="caret"></div>
-                <div class="words">
-                    <div class="word" id="word" v-for="(word, index) in words" :key="index">
-                        <span v-for="(letter, index) in word.split('')" :key="index">{{letter}}</span>
+    <div>
+        <div class="container" :key="this.$store.state.componentKey">
+            <div class="type-test" v-if="!testFinished">
+                <div id="test-time" v-if="testStarted">{{testTime}}</div>
+                <div class="prompt" ref="prompt" @click="focusInput" :class="{ 'blur' : !focus }">
+                    <div :class="{ caret: true, flashing: !testStarted }" ref="caret"></div>
+                    <div class="words">
+                        <div class="word" id="word" v-for="(word, index) in words" :key="index">
+                            <span v-for="(letter, index) in word.split('')" :key="index">{{letter}}</span>
+                        </div>
                     </div>
                 </div>
+                <input class="type-input" type="text" v-model="input" ref="textInput" @focus="changeFocus" @blur="changeFocus" @keydown="handleKeyDown" @input="updateCorrect" :disabled="testFinished">
             </div>
-            <input class="type-input" type="text" v-model="input" ref="textInput" @focus="changeFocus" @blur="changeFocus" @keydown="handleKeyDown" @input= "updateCorrect" :disabled="testFinished">
+            <Results v-if="testFinished" :wpm="wpm" :graphPoints="liveWpm" :accuracy="accuracyPercent"  :accuracyStats="accuracyStats" :errorsPerSecond="errorsPerSecond" :correctChars="correctChars" :incorrectChars="incorrectChars" />
         </div>
-        <Results v-if="testFinished" :wpm="wpm" :graphPoints="liveWpm" :accuracy="accuracyPercent"  :accuracyStats="accuracyStats" :errorsPerSecond="errorsPerSecond" :correctChars="correctChars" :incorrectChars="incorrectChars" />
+        <div class="select-time-container" v-if="!testStarted">
+            <div>Test times</div>
+            <div class="times">
+                <div :class="{ selected: testTime == 15 }" @click="() => { testTime = 15; focusInput(); focus = true; }">15</div>
+                <div :class="{ selected: testTime == 30 }" @click="() => { testTime = 30; focusInput(); focus = true; }">30</div>
+                <div :class="{ selected: testTime == 60 }" @click="() => { testTime = 60; focusInput(); focus = true; }">60</div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -43,6 +53,7 @@ export default {
             liveWpm: [],
             currentErrors: 0,
             testTime: 15,
+            initialTestTime: null,
             testSeconds: 0,
             testFinished: false,
             ignoredKeycodes: [37, 38, 39, 40, 16, 17, 18, 91, 92, 93],
@@ -54,6 +65,8 @@ export default {
             this.$store.state.componentKey += 1;
         },
         startTest() {
+            this.initialTestTime = this.testTime;
+            console.log("Initial test time", this.initialTestTime);
             var timerInterval = setInterval(() => {
                 this.testSeconds++;
                 this.liveWpm.push(Math.round(((this.correctWordChars + this.spaces) * (60 / this.testSeconds)) / 5));
@@ -162,7 +175,7 @@ export default {
         finishTest() {
             this.testFinished = true;
             this.wpm = Math.round(
-                ((this.correctWordChars + this.correctSpaces) * (60 / 15)) / 5
+                ((this.correctWordChars + this.correctSpaces) * (60 / this.initialTestTime)) / 5
             );
             this.accuracyPercent = Math.round(
                 ((this.accuracyStats.correct / (this.accuracyStats.incorrect + this.accuracyStats.correct)) * 100)
