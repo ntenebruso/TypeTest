@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "webpack serve --inline --hot",
     "build": "webpack --mode=production --progress --color",
+    "serve": "webpack serve --inline --hot",
     "serve-build": "sirv dist --single --port 3000"
   },
   "dependencies": {
