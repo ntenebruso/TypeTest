@@ -1,5 +1,5 @@
 <template>
-    <div class="sk-chase">
+    <div class="sk-chase" v-if="loading">
         <div class="sk-chase-dot"></div>
         <div class="sk-chase-dot"></div>
         <div class="sk-chase-dot"></div>
@@ -8,6 +8,40 @@
         <div class="sk-chase-dot"></div>
     </div>
 </template>
+
+<script>
+    import { mapGetters } from "vuex";
+
+    export default {
+        data() {
+            return {
+                loading: false
+            }
+        },
+        methods: {
+            start() {
+                this.loading = true;
+            },
+            stop() {
+                this.loading = false;
+            }
+        },
+        computed: {
+            ...mapGetters({
+                getLoading: "getLoading"
+            })
+        },
+        watch: {
+            getLoading(val, oldVal) {
+                if (val) {
+                    this.start();
+                } else {
+                    this.stop();
+                }
+            }
+        }
+    }
+</script>
 
 <style>
     .sk-chase {

@@ -1,34 +1,65 @@
 <template>
-    <div class="dashboard">
-        <Loader v-if="loading" />
-        <div v-else>
-            <h1>Hello, {{this.$store.state.user.email}}</h1>
-            <h2>Our account section is still under development. Please check back later. Thank you!</h2>
+    <div class="dashboard" v-if="user">
+        <div>
+            <h1>Hello, {{user.email}}</h1>
+            <div class="saved-tests">
+                <h2>Saved tests</h2>
+                <MiniSpinner v-if="loading" />
+                <table width="100%" v-else>
+                    <thead>
+                        <tr>
+                            <td>WPM</td>
+                            <td>Accuracy</td>
+                            <td>Correct chars</td>
+                            <td>Incorrect chars</td>
+                            <td>Test type</td>
+                            <td>Date</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="test in tests" :key="test.id">
+                            <td>{{test.data().wpm}}</td>
+                            <td>{{test.data().accuracy}}</td>
+                            <td>{{test.data().correctChars}}</td>
+                            <td>{{test.data().incorrectChars}}</td>
+                            <td>{{test.data().testType}}</td>
+                            <td>{{formattedDate(test.data().date)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import firebase from "../firebase";
-    import Loader from "../components/Loader.vue";
+    import MiniSpinner from "../components/MiniSpinner.vue";
+    import { firebase, db } from "../firebase";
+    import dayjs from "dayjs";
 
     export default {
-        components: { Loader },
+        components: { MiniSpinner },
         data() {
             return {
-                loading: true,
+                user: null,
+                tests: null,
+                loading: true
             }
         },
         mounted() {
-            firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                    this.$store.state.user = user;
+            firebase.getCurrentUser().then(user => {
+                this.user = user;
+
+                db.collection("users").doc(user.uid).collection("tests").get().then(querySnapshot => {
                     this.loading = false;
-                } else {
-                    this.$router.push({ name: "login" });
-                    return;
-                }
-            })
+                    this.tests = querySnapshot.docs;
+                })
+            });
+        },
+        computed: {
+            formattedDate() {
+                return date => dayjs(date).format("DD MMM YYYY h:mm A");
+            }
         }
     }
 </script>

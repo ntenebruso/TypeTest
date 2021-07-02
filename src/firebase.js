@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/firestore";
 
 var firebaseConfig = {
     apiKey: "AIzaSyCb1Q2Uj41yIBlpDRIQFr1JN9zeg5gkvVY",
@@ -15,4 +16,14 @@ if (firebase.apps.length == 0) {
     firebase.initializeApp(firebaseConfig);
 }
 
-export default firebase;
+firebase.getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        firebase.auth().onAuthStateChanged(user => {
+            resolve(user);
+        }, reject);
+    })
+}
+
+var db = firebase.firestore();
+
+export { firebase, db };

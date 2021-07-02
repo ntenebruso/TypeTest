@@ -69,6 +69,11 @@ a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 40px;
+}
+
+.header h1 {
+    color: var(--fg-color);
 }
 
 .header div a {
@@ -284,4 +289,37 @@ input.type-input {
 .extra-stats .bottom {
     font-size: 40px;
     color: var(--fg-color);
+}
+
+.dashboard {
+    align-self: start;
+    padding: 100px 0 0 0;
+}
+
+.dashboard .saved-tests {
+    margin-top: 100px;
+}
+
+.dashboard .saved-tests h2 {
+    margin-bottom: 15px;
+}
+
+.dashboard .saved-tests table {
+    border-collapse: collapse;
+}
+
+.dashboard .saved-tests table td {
+    padding: 20px;
+}
+
+.dashboard .saved-tests table thead {
+    color: var(--sub-color);
+}
+
+.dashboard .saved-tests table tbody td {
+    font-size: 17px;
+}
+
+.dashboard .saved-tests table tbody tr:nth-child(odd) td {
+    background: rgba(0,0,0,0.1);
 }

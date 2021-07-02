@@ -13,7 +13,7 @@
                 </div>
                 <input class="type-input" type="text" v-model="input" ref="textInput" @focus="changeFocus" @blur="changeFocus" @keydown="handleKeyDown" @input="updateCorrect" :disabled="testFinished">
             </div>
-            <Results v-if="testFinished" :wpm="wpm" :graphPoints="liveWpm" :accuracy="accuracyPercent"  :accuracyStats="accuracyStats" :errorsPerSecond="errorsPerSecond" :correctChars="correctChars" :incorrectChars="incorrectChars" />
+            <Results v-if="testFinished" :wpm="wpm" :graphPoints="liveWpm" :accuracy="accuracyPercent"  :accuracyStats="accuracyStats" :errorsPerSecond="errorsPerSecond" :correctChars="correctChars" :incorrectChars="incorrectChars" :testTime="initialTestTime" />
         </div>
         <div class="select-time-container" v-if="!testStarted">
             <div>Test times</div>

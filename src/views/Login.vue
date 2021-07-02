@@ -1,7 +1,6 @@
 <template>
     <div class="login-wrapper">
-        <Loader v-if="loading" />
-        <div class="forms" v-else>
+        <div class="forms">
             <form class="signup-form form" @submit="signUp">
                 <h3>Sign Up</h3>
                 <input required type="email" placeholder="Email" v-model="signupEmail">
@@ -19,48 +18,43 @@
 </template>
 
 <script>
-    import firebase from "../firebase";
-    import Loader from "../components/Loader.vue";
+    import { firebase, db } from "../firebase";
 
     export default {
-        components: { Loader },
         data() {
             return {
                 signupEmail: null,
                 signupPassword: null,
                 loginEmail: null,
                 loginPassword: null,
-                loading: true
             }
         },
         methods: {
             signUp(e) {
                 e.preventDefault();
                 firebase.auth().createUserWithEmailAndPassword(this.signupEmail, this.signupPassword)
+                    .then(cred => {
+                        db.collection("users").doc(cred.user.uid).set({ startedTests: 0 });
+                    })
                     .catch(error => {
                         alert(error.message);
                     });
             },
             logIn(e) {
                 e.preventDefault();
-                this.loading = true;
                 firebase.auth().signInWithEmailAndPassword(this.loginEmail, this.loginPassword)
+                    .then(() => {
+                        this.$router.push({ path: "/dashboard" })
+                    })
                     .catch(error => {
-                        this.loading = false;
                         alert(error.message);
                     });
             }
         },
-        mounted() {
-            firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                    this.$store.state.user = user;
-                    this.$router.push("dashboard");
-                } else {
-                    this.loading = false;
-                    return;
-                }
-            })
+        async mounted() {
+            if (await firebase.getCurrentUser()) {
+                this.$router.push({ path: "/dashboard" });
+            }
         }
     }
 </script>

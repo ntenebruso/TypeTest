@@ -27,14 +27,29 @@
                 <div class="bottom" aria-label="correct/incorrect">{{correctChars}}/{{incorrectChars}}</div>
             </div>
         </div>
+        <button style="margin: auto;" @click="saveResults">Save test</button>
     </div>
 </template>
 
 <script>
     import Chart from "chart.js";
+    import { firebase, db } from "../firebase";
 
     export default {
-        props: ["wpm", "graphPoints", "accuracy", "accuracyStats", "errorsPerSecond", "correctChars", "incorrectChars"],
+        props: ["wpm", "graphPoints", "accuracy", "accuracyStats", "errorsPerSecond", "correctChars", "incorrectChars", "testTime"],
+        methods: {
+            saveResults() {
+                db.collection("users").doc(firebase.auth().currentUser.uid).collection("tests").doc(Date.now().toString()).set({
+                    date: Date.now(),
+                    wpm: this.wpm,
+                    accuracy: this.accuracy,
+                    accuracyStats: this.accuracyStats,
+                    correctChars: this.correctChars,
+                    incorrectChars: this.incorrectChars,
+                    testType: `Test ${this.testTime}`
+                }).then(() => { console.log("Test saved") });
+            }
+        },
         mounted() {
             var chartLabels = [];
             for (let i = 0; i < this.graphPoints.length; i++) {

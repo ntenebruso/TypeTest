@@ -4,9 +4,7 @@ import router from "./router";
 import store from "./store";
 import "./styles/style.css";
 
-
-
-new Vue({
+const app = new Vue({
     render: h => h(App),
     router,
     store

@@ -7,13 +7,14 @@ module.exports = {
     mode: "development",
     target: "web",
     entry: "./src/main.js",
-    devServer: {
-        historyApiFallback: true,
-    },
     output: {
         path: path.join(__dirname, "dist"),
         filename: "bundle.js",
-        assetModuleFilename: "images/[hash][ext][query]"
+        assetModuleFilename: "images/[hash][ext][query]",
+        clean: true
+    },
+    devServer: {
+        historyApiFallback: true,
     },
     module: {
         rules: [
