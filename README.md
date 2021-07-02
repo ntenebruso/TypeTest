@@ -12,16 +12,16 @@
   * Correct/incorrect words ratio
   * Correct/incorrect characters ratio
   * WPM and error count interactive chart
+  * User account system and leaderboard
 
 Example:
 
 ![Typing Analysis](thumbnails/analysis.jpg)
 
-*Please note that this app is not available to the public yet, as we are still in alpha testing!*
+*Please note that this app is not available to the public yet!*
 
 # Features in Development
 
-* User account system and leaderboard
 * Adding custom test times
 * Theme switcher
 * Gross WPM calculation
