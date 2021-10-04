@@ -52,7 +52,7 @@
 
                 db.collection("users").doc(user.uid).collection("tests").get().then(querySnapshot => {
                     this.loading = false;
-                    this.tests = querySnapshot.docs;
+                    this.tests = querySnapshot.docs.reverse();
                 })
             });
         },

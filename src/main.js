@@ -1,11 +1,11 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
 import App from './App.vue';
 import router from "./router";
 import store from "./store";
 import "./styles/style.css";
 
-const app = new Vue({
-    render: h => h(App),
-    router,
-    store
-}).$mount('#app')
+const app = createApp(App);
+
+app.use(router).use(store);
+
+app.mount("#app");

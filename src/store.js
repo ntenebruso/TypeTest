@@ -1,12 +1,11 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from "vuex";
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
-    state: {
-        componentKey: 0,
-        loading: false
+export default createStore({
+    state() {
+        return {
+            componentKey: 0,
+            loading: false
+        }
     },
     mutations: {
         setLoading(state, bool) {

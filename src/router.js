@@ -1,12 +1,9 @@
-import Vue from "vue";
-import Router from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import { firebase } from "./firebase";
-import "core-js/core";
-import "regenerator-runtime/runtime";
 import store from "./store";
 
-const router = new Router({
-    mode: "history",
+const router = createRouter({
+    history: createWebHistory(),
     routes: [
         {
             path: '/',
@@ -51,7 +48,5 @@ router.beforeResolve(async(to, from, next) => {
 router.afterEach(() => {
     store.commit("setLoading", false);
 });
-
-Vue.use(Router);
 
 export default router;
