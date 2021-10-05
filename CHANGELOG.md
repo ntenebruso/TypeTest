@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/ntenebruso/TypeTest/compare/v1.0.0...v2.0.0) (2021-10-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* Refactor to use vitejs instead of webpack and upgrade to vue 3
+
+* Switch to vue 3 ([196ed28](https://github.com/ntenebruso/TypeTest/commit/196ed283a9373cb29bb70eb23524eb157550e73d))
+
 ## [1.0.0](https://github.com/ntenebruso/TypeTest/compare/v0.1.0...v1.0.0) (2021-07-02)
 
 
