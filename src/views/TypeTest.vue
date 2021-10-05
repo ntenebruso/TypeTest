@@ -11,7 +11,7 @@
                         </div>
                     </div>
                 </div>
-                <input class="type-input" type="text" v-model="input" ref="textInput" @focus="changeFocus" @blur="changeFocus" @keydown="handleKeyDown" @input="updateCorrect" :disabled="testFinished">
+                <input class="type-input" type="text" v-model="input" ref="textInput" @focus="changeFocus" @blur="changeFocus" @keydown="handleKeyDown" :disabled="testFinished">
             </div>
             <Results v-if="testFinished" :wpm="wpm" :graphPoints="liveWpm" :accuracy="accuracyPercent"  :accuracyStats="accuracyStats" :errorsPerSecond="errorsPerSecond" :correctChars="correctChars" :incorrectChars="incorrectChars" :testTime="initialTestTime" />
         </div>
@@ -36,6 +36,7 @@ export default {
     data() {
         return {
             input: '',
+            inputValue: [],
             focus: false,
             currentWordElementIndex: 0,
             currentLetterElementIndex: 0,
@@ -81,37 +82,6 @@ export default {
             }, 1000)
             this.testStarted = true;
         },
-        updateCorrect() {
-            var wordElement = this.$refs['prompt'].querySelectorAll('div#word');
-            var letters = Array.from(wordElement[this.currentWordElementIndex].children);
-
-            letters.forEach((letter, index) => {
-                if (this.inputValue[index] == null) {
-                    letter.style.color = "#526777";
-                } else if (this.inputValue[index] == letter.innerText) {
-                    letter.classList.add('correct');
-                } else if (this.inputValue[index] != letter.innerText) {
-                    letter.classList.add('incorrect');
-                }
-            })
-
-            if (this.inputValue.length > letters.length) {
-                wordElement[this.currentWordElementIndex].innerHTML += `<span class="incorrect extra">${String.fromCharCode(this.keyPressed)}</span>`;
-            }
-
-            letters = Array.from(wordElement[this.currentWordElementIndex].children);
-
-            if (this.currentLetterElementIndex > 0) {
-                this.moveCaret(letters[this.currentLetterElementIndex-1].offsetLeft + letters[this.currentLetterElementIndex-1].offsetWidth);
-            }
-
-            if (this.inputValue[this.currentLetterElementIndex-1] != letters[this.currentLetterElementIndex-1].innerText) {
-                this.currentErrors++;
-                this.incorrectChars++;
-            } else {
-                this.correctChars++;
-            }
-        },
         focusInput() {
             this.$refs['textInput'].focus();
         },
@@ -126,7 +96,8 @@ export default {
                 this.startTest();
             }
 
-            if (e.keyCode == 32) {
+            // HANDLE ACTUAL CHECKING
+            if (e.keyCode == 32) { // If space is pressed, move onto next word and update caret
                 e.preventDefault();
                 if (this.input !== null) {
                     if (this.input == this.words[this.currentWordElementIndex]) {
@@ -138,12 +109,13 @@ export default {
                     }
                     this.currentWordElementIndex++;
                     this.input = null;
+                    this.inputValue = [];
                     this.currentLetterElementIndex = 0;
                     this.spaces++;
                     this.moveCaret(wordElement[this.currentWordElementIndex].offsetLeft);
                     wordElement[this.currentWordElementIndex].scrollIntoView({behavior: "smooth"});
                 }
-            } else if (e.keyCode == 8) {
+            } else if (e.keyCode == 8) {  // If backspace is pressed, handle moving caret and update inputValue
                 if (this.currentLetterElementIndex > 0) {
                     this.currentLetterElementIndex--;
                     if (this.currentLetterElementIndex == 0) {
@@ -158,18 +130,39 @@ export default {
                     if (letters[this.currentLetterElementIndex].classList.contains("extra")) {
                         letters[this.currentLetterElementIndex].parentNode.removeChild(letters[this.currentLetterElementIndex]);
                     }
+                    this.inputValue.pop();
                 } else {
                     e.preventDefault();
                 }
-            } else if (this.ignoredKeycodes.find(code => code == e.keyCode)) {
+            } else if (this.ignoredKeycodes.find(code => code == e.keyCode)) { // Make sure ignored keycodes (ie. CTRL or ALT) do not get counted as characters
                 e.preventDefault();
-            } else if (e.keyCode == 27) {
+            } else if (e.keyCode == 27) { // WORK IN PROGRESS: restart test if escape key is pressed
                 this.forceRerender();
             }
-            else {
-                this.currentLetterElementIndex++;
-                this.keyPressed = e.keyCode;
+            else { // If the entered key is an actual character, handle the logic such as updating caret and checking if the character is correct
+                this.keyPressed = e.shiftKey ? String.fromCharCode(e.keyCode) : String.fromCharCode(e.keyCode).toLowerCase();
+                this.inputValue.push(this.keyPressed);
                 this.totalChars++;
+  
+                if (this.inputValue.length > letters.length) {
+                    wordElement[this.currentWordElementIndex].innerHTML += `<span class="incorrect extra">${this.keyPressed}</span>`;
+                    letters = Array.from(wordElement[this.currentWordElementIndex].children); // redefine letters with updated extra spans if there are any
+                } else if (this.inputValue[this.currentLetterElementIndex] == null) {
+                    letter.style.color = "#526777";
+                } else if (this.inputValue[this.currentLetterElementIndex] == letters[this.currentLetterElementIndex].innerText) {
+                    letters[this.currentLetterElementIndex].classList.add('correct');
+                    this.correctChars++;
+                } else if (this.inputValue[this.currentLetterElementIndex] != letters[this.currentLetterElementIndex].innerText) {
+                    letters[this.currentLetterElementIndex].classList.add('incorrect');
+                    this.currentErrors++;
+                    this.incorrectChars++;
+                }
+
+                console.log(this.inputValue.length, letters.length);
+
+                this.moveCaret(letters[this.currentLetterElementIndex].offsetLeft + letters[this.currentLetterElementIndex].offsetWidth);
+
+                this.currentLetterElementIndex++;
             }
         },
         finishTest() {
@@ -186,9 +179,6 @@ export default {
         }
     },
     computed: {
-        inputValue() {
-            return this.input.split('');
-        },
         words() {
             return data.sort(() => Math.random() - 0.5);
         }
