@@ -1,44 +1,44 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { firebase } from "./firebase";
+import { auth, getCurrentUser } from "./firebase";
 import store from "./store";
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: '/',
+            path: "/",
             component: () => import("./views/TypeTest.vue"),
         },
         {
             name: "login",
-            path: '/login',
+            path: "/login",
             meta: {
-                displayLoader: true
+                displayLoader: true,
             },
-            component: () => import("./views/Login.vue")
+            component: () => import("./views/Login.vue"),
         },
         {
             name: "dashboard",
-            path: '/dashboard',
+            path: "/dashboard",
             meta: {
-                authRequired: true
+                authRequired: true,
             },
-            component: () => import("./views/Dashboard.vue")
-        }
-    ]
-})
+            component: () => import("./views/Dashboard.vue"),
+        },
+    ],
+});
 
-router.beforeResolve(async(to, from, next) => {
-    if (to.matched.some(record => record.meta.authRequired)) {
+router.beforeResolve(async (to, from, next) => {
+    if (to.matched.some((record) => record.meta.authRequired)) {
         store.commit("setLoading", true);
-        if (await firebase.getCurrentUser()) {
+        if (await getCurrentUser()) {
             next();
-            console.log("Logged in")
+            console.log("Logged in");
         } else {
             next("/login");
         }
     } else {
-        if (to.matched.some(record => record.meta.displayLoader)) {
+        if (to.matched.some((record) => record.meta.displayLoader)) {
             store.commit("setLoading", true);
         }
         next();

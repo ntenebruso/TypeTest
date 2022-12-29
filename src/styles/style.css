@@ -1,5 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@400;700&display=swap');
+@import "@fontsource/dm-sans/400.css";
+@import "@fontsource/dm-sans/500.css";
+@import "@fontsource/dm-sans/700.css";
+@import "@fontsource/roboto-mono/400.css";
 
 :root {
     --bg-color: #262a33;
@@ -8,7 +10,7 @@
     --text-color: #fff;
     --correct-color: #fff;
     --incorrect-color: #43ffaf;
-    --main-font: "Roboto";
+    --main-font: "DM Sans";
 }
 
 * {
@@ -89,7 +91,7 @@ a:hover {
 }
 
 h1 {
-    font-family: Oxygen, sans-serif;
+    font-family: "DM Sans", sans-serif;
     font-size: 55px;
 }
 
@@ -123,6 +125,7 @@ button:hover {
     position: relative;
     font-size: 27px;
     color: var(--sub-color);
+    font-family: "Roboto Mono", sans-serif;
 }
 
 #test-time {
