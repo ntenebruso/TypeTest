@@ -31,16 +31,24 @@
                 </div>
             </div>
         </div>
-        <button style="margin: auto" @click="saveResults">Save test</button>
+        <button v-if="user" style="margin: auto" @click="saveResults">
+            Save test
+        </button>
+        <p v-else style="text-align: center">Log in to save results</p>
     </div>
 </template>
 
 <script>
 import Chart from "chart.js/auto";
-import { db, auth } from "../firebase";
+import { db, getCurrentUser } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 
 export default {
+    data() {
+        return {
+            user: null,
+        };
+    },
     props: [
         "wpm",
         "graphPoints",
@@ -53,11 +61,10 @@ export default {
     ],
     methods: {
         async saveResults() {
-            console.log(auth.currentUser.uid);
             const docRef = doc(
                 db,
                 "users",
-                auth.currentUser.uid,
+                this.user.uid,
                 "tests",
                 Date.now().toString()
             );
@@ -74,7 +81,8 @@ export default {
             alert("saved!");
         },
     },
-    mounted() {
+    async mounted() {
+        this.user = await getCurrentUser();
         var chartLabels = [];
         for (let i = 0; i < this.graphPoints.length; i++) {
             chartLabels.push(i + 1);
@@ -91,6 +99,7 @@ export default {
                         label: "wpm",
                         data: this.graphPoints,
                         order: 2,
+                        fill: "origin",
                     },
                     {
                         clip: false,

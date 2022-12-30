@@ -27,7 +27,7 @@ const router = createRouter({
 
 router.beforeResolve(async (to, from, next) => {
     if (to.matched.some((record) => record.meta.authRequired)) {
-        store.commit("setLoading", true);
+        store.state.loading = true;
         if (await getCurrentUser()) {
             next();
             console.log("Logged in");
@@ -35,15 +35,12 @@ router.beforeResolve(async (to, from, next) => {
             next("/login");
         }
     } else {
-        if (to.matched.some((record) => record.meta.displayLoader)) {
-            store.commit("setLoading", true);
-        }
         next();
     }
 });
 
 router.afterEach(() => {
-    store.commit("setLoading", false);
+    store.state.loading = false;
 });
 
 export default router;

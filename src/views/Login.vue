@@ -79,7 +79,7 @@ export default {
                 this.loginPassword
             )
                 .then(() => {
-                    this.$router.push({ path: "/dashboard" });
+                    location.href = "/dashboard";
                 })
                 .catch((error) => {
                     alert(error.message);

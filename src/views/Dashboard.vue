@@ -2,6 +2,7 @@
     <div class="dashboard" v-if="user">
         <div>
             <h1>Hello, {{ user.email }}</h1>
+            <button @click="signOut">Sign out</button>
             <div class="saved-tests">
                 <h2>Saved tests</h2>
                 <MiniSpinner v-if="loading" />
@@ -34,7 +35,8 @@
 
 <script>
 import MiniSpinner from "../components/MiniSpinner.vue";
-import { getCurrentUser, db } from "../firebase";
+import { getCurrentUser, db, auth } from "../firebase";
+import { signOut } from "@firebase/auth";
 import { collection, getDocs } from "@firebase/firestore";
 import dayjs from "dayjs";
 
@@ -54,6 +56,12 @@ export default {
         const querySnapshot = await getDocs(collRef);
         this.loading = false;
         this.tests = querySnapshot.docs.reverse();
+    },
+    methods: {
+        async signOut() {
+            await signOut(auth);
+            location.href = "/";
+        },
     },
     computed: {
         formattedDate() {

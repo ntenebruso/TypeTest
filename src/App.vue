@@ -2,10 +2,10 @@
     <div class="app">
         <div class="header">
             <router-link to="/">
-                <h1>TypeTest</h1>
+                <span class="title">TypeTest</span>
             </router-link>
             <div>
-                <router-link to="/login" v-if="!user">Login</router-link>
+                <router-link to="/login" v-if="!user">Log in</router-link>
                 <router-link to="/dashboard" v-else>{{
                     user.email
                 }}</router-link>

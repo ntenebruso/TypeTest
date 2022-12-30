@@ -4,12 +4,12 @@
 @import "@fontsource/roboto-mono/400.css";
 
 :root {
-    --bg-color: #262a33;
-    --fg-color: #43ffaf;
-    --sub-color: #526777;
+    --bg-color: #1e1e1e;
+    --fg-color: #fe5e41;
+    --sub-color: #3e3e3e;
     --text-color: #fff;
-    --correct-color: #fff;
-    --incorrect-color: #43ffaf;
+    --correct-color: #dbdbdb;
+    --incorrect-color: #fe5e41;
     --main-font: "DM Sans";
 }
 
@@ -20,6 +20,7 @@
 }
 
 body {
+    font-size: 20px;
     font-family: var(--main-font), sans-serif;
     background: var(--bg-color);
     color: var(--text-color);
@@ -36,7 +37,7 @@ body {
     left: 50%;
     bottom: 80%;
     pointer-events: none;
-    transition: all .18s ease-out 0s;
+    transition: all 0.18s ease-out 0s;
     text-indent: 0;
     font-weight: 400;
     font-style: normal;
@@ -68,13 +69,18 @@ a:hover {
 }
 
 .header {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    border-radius: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
-.header h1 {
+.header .title {
+    font-size: 40px;
+    font-weight: bold;
     color: var(--fg-color);
 }
 
@@ -91,18 +97,18 @@ a:hover {
 }
 
 h1 {
-    font-family: "DM Sans", sans-serif;
     font-size: 55px;
 }
 
 button {
-    background: rgba(0,0,0,.1);
+    background: rgba(0, 0, 0, 0.2);
+    font-size: 20px;
     color: var(--text-color);
     padding: 5px 15px;
     border: none;
     font-family: var(--main-font), sans-serif;
     border-radius: 5px;
-    transition: all .3s;
+    transition: all 0.3s;
     cursor: pointer;
 }
 
@@ -152,7 +158,7 @@ button:hover {
 
 .select-time-container .times div {
     cursor: pointer;
-    transition: color .3s;
+    transition: color 0.3s;
 }
 
 .select-time-container .times div:hover {
@@ -232,7 +238,7 @@ input.type-input {
     display: block;
     padding: 10px 15px;
     font-family: var(--main-font), sans-serif;
-    background: rgba(0,0,0,.1);
+    background: rgba(0, 0, 0, 0.1);
     border: none;
     outline: none;
     color: var(--fg-color);
@@ -248,7 +254,7 @@ input.type-input {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 50px;
-    grid-template-areas: 
+    grid-template-areas:
         "stats chart"
         "extra-stats extra-stats";
 }
@@ -262,7 +268,7 @@ input.type-input {
 }
 
 .stats .top {
-    line-height: .5;
+    line-height: 0.5;
     font-size: 40px;
 }
 
@@ -272,6 +278,7 @@ input.type-input {
 }
 
 .chart {
+    min-width: 0;
     grid-area: chart;
 }
 
@@ -285,7 +292,7 @@ input.type-input {
 }
 
 .extra-stats .top {
-    line-height: .5;
+    line-height: 0.5;
     font-size: 20px;
 }
 
@@ -324,5 +331,5 @@ input.type-input {
 }
 
 .dashboard .saved-tests table tbody tr:nth-child(odd) td {
-    background: rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.1);
 }

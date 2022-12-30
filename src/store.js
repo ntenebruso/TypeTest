@@ -8,14 +8,4 @@ export default createStore({
             user: null,
         };
     },
-    mutations: {
-        setLoading(state, bool) {
-            state.loading = bool;
-        },
-    },
-    getters: {
-        getLoading(state) {
-            return state.loading;
-        },
-    },
 });
