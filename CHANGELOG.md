@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/ntenebruso/TypeTest/compare/v2.0.0...v2.1.0) (2022-12-30)
+
+
+### Features
+
+* Major redesign ([328744b](https://github.com/ntenebruso/TypeTest/commit/328744b428f84df4a702b67b37ae5d8b35e46c00))
+
+
+### Bug Fixes
+
+* Chart displaying incorrect values ([7ec868f](https://github.com/ntenebruso/TypeTest/commit/7ec868fb772635e3be4dc74ffa89e175cd87eb43))
+
 ## [2.0.0](https://github.com/ntenebruso/TypeTest/compare/v1.0.0...v2.0.0) (2021-10-05)
 
 
