@@ -11,7 +11,7 @@
                 }}</router-link>
             </div>
         </div>
-        <Loader />
+        <Loader v-if="$store.state.loading" />
         <router-view v-if="!$store.state.loading"></router-view>
     </div>
 </template>

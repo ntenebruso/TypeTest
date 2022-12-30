@@ -1,5 +1,5 @@
 <template>
-    <div class="sk-chase" v-if="loading">
+    <div class="sk-chase">
         <div class="sk-chase-dot"></div>
         <div class="sk-chase-dot"></div>
         <div class="sk-chase-dot"></div>
@@ -9,7 +9,7 @@
     </div>
 </template>
 
-<script>
+<!-- <script>
 import { mapGetters } from "vuex";
 
 export default {
@@ -41,7 +41,7 @@ export default {
         },
     },
 };
-</script>
+</script> -->
 
 <style>
 .sk-chase {
