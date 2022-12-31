@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrapper">
         <div class="forms">
-            <form class="signup-form form" @submit="signUp">
+            <form class="signup-form form" @submit.prevent="signUp">
                 <h3>Sign Up</h3>
                 <input
                     required
@@ -17,7 +17,7 @@
                 />
                 <button type="submit">Sign Up</button>
             </form>
-            <form class="login-form form" @submit="logIn">
+            <form class="login-form form" @submit.prevent="logIn">
                 <h3>Log In</h3>
                 <input
                     required
@@ -37,60 +37,32 @@
     </div>
 </template>
 
-<script>
-import { auth, db, getCurrentUser } from "../firebase";
+<script setup>
+import { ref, onMounted } from "vue";
+import { useUserStore } from "@/store";
+import { useRouter } from "vue-router";
+import { getCurrentUser } from "@/firebase";
 
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-} from "firebase/auth";
+const store = useUserStore();
+const router = useRouter();
 
-export default {
-    data() {
-        return {
-            signupEmail: null,
-            signupPassword: null,
-            loginEmail: null,
-            loginPassword: null,
-        };
-    },
-    methods: {
-        signUp(e) {
-            e.preventDefault();
-            createUserWithEmailAndPassword(
-                auth,
-                this.signupEmail,
-                this.signupPassword
-            )
-                .then((cred) => {
-                    db.collection("users")
-                        .doc(cred.user.uid)
-                        .set({ startedTests: 0 });
-                })
-                .catch((error) => {
-                    alert(error.message);
-                });
-        },
-        logIn(e) {
-            e.preventDefault();
-            signInWithEmailAndPassword(
-                auth,
-                this.loginEmail,
-                this.loginPassword
-            )
-                .then(() => {
-                    location.href = "/dashboard";
-                })
-                .catch((error) => {
-                    alert(error.message);
-                });
-        },
-    },
-    async mounted() {
-        if (await getCurrentUser()) {
-            console.log("USER");
-            this.$router.push({ path: "/dashboard" });
-        }
-    },
-};
+const signupEmail = ref("");
+const signupPassword = ref("");
+const loginEmail = ref("");
+const loginPassword = ref("");
+
+async function signUp() {
+    await store.createUser(signupEmail.value, signupPassword.value);
+}
+
+async function logIn() {
+    await store.signIn(loginEmail.value, loginPassword.value);
+    router.push("/dashboard");
+}
+
+onMounted(async () => {
+    if (!store.user) {
+        router.push("/dashboard");
+    }
+});
 </script>

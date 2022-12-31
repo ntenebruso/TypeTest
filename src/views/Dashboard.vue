@@ -1,8 +1,8 @@
 <template>
-    <div class="dashboard" v-if="user">
+    <div class="dashboard">
         <div>
-            <h1>Hello, {{ user.email }}</h1>
-            <button @click="signOut">Sign out</button>
+            <h1>Hello, {{ store.user.email }}</h1>
+            <button @click="handleClick">Sign out</button>
             <div class="saved-tests">
                 <h2>Saved tests</h2>
                 <MiniSpinner v-if="loading" />
@@ -33,40 +33,31 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, computed } from "vue";
+import { useUserStore } from "@/store";
 import MiniSpinner from "../components/MiniSpinner.vue";
 import { getCurrentUser, db, auth } from "../firebase";
 import { signOut } from "@firebase/auth";
 import { collection, getDocs } from "@firebase/firestore";
 import dayjs from "dayjs";
+import router from "@/router";
 
-export default {
-    components: { MiniSpinner },
-    data() {
-        return {
-            user: null,
-            tests: null,
-            loading: true,
-        };
-    },
-    async mounted() {
-        this.user = await getCurrentUser();
+const store = useUserStore();
+const tests = ref();
+const loading = ref(true);
 
-        const collRef = collection(db, "users", this.user.uid, "tests");
-        const querySnapshot = await getDocs(collRef);
-        this.loading = false;
-        this.tests = querySnapshot.docs.reverse();
-    },
-    methods: {
-        async signOut() {
-            await signOut(auth);
-            location.href = "/";
-        },
-    },
-    computed: {
-        formattedDate() {
-            return (date) => dayjs(date).format("DD MMM YYYY h:mm A");
-        },
-    },
-};
+onMounted(async () => {
+    const collRef = collection(db, "users", store.user.uid, "tests");
+    const querySnapshot = await getDocs(collRef);
+    loading.value = false;
+    tests.value = querySnapshot.docs.reverse();
+});
+
+async function handleClick() {
+    await signOut(auth);
+    router.push("/");
+}
+
+const formattedDate = (date) => dayjs(date).format("DD MMM YYYY h:mm A");
 </script>

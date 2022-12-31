@@ -5,36 +5,24 @@
                 <span class="title">TypeTest</span>
             </router-link>
             <div>
-                <router-link to="/login" v-if="!user">Log in</router-link>
+                <router-link to="/login" v-if="!store.user">Log in</router-link>
                 <router-link to="/dashboard" v-else>{{
-                    user.email
+                    store.user.email
                 }}</router-link>
             </div>
         </div>
-        <Loader v-if="$store.state.loading" />
-        <router-view v-if="!$store.state.loading"></router-view>
+        <router-view></router-view>
     </div>
 </template>
 
-<script>
-import Loader from "./components/Loader.vue";
-import { getCurrentUser } from "./firebase";
+<script setup>
+import { onBeforeMount } from "vue";
+import Loader from "@/components/Loader.vue";
+import { useUserStore } from "@/store";
 
-export default {
-    name: "App",
-    components: { Loader },
-    data() {
-        return {
-            user: null,
-        };
-    },
-    methods: {
-        handleClick() {
-            this.$store.state.componentKey += 1;
-        },
-    },
-    async mounted() {
-        this.user = await getCurrentUser();
-    },
-};
+const store = useUserStore();
+
+onBeforeMount(() => {
+    store.fetchUser();
+});
 </script>
