@@ -2,7 +2,7 @@
     <div class="loader"></div>
 </template>
 
-<style>
+<style scoped>
 .loader,
 .loader:after {
     border-radius: 50%;

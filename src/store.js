@@ -12,6 +12,7 @@ export const useUserStore = defineStore("user", {
     state: () => {
         return {
             user: null,
+            loading: true,
         };
     },
     actions: {
@@ -44,8 +45,9 @@ export const useUserStore = defineStore("user", {
         },
         async fetchUser() {
             const user = await getCurrentUser();
+            this.loading = false;
 
-            if (user) {
+            if (user && !this.user) {
                 this.user = user;
             }
         },

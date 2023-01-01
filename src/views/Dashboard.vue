@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { useUserStore } from "@/store";
 import MiniSpinner from "../components/MiniSpinner.vue";
 import { db } from "../firebase";

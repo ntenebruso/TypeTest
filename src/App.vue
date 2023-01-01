@@ -12,6 +12,7 @@
             </div>
         </div>
         <router-view></router-view>
+        <Loader v-if="store.loading" />
     </div>
 </template>
 
@@ -21,8 +22,4 @@ import Loader from "@/components/Loader.vue";
 import { useUserStore } from "@/store";
 
 const store = useUserStore();
-
-onBeforeMount(() => {
-    store.fetchUser();
-});
 </script>

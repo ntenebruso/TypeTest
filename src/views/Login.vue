@@ -41,7 +41,6 @@
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/store";
 import { useRouter } from "vue-router";
-import { getCurrentUser } from "@/firebase";
 
 const store = useUserStore();
 const router = useRouter();
@@ -61,7 +60,7 @@ async function logIn() {
 }
 
 onMounted(async () => {
-    if (await getCurrentUser()) {
+    if (store.user) {
         router.push("/dashboard");
     }
 });

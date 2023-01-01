@@ -1,133 +1,41 @@
 <template>
-    <div class="sk-chase">
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-    </div>
+    <span class="loader"></span>
 </template>
 
-<!-- <script>
-import { mapGetters } from "vuex";
-
-export default {
-    data() {
-        return {
-            loading: false,
-        };
-    },
-    methods: {
-        start() {
-            this.loading = true;
-        },
-        stop() {
-            this.loading = false;
-        },
-    },
-    computed: {
-        ...mapGetters({
-            getLoading: "getLoading",
-        }),
-    },
-    watch: {
-        getLoading(val, oldVal) {
-            if (val) {
-                this.start();
-            } else {
-                this.stop();
-            }
-        },
-    },
-};
-</script> -->
-
-<style>
-.sk-chase {
-    width: 60px;
-    height: 60px;
+<style scoped>
+.loader {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    display: inline-block;
     position: relative;
-    margin: 0 auto;
-    animation: sk-chase 2.5s infinite linear both;
+    background: linear-gradient(
+        0deg,
+        rgba(255, 61, 0, 0.2) 33%,
+        var(--fg-color) 100%
+    );
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    margin: auto;
 }
-
-.sk-chase-dot {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    animation: sk-chase-dot 2s infinite ease-in-out both;
-}
-
-.sk-chase-dot:before {
+.loader::after {
     content: "";
-    display: block;
-    width: 25%;
-    height: 25%;
-    background-color: #fff;
-    border-radius: 100%;
-    animation: sk-chase-dot-before 2s infinite ease-in-out both;
+    box-sizing: border-box;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--bg-color);
 }
-
-.sk-chase-dot:nth-child(1) {
-    animation-delay: -1.1s;
-}
-.sk-chase-dot:nth-child(2) {
-    animation-delay: -1s;
-}
-.sk-chase-dot:nth-child(3) {
-    animation-delay: -0.9s;
-}
-.sk-chase-dot:nth-child(4) {
-    animation-delay: -0.8s;
-}
-.sk-chase-dot:nth-child(5) {
-    animation-delay: -0.7s;
-}
-.sk-chase-dot:nth-child(6) {
-    animation-delay: -0.6s;
-}
-.sk-chase-dot:nth-child(1):before {
-    animation-delay: -1.1s;
-}
-.sk-chase-dot:nth-child(2):before {
-    animation-delay: -1s;
-}
-.sk-chase-dot:nth-child(3):before {
-    animation-delay: -0.9s;
-}
-.sk-chase-dot:nth-child(4):before {
-    animation-delay: -0.8s;
-}
-.sk-chase-dot:nth-child(5):before {
-    animation-delay: -0.7s;
-}
-.sk-chase-dot:nth-child(6):before {
-    animation-delay: -0.6s;
-}
-
-@keyframes sk-chase {
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes sk-chase-dot {
-    80%,
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes sk-chase-dot-before {
-    50% {
-        transform: scale(0.4);
-    }
-    100%,
+@keyframes rotation {
     0% {
-        transform: scale(1);
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }
 </style>

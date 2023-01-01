@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { auth, getCurrentUser } from "@/firebase";
+import { useUserStore } from "@/store";
 import NProgress from "nprogress";
 
 const router = createRouter({
@@ -27,11 +28,13 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+    const store = useUserStore();
+    await store.fetchUser();
+
     if (to.matched.some((record) => record.meta.authRequired)) {
         NProgress.start();
-        console.log(to.name);
 
-        if (await getCurrentUser()) {
+        if (store.user) {
             return next();
         } else {
             return next("/login");
