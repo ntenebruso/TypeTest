@@ -37,8 +37,7 @@
 import { ref, onMounted, computed } from "vue";
 import { useUserStore } from "@/store";
 import MiniSpinner from "../components/MiniSpinner.vue";
-import { getCurrentUser, db, auth } from "../firebase";
-import { signOut } from "@firebase/auth";
+import { db } from "../firebase";
 import { collection, getDocs } from "@firebase/firestore";
 import dayjs from "dayjs";
 import router from "@/router";
@@ -55,7 +54,7 @@ onMounted(async () => {
 });
 
 async function handleClick() {
-    await signOut(auth);
+    await store.signOut();
     router.push("/");
 }
 

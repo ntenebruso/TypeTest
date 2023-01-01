@@ -17,12 +17,13 @@ export const auth = getAuth(app);
 
 export function getCurrentUser() {
     return new Promise((resolve, reject) => {
-        onAuthStateChanged(
+        const destroyListener = onAuthStateChanged(
             auth,
             (user) => {
                 resolve(user);
             },
             reject
         );
+        destroyListener();
     });
 }

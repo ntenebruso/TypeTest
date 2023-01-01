@@ -3,7 +3,7 @@ import { auth, getCurrentUser } from "@/firebase";
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
-    onAuthStateChanged,
+    signOut,
 } from "firebase/auth";
 
 export const store = createPinia();
@@ -33,14 +33,21 @@ export const useUserStore = defineStore("user", {
 
             this.user = auth.currentUser;
         },
-        fetchUser() {
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    this.user = user;
-                } else {
-                    this.$reset();
-                }
-            });
+        async signOut() {
+            try {
+                await signOut(auth);
+            } catch (error) {
+                throw error;
+            }
+
+            this.$reset();
+        },
+        async fetchUser() {
+            const user = await getCurrentUser();
+
+            if (user) {
+                this.user = user;
+            }
         },
     },
 });

@@ -61,7 +61,7 @@ async function logIn() {
 }
 
 onMounted(async () => {
-    if (!store.user) {
+    if (await getCurrentUser()) {
         router.push("/dashboard");
     }
 });
