@@ -142,13 +142,13 @@ onMounted(() => {
             },
             scales: {
                 x: {
-                    ticks: {
-                        display: true,
-                    },
                     display: true,
                     title: {
                         display: true,
                         text: "Seconds",
+                    },
+                    ticks: {
+                        display: true,
                     },
                 },
                 y: {
@@ -173,8 +173,7 @@ onMounted(() => {
                     },
                     ticks: {
                         precision: 0,
-                        autoSkip: true,
-                        display: false,
+                        display: true,
                     },
                     grid: {
                         display: false,

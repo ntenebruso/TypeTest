@@ -111,6 +111,7 @@ export default {
             currentLetterElementIndex: 0,
             totalChars: 0,
             correctWordChars: 0,
+            errorsPerWord: 0,
             correctChars: 0,
             incorrectChars: 0,
             spaces: 0,
@@ -182,9 +183,7 @@ export default {
                 // If space is pressed, move onto next word and update caret
                 e.preventDefault();
                 if (this.input !== null) {
-                    if (
-                        this.input == this.words[this.currentWordElementIndex]
-                    ) {
+                    if (this.errorsPerWord == 0) {
                         this.correctSpaces++;
                         this.accuracyStats.correct++;
                         this.correctWordChars += this.inputValue.length;
@@ -195,6 +194,7 @@ export default {
                     this.input = null;
                     this.inputValue = [];
                     this.currentLetterElementIndex = 0;
+                    this.errorsPerWord = 0;
                     this.spaces++;
                     this.moveCaret(
                         wordElement[this.currentWordElementIndex].offsetLeft
@@ -282,9 +282,8 @@ export default {
                     );
                     this.currentErrors++;
                     this.incorrectChars++;
+                    this.errorsPerWord++;
                 }
-
-                console.log(this.inputValue.length, letters.length);
 
                 this.moveCaret(
                     letters[this.currentLetterElementIndex].offsetLeft +
