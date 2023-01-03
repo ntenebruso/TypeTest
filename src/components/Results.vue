@@ -61,7 +61,7 @@ const props = defineProps([
     "testTime",
 ]);
 
-async function saveResults() {
+async function saveResults(e) {
     const docRef = doc(
         db,
         "users",
@@ -78,6 +78,7 @@ async function saveResults() {
         incorrectChars: props.incorrectChars,
         testType: `Test ${props.testTime}`,
     });
+    e.target.disabled = true;
 
     alert("saved!");
 }
