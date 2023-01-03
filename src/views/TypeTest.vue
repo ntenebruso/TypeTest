@@ -183,11 +183,26 @@ export default {
                 // If space is pressed, move onto next word and update caret
                 e.preventDefault();
                 if (this.input !== null) {
-                    if (this.errorsPerWord == 0) {
+                    if (
+                        this.errorsPerWord == 0 &&
+                        this.input.length ==
+                            this.words[this.currentWordElementIndex].length
+                    ) {
                         this.correctSpaces++;
                         this.accuracyStats.correct++;
                         this.correctWordChars += this.inputValue.length;
                     } else {
+                        if (
+                            this.input.length <
+                            this.words[this.currentWordElementIndex].length
+                        ) {
+                            this.currentErrors +=
+                                this.words[this.currentWordElementIndex]
+                                    .length - this.input.length;
+                            this.incorrectChars +=
+                                this.words[this.currentWordElementIndex]
+                                    .length - this.input.length;
+                        }
                         this.accuracyStats.incorrect++;
                     }
                     this.currentWordElementIndex++;
@@ -265,6 +280,9 @@ export default {
                     letters = Array.from(
                         wordElement[this.currentWordElementIndex].children
                     ); // redefine letters with updated extra spans if there are any
+                    this.currentErrors++;
+                    this.incorrectChars++;
+                    this.errorsPerWord++;
                 } else if (
                     this.inputValue[this.currentLetterElementIndex] ==
                     letters[this.currentLetterElementIndex].innerText
