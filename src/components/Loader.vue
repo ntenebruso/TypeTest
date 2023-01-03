@@ -11,7 +11,7 @@
     position: relative;
     background: linear-gradient(
         0deg,
-        rgba(255, 61, 0, 0.2) 33%,
+        rgba(0, 0, 0, 0) 33%,
         var(--fg-color) 100%
     );
     box-sizing: border-box;

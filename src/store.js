@@ -13,6 +13,7 @@ export const useUserStore = defineStore("user", {
         return {
             user: null,
             loading: true,
+            initialized: false,
         };
     },
     actions: {
@@ -44,11 +45,11 @@ export const useUserStore = defineStore("user", {
             this.$reset();
         },
         async fetchUser() {
-            const user = await getCurrentUser();
-            this.loading = false;
-
-            if (user && !this.user) {
-                this.user = user;
+            if (!this.initialized) {
+                this.initialized = true;
+                this.user = await getCurrentUser();
+                console.log("fetching user");
+                this.loading = false;
             }
         },
     },
