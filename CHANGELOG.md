@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/ntenebruso/TypeTest/compare/v2.1.0...v2.2.0) (2023-01-03)
+
+
+### Features
+
+* Delete tests ([1d04268](https://github.com/ntenebruso/TypeTest/commit/1d042686894629501ba7615349f919d67b94a13f))
+
+
+### Bug Fixes
+
+* **Authentication:** Route guard fixes ([e2954c0](https://github.com/ntenebruso/TypeTest/commit/e2954c0642a17cdda123d117b40a30332c03d03e))
+* Calculations improved for a more accurate accuracy reading ([cf91782](https://github.com/ntenebruso/TypeTest/commit/cf917823c4a97c7ad0e22ae65746650eabae5f08))
+* Don't refetch user on page change ([3ecaafd](https://github.com/ntenebruso/TypeTest/commit/3ecaafda54e22c25c8d0ef8c8d352a6a45f80a8f))
+
 ## [2.1.0](https://github.com/ntenebruso/TypeTest/compare/v2.0.0...v2.1.0) (2022-12-30)
 
 
