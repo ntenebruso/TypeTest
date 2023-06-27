@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <div class="header">
-            <router-link to="/">
+            <router-link @click="resetTest" to="/">
                 <span class="title">TypeTest</span>
             </router-link>
             <div>
@@ -17,7 +17,6 @@
 </template>
 
 <script setup>
-import { onBeforeMount } from "vue";
 import Loader from "@/components/Loader.vue";
 import { useUserStore } from "@/store";
 

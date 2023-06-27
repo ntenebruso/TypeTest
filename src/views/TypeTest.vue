@@ -13,7 +13,7 @@
                         :class="{ caret: true, flashing: !testStarted }"
                         ref="caret"
                     ></div>
-                    <div class="words">
+                    <div class="words" ref="wordsContainer">
                         <div
                             class="word"
                             id="word"
@@ -60,7 +60,6 @@
                         () => {
                             testTime = 15;
                             focusInput();
-                            focus = true;
                         }
                     "
                 >
@@ -72,7 +71,6 @@
                         () => {
                             testTime = 30;
                             focusInput();
-                            focus = true;
                         }
                     "
                 >
@@ -84,7 +82,6 @@
                         () => {
                             testTime = 60;
                             focusInput();
-                            focus = true;
                         }
                     "
                 >
@@ -106,6 +103,7 @@ export default {
         return {
             input: "",
             inputValue: [],
+            recomputeWords: 0,
             focus: false,
             currentWordElementIndex: 0,
             currentLetterElementIndex: 0,
@@ -125,6 +123,7 @@ export default {
             currentErrors: 0,
             testTime: 15,
             initialTestTime: null,
+            timerInterval: null,
             testSeconds: 0,
             testFinished: false,
             ignoredKeycodes: [37, 38, 39, 40, 16, 17, 18, 91, 92, 93],
@@ -133,12 +132,16 @@ export default {
     },
     methods: {
         forceRerender() {
-            this.$store.state.componentKey += 1;
+            clearInterval(this.timerInterval);
+            this.$refs["textInput"].value = "";
+            this.recomputeWords++;
+            Object.assign(this.$data, this.$options.data());
+            this.focusInput();
         },
         startTest() {
             this.initialTestTime = this.testTime;
             console.log("Initial test time", this.initialTestTime);
-            var timerInterval = setInterval(() => {
+            this.timerInterval = setInterval(() => {
                 this.testSeconds++;
                 this.liveWpm.push(
                     Math.round(
@@ -151,7 +154,7 @@ export default {
                 this.currentErrors = 0;
                 this.testTime--;
                 if (this.testTime == 0) {
-                    clearInterval(timerInterval);
+                    clearInterval(this.timerInterval);
                     this.finishTest();
                     console.log(this.errorsPerSecond);
                 }
@@ -160,9 +163,10 @@ export default {
         },
         focusInput() {
             this.$refs["textInput"].focus();
+            this.focus = true;
         },
         changeFocus() {
-            this.focus == false ? (this.focus = true) : (this.focus = false);
+            this.focus = !this.focus;
         },
         handleKeyDown(e) {
             var wordElement = this.$refs["prompt"].querySelectorAll("div#word");
@@ -214,9 +218,19 @@ export default {
                     this.moveCaret(
                         wordElement[this.currentWordElementIndex].offsetLeft
                     );
-                    wordElement[this.currentWordElementIndex].scrollIntoView({
-                        behavior: "smooth",
-                    });
+                    if (
+                        wordElement[this.currentWordElementIndex].offsetTop > 0
+                    ) {
+                        this.$refs["wordsContainer"].style.marginTop =
+                            (parseInt(
+                                this.$refs[
+                                    "wordsContainer"
+                                ].style.marginTop.slice(0, -2)
+                            ) || 0) -
+                            wordElement[this.currentWordElementIndex]
+                                .offsetTop +
+                            "px";
+                    }
                 }
             } else if (e.keyCode == 8) {
                 // If backspace is pressed, handle moving caret and update inputValue
@@ -264,7 +278,9 @@ export default {
                 e.preventDefault();
             } else if (e.keyCode == 27) {
                 // WORK IN PROGRESS: restart test if escape key is pressed
+                e.preventDefault();
                 this.forceRerender();
+                console.log("ESC PRESSED");
             } else {
                 // If the entered key is an actual character, handle the logic such as updating caret and checking if the character is correct
                 this.keyPressed = e.shiftKey
@@ -331,6 +347,7 @@ export default {
     },
     computed: {
         words() {
+            this.recomputeWords;
             return data.sort(() => Math.random() - 0.5);
         },
     },
