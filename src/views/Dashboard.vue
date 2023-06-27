@@ -13,6 +13,7 @@
                             <td class="data-table__item">Accuracy</td>
                             <td class="data-table__item">Correct chars</td>
                             <td class="data-table__item">Incorrect chars</td>
+                            <td class="data-table__item">Language</td>
                             <td class="data-table__item">Test type</td>
                             <td class="data-table__item">Date</td>
                         </tr>
@@ -34,6 +35,9 @@
                             </td>
                             <td class="data-table__item">
                                 {{ test.data().incorrectChars }}
+                            </td>
+                            <td class="data-table__item">
+                                {{ test.data().language || "N/A" }}
                             </td>
                             <td class="data-table__item">
                                 {{ test.data().testType }}

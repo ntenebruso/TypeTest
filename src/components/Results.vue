@@ -68,6 +68,7 @@ const props = defineProps([
     "correctChars",
     "incorrectChars",
     "testTime",
+    "language",
     "restart",
 ]);
 
@@ -86,6 +87,7 @@ async function saveResults(e) {
         accuracyStats: props.accuracyStats,
         correctChars: props.correctChars,
         incorrectChars: props.incorrectChars,
+        language: props.language[0].toUpperCase() + props.language.slice(1),
         testType: `Test ${props.testTime}`,
     });
     saved.value = true;

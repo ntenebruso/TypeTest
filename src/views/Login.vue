@@ -100,7 +100,7 @@ onMounted(async () => {
     display: block;
     padding: 10px 15px;
     font-size: 20px;
-    font-family: var(--main-font), sans-serif;
+    font-family: var(--main-font);
     background: rgba(0, 0, 0, 0.1);
     border: none;
     outline: none;

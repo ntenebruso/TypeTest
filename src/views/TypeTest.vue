@@ -1,4 +1,15 @@
 <template>
+    <SearchModal
+        v-if="showingSearchModal"
+        :close="
+            () => {
+                showingSearchModal = false;
+                focusInput();
+            }
+        "
+        :callback="(newLanguage) => optionsStore.setLanguage(newLanguage)"
+        :items="this.languages"
+    />
     <div class="container" v-if="!testFinished">
         <div class="settings" :class="{ 'settings--hidden': testStarted }">
             <div class="settings__group">
@@ -21,20 +32,18 @@
             </div>
             <div class="settings__group">
                 <button
-                    v-for="language in languages"
-                    :class="{
-                        settings__button: true,
-                        'settings__button--selected':
-                            optionsStore.language == language,
-                    }"
-                    @click="
-                        () => {
-                            optionsStore.setLanguage(language);
-                            focusInput();
-                        }
-                    "
+                    class="settings__button"
+                    @click="() => (showingSearchModal = true)"
                 >
-                    {{ language }}
+                    <span
+                        style="
+                            font-size: 10px;
+                            vertical-align: middle;
+                            margin-right: 3px;
+                        "
+                    >
+                        <Icon icon="globe" /> </span
+                    >{{ optionsStore.language }}
                 </button>
             </div>
         </div>
@@ -113,21 +122,24 @@
         :correctChars="correctChars"
         :incorrectChars="incorrectChars"
         :testTime="initialTestTime"
+        :language="optionsStore.language"
         :restart="restart.bind(this)"
     />
 </template>
 
 <script>
 import Results from "@/components/Results.vue";
+import SearchModal from "@/components/SearchModal.vue";
 import Icon from "@/components/Icon.vue";
 import { useOptionsStore } from "@/store";
 import { mapStores } from "pinia";
 import { computed } from "vue";
 
 export default {
-    components: { Results, Icon },
+    components: { Results, SearchModal, Icon },
     data() {
         return {
+            showingSearchModal: false,
             correctMap: [],
             extraChars: [],
             caretXPos: 0,
@@ -414,7 +426,7 @@ export default {
     position: relative;
     font-size: 27px;
     color: var(--sub-color);
-    font-family: "Roboto Mono", sans-serif;
+    font-family: var(--mono-font);
 }
 
 .test__prompt--blur {
@@ -448,7 +460,7 @@ export default {
     width: fit-content;
     display: flex;
     padding: 10px 20px;
-    font-family: "Roboto Mono", "sans-serif";
+    font-family: var(--mono-font);
     font-size: 18px;
     border-radius: 20px;
     background: rgba(0, 0, 0, 0.2);
