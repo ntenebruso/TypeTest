@@ -2,31 +2,50 @@
     <div class="dashboard">
         <div>
             <h1>Hello, {{ store.user.email }}</h1>
-            <button @click="handleClick">Sign out</button>
+            <button class="button" @click="handleClick">Sign out</button>
             <div class="saved-tests">
-                <h2>Saved tests</h2>
+                <h2 class="saved-tests__title">Saved tests</h2>
                 <MiniSpinner v-if="loading" />
-                <table width="100%" v-else-if="tests.length">
+                <table class="data-table" width="100%" v-else-if="tests.length">
                     <thead>
                         <tr>
-                            <td>WPM</td>
-                            <td>Accuracy</td>
-                            <td>Correct chars</td>
-                            <td>Incorrect chars</td>
-                            <td>Test type</td>
-                            <td>Date</td>
+                            <td class="data-table__item">WPM</td>
+                            <td class="data-table__item">Accuracy</td>
+                            <td class="data-table__item">Correct chars</td>
+                            <td class="data-table__item">Incorrect chars</td>
+                            <td class="data-table__item">Test type</td>
+                            <td class="data-table__item">Date</td>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="test in tests" :key="test.id">
-                            <td>{{ test.data().wpm }}</td>
-                            <td>{{ test.data().accuracy }}</td>
-                            <td>{{ test.data().correctChars }}</td>
-                            <td>{{ test.data().incorrectChars }}</td>
-                            <td>{{ test.data().testType }}</td>
-                            <td>{{ formattedDate(test.data().date) }}</td>
-                            <td>
-                                <button @click="deleteTest(test.id)">
+                        <tr
+                            class="data-table__row"
+                            v-for="test in tests"
+                            :key="test.id"
+                        >
+                            <td class="data-table__item">
+                                {{ test.data().wpm }}
+                            </td>
+                            <td class="data-table__item">
+                                {{ test.data().accuracy }}
+                            </td>
+                            <td class="data-table__item">
+                                {{ test.data().correctChars }}
+                            </td>
+                            <td class="data-table__item">
+                                {{ test.data().incorrectChars }}
+                            </td>
+                            <td class="data-table__item">
+                                {{ test.data().testType }}
+                            </td>
+                            <td class="data-table__item">
+                                {{ formattedDate(test.data().date) }}
+                            </td>
+                            <td class="data-table__item">
+                                <button
+                                    class="button"
+                                    @click="deleteTest(test.id)"
+                                >
                                     Delete
                                 </button>
                             </td>
@@ -84,3 +103,31 @@ async function handleClick() {
 
 const formattedDate = (date) => dayjs(date).format("DD MMM YYYY h:mm A");
 </script>
+
+<style scoped>
+.dashboard {
+    align-self: start;
+    padding: 100px 0 0 0;
+}
+
+.saved-tests {
+    margin-top: 100px;
+}
+
+.saved-tests__title {
+    margin-bottom: 15px;
+}
+
+.data-table {
+    border-collapse: collapse;
+    font-size: 17px;
+}
+
+.data-table__item {
+    padding: 20px;
+}
+
+.data-table__row:nth-child(odd) {
+    background: rgba(0, 0, 0, 0.1);
+}
+</style>

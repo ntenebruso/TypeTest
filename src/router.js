@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { auth, getCurrentUser } from "@/firebase";
 import { useUserStore } from "@/store";
 import NProgress from "nprogress";
 
@@ -9,17 +8,24 @@ const router = createRouter({
         {
             name: "homepage",
             path: "/",
+            meta: {
+                title: "Home",
+            },
             component: () => import("./views/TypeTest.vue"),
         },
         {
             name: "login",
             path: "/login",
+            meta: {
+                title: "Login",
+            },
             component: () => import("./views/Login.vue"),
         },
         {
             name: "dashboard",
             path: "/dashboard",
             meta: {
+                title: "Dashboard",
                 authRequired: true,
             },
             component: () => import("./views/Dashboard.vue"),
@@ -27,7 +33,14 @@ const router = createRouter({
     ],
 });
 
+const DEFAULT_TITLE = "TypeTest";
 router.beforeEach(async (to, from, next) => {
+    if (to.meta.title) {
+        document.title = to.meta.title + " | TypeTest";
+    } else {
+        document.title = DEFAULT_TITLE;
+    }
+
     const store = useUserStore();
     await store.fetchUser();
 

@@ -68,39 +68,21 @@ a:hover {
     color: var(--fg-color);
 }
 
-.header {
-    background: rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border-radius: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.header .title {
-    font-size: 40px;
-    font-weight: bold;
-    color: var(--fg-color);
-}
-
-.header div a {
-    font-size: 20px;
-}
-
-.correct {
-    color: var(--correct-color) !important;
-}
-
-.incorrect {
-    color: var(--incorrect-color) !important;
-}
-
 h1 {
     font-size: 55px;
 }
 
 button {
+    margin: 0;
+    padding: 0;
+    background: inherit;
+    border: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+}
+
+.button {
     background: rgba(0, 0, 0, 0.2);
     font-size: 20px;
     color: var(--text-color);
@@ -110,227 +92,17 @@ button {
     border-radius: 5px;
     transition: all 0.3s;
     cursor: pointer;
-}
-
-button:hover {
-    background: var(--fg-color);
-    color: var(--sub-color);
-}
-
-.app {
-    width: 90%;
-    max-width: 1000px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    align-items: center;
-    min-height: 100vh;
-}
-
-.prompt {
-    overflow: hidden;
-    height: 125px;
-    position: relative;
-    font-size: 27px;
-    color: var(--sub-color);
-    font-family: "Roboto Mono", sans-serif;
-}
-
-#test-time {
-    font-size: 100px;
-    text-align: center;
-    line-height: 0;
-    position: relative;
-    bottom: 100px;
-    color: var(--sub-color);
-    user-select: none;
-}
-
-.select-time-container {
-    height: 0;
-    position: relative;
-    top: 50px;
-    color: var(--sub-color);
-}
-
-.select-time-container .times {
-    display: flex;
-    column-gap: 10px;
-}
-
-.select-time-container .times div {
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.select-time-container .times div:hover {
-    color: var(--text-color);
-}
-
-.select-time-container div.selected {
-    color: var(--fg-color);
-}
-
-.caret {
     display: inline-block;
-    vertical-align: middle;
-    position: absolute;
-    height: 32px;
-    width: 2px;
+    outline: none;
+}
+
+.button:disabled {
+    color: var(--sub-color);
+    cursor: default;
+}
+
+.button:hover:enabled,
+.button:focus:enabled {
     background: var(--fg-color);
-    left: 0;
-    top: 7px;
-}
-
-.caret.flashing {
-    animation: caret-animation 1s infinite;
-}
-
-input.type-input {
-    height: 0;
-    padding: 0;
-    margin: 0;
-    display: block;
-    border: none;
-    outline: none;
-}
-
-.words {
-    display: flex;
-    flex-wrap: wrap;
-    line-height: 1.7;
-    user-select: none;
-    transition: margin 0.1s ease-in-out;
-}
-
-.words .word {
-    margin: 0 5px;
-}
-
-@keyframes caret-animation {
-    0% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
-.blur {
-    filter: blur(2px);
-}
-
-.forms {
-    display: flex;
-    justify-content: space-around;
-    height: 100%;
-}
-
-.form {
-    display: block;
-}
-
-.form input {
-    display: block;
-    padding: 10px 15px;
-    font-family: var(--main-font), sans-serif;
-    background: rgba(0, 0, 0, 0.1);
-    border: none;
-    outline: none;
-    color: var(--fg-color);
-    border-radius: 5px;
-    margin: 5px 0;
-}
-
-.form input::placeholder {
     color: var(--sub-color);
-}
-
-.results {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 50px;
-    grid-template-areas:
-        "stats chart"
-        "extra-stats extra-stats";
-}
-
-.stats {
-    grid-area: stats;
-}
-
-.stats .group {
-    margin-bottom: 25px;
-}
-
-.stats .top {
-    line-height: 0.5;
-    font-size: 40px;
-}
-
-.stats .bottom {
-    font-size: 80px;
-    color: var(--fg-color);
-}
-
-.chart {
-    min-width: 0;
-    grid-area: chart;
-}
-
-.extra-stats {
-    grid-area: extra-stats;
-}
-
-.extra-stats {
-    display: flex;
-    justify-content: space-between;
-}
-
-.extra-stats .top {
-    line-height: 0.5;
-    font-size: 20px;
-}
-
-.extra-stats .bottom {
-    font-size: 40px;
-    color: var(--fg-color);
-}
-
-.dashboard {
-    align-self: start;
-    padding: 100px 0 0 0;
-}
-
-.dashboard .saved-tests {
-    margin-top: 100px;
-}
-
-.dashboard .saved-tests h2 {
-    margin-bottom: 15px;
-}
-
-.dashboard .saved-tests table {
-    border-collapse: collapse;
-}
-
-.dashboard .saved-tests table td {
-    padding: 20px;
-}
-
-.dashboard .saved-tests table thead {
-    color: var(--sub-color);
-}
-
-.dashboard .saved-tests table tbody td {
-    font-size: 17px;
-}
-
-.dashboard .saved-tests table tbody tr:nth-child(odd) td {
-    background: rgba(0, 0, 0, 0.1);
 }

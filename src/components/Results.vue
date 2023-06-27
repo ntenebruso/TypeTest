@@ -33,15 +33,17 @@
                 </div>
             </div>
         </div>
-        <button v-if="store.user" style="margin: auto" @click="saveResults">
-            Save test
-        </button>
-        <p v-else style="text-align: center">Log in to save results</p>
+        <div class="button-container">
+            <button class="button" @click="props.restart">Try again</button>
+            <button v-if="store.user" class="button" @click="saveResults">
+                Save test
+            </button>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted, defineProps, ref } from "vue";
+import { onMounted, ref } from "vue";
 import Chart from "chart.js/auto";
 import { db } from "@/firebase";
 import { doc, setDoc } from "firebase/firestore";
@@ -59,6 +61,7 @@ const props = defineProps([
     "correctChars",
     "incorrectChars",
     "testTime",
+    "restart",
 ]);
 
 async function saveResults(e) {
@@ -185,3 +188,61 @@ onMounted(() => {
     });
 });
 </script>
+
+<style scoped>
+.results {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 50px;
+    grid-template-areas:
+        "stats chart"
+        "extra-stats extra-stats";
+}
+
+.stats {
+    grid-area: stats;
+}
+
+.stats .group {
+    margin-bottom: 25px;
+}
+
+.stats .top {
+    line-height: 0.5;
+    font-size: 40px;
+}
+
+.stats .bottom {
+    font-size: 80px;
+    color: var(--fg-color);
+}
+
+.button-container {
+    display: flex;
+    column-gap: 10px;
+}
+
+.chart {
+    min-width: 0;
+    grid-area: chart;
+}
+
+.extra-stats {
+    grid-area: extra-stats;
+}
+
+.extra-stats {
+    display: flex;
+    justify-content: space-between;
+}
+
+.extra-stats .top {
+    line-height: 0.5;
+    font-size: 20px;
+}
+
+.extra-stats .bottom {
+    font-size: 40px;
+    color: var(--fg-color);
+}
+</style>

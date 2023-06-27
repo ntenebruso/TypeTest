@@ -8,8 +8,21 @@ import {
 
 export const store = createPinia();
 
+export const useOptionsStore = defineStore("options", {
+    state() {
+        return {
+            testTime: 15,
+        };
+    },
+    actions: {
+        setTestTime(newTime) {
+            this.testTime = newTime;
+        },
+    },
+});
+
 export const useUserStore = defineStore("user", {
-    state: () => {
+    state() {
         return {
             user: null,
             loading: true,
