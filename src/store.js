@@ -12,11 +12,15 @@ export const useOptionsStore = defineStore("options", {
     state() {
         return {
             testTime: 15,
+            language: "english",
         };
     },
     actions: {
         setTestTime(newTime) {
             this.testTime = newTime;
+        },
+        setLanguage(newLanguage) {
+            this.language = newLanguage;
         },
     },
 });

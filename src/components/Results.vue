@@ -35,9 +35,15 @@
         </div>
         <div class="button-container">
             <button class="button" @click="props.restart">Try again</button>
-            <button v-if="store.user" class="button" @click="saveResults">
+            <button
+                v-if="store.user"
+                :disabled="saved"
+                class="button"
+                @click="saveResults"
+            >
                 Save test
             </button>
+            <p v-if="saved">Test saved!</p>
         </div>
     </div>
 </template>
@@ -51,6 +57,7 @@ import { useUserStore } from "@/store";
 
 const store = useUserStore();
 const chartCanvas = ref();
+const saved = ref(false);
 
 const props = defineProps([
     "wpm",
@@ -81,9 +88,7 @@ async function saveResults(e) {
         incorrectChars: props.incorrectChars,
         testType: `Test ${props.testTime}`,
     });
-    e.target.disabled = true;
-
-    alert("saved!");
+    saved.value = true;
 }
 
 onMounted(() => {
@@ -219,6 +224,7 @@ onMounted(() => {
 
 .button-container {
     display: flex;
+    align-items: center;
     column-gap: 10px;
 }
 

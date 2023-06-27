@@ -1,12 +1,12 @@
 <template>
     <div class="container" v-if="!testFinished">
         <div class="settings" :class="{ 'settings--hidden': testStarted }">
-            <div class="settings__times">
+            <div class="settings__group">
                 <button
                     v-for="index in [15, 30, 60]"
                     :class="{
-                        settings__time: true,
-                        'settings__time--selected':
+                        settings__button: true,
+                        'settings__button--selected':
                             optionsStore.testTime == index,
                     }"
                     @click="
@@ -17,6 +17,24 @@
                     "
                 >
                     {{ index }}
+                </button>
+            </div>
+            <div class="settings__group">
+                <button
+                    v-for="language in languages"
+                    :class="{
+                        settings__button: true,
+                        'settings__button--selected':
+                            optionsStore.language == language,
+                    }"
+                    @click="
+                        () => {
+                            optionsStore.setLanguage(language);
+                            focusInput();
+                        }
+                    "
+                >
+                    {{ language }}
                 </button>
             </div>
         </div>
@@ -79,7 +97,7 @@
             />
             <div class="restart-container">
                 <button class="button button--restart" @click="restart">
-                    Restart
+                    <Icon icon="refresh-cw" />
                 </button>
             </div>
         </div>
@@ -100,13 +118,14 @@
 </template>
 
 <script>
-import data from "@/data";
 import Results from "@/components/Results.vue";
+import Icon from "@/components/Icon.vue";
 import { useOptionsStore } from "@/store";
 import { mapStores } from "pinia";
+import { computed } from "vue";
 
 export default {
-    components: { Results },
+    components: { Results, Icon },
     data() {
         return {
             correctMap: [],
@@ -114,6 +133,7 @@ export default {
             caretXPos: 0,
             input: "",
             inputValue: [],
+            words: [],
             recomputeWords: 0,
             focus: false,
             currentWordElementIndex: 0,
@@ -137,14 +157,19 @@ export default {
             testSeconds: 0,
             testFinished: false,
             testStarted: false,
+            languages: ["english", "spanish"], //not ideal method but will fix later...
         };
     },
     methods: {
+        async fetchWords(language) {
+            const res = await fetch(`./data/${language}.json`);
+            const data = await res.json();
+            this.words = data.words.sort(() => Math.random() - 0.5);
+        },
         restart() {
             clearInterval(this.timerInterval);
-            this.recomputeWords++;
             Object.assign(this.$data, this.$options.data());
-
+            this.fetchWords(this.optionsStore.language);
             this.$nextTick(function () {
                 this.$refs["textInput"].value = "";
                 this.$refs["wordsContainer"].style.marginTop = 0 + "px";
@@ -327,14 +352,18 @@ export default {
         },
     },
     computed: {
-        words() {
-            this.recomputeWords;
-            return data.sort(() => Math.random() - 0.5);
+        language() {
+            return this.optionsStore.language;
         },
         ...mapStores(useOptionsStore),
     },
     mounted() {
         this.$refs["textInput"].focus();
+    },
+    created() {
+        this.$watch("language", this.fetchWords, {
+            immediate: true,
+        });
     },
 };
 </script>
@@ -347,8 +376,15 @@ export default {
     position: relative;
 }
 
+.button--restart {
+    background: transparent;
+    font-size: 25px;
+    color: var(--sub-color);
+}
+
 .test {
     position: absolute;
+    width: 100%;
     top: 50%;
     transform: translateY(-50%);
 }
@@ -410,6 +446,7 @@ export default {
     margin-top: 25px;
     display: inline-block;
     width: fit-content;
+    display: flex;
     padding: 10px 20px;
     font-family: "Roboto Mono", "sans-serif";
     font-size: 18px;
@@ -426,21 +463,31 @@ export default {
     visibility: hidden;
 }
 
-.settings__times {
+.settings__group {
     display: flex;
     column-gap: 10px;
 }
 
-.settings__time {
+.settings__group:not(:last-child)::after {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 2.5px;
+    margin-right: 10px;
+    border-radius: 20px;
+    background: var(--sub-color);
+}
+
+.settings__button {
     cursor: pointer;
     transition: color 0.3s;
 }
 
-.settings__time:hover {
+.settings__button:hover {
     color: var(--text-color);
 }
 
-.settings__time--selected {
+.settings__button--selected {
     color: var(--fg-color);
 }
 

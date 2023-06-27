@@ -46,7 +46,7 @@
                                     class="button"
                                     @click="deleteTest(test.id)"
                                 >
-                                    Delete
+                                    <Icon icon="trash" />
                                 </button>
                             </td>
                         </tr>
@@ -59,6 +59,7 @@
 </template>
 
 <script setup>
+import Icon from "@/components/Icon.vue";
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/store";
 import MiniSpinner from "../components/MiniSpinner.vue";
