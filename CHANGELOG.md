@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.5](https://github.com/ntenebruso/TypeTest/compare/v2.1.0...v2.2.5) (2023-06-27)
+
+
+### Features
+
+* Delete tests ([1d04268](https://github.com/ntenebruso/TypeTest/commit/1d042686894629501ba7615349f919d67b94a13f))
+* Restart tests ([1fbab03](https://github.com/ntenebruso/TypeTest/commit/1fbab03c6e112c30936304f41aedda84b2e1a3fa))
+* Spanish tests (more to come) ([2a5b4d9](https://github.com/ntenebruso/TypeTest/commit/2a5b4d95ad9efff6010dd102bd401e1014328059))
+
+
+### Bug Fixes
+
+* **Authentication:** Route guard fixes ([e2954c0](https://github.com/ntenebruso/TypeTest/commit/e2954c0642a17cdda123d117b40a30332c03d03e))
+* Calculations improved for a more accurate accuracy reading ([cf91782](https://github.com/ntenebruso/TypeTest/commit/cf917823c4a97c7ad0e22ae65746650eabae5f08))
+* Don't refetch user on page change ([3ecaafd](https://github.com/ntenebruso/TypeTest/commit/3ecaafda54e22c25c8d0ef8c8d352a6a45f80a8f))
+* More accuracy fine-tuning ([b9f673d](https://github.com/ntenebruso/TypeTest/commit/b9f673dbd14d858b7c1d19bc4d3a9e025c86bf29))
+* Typetest scrolling no longer choppy and inconsistent ([c35da0f](https://github.com/ntenebruso/TypeTest/commit/c35da0fa656df2dbd2709968ffc05f75f9583c48))
+
 ## [2.2.0](https://github.com/ntenebruso/TypeTest/compare/v2.1.0...v2.2.0) (2023-01-03)
 
 
