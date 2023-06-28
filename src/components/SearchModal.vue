@@ -33,7 +33,20 @@ import Icon from "./Icon.vue";
 import BaseModal from "./BaseModal.vue";
 import { ref, computed, onMounted, nextTick } from "vue";
 
-const props = defineProps(["items", "callback", "close"]);
+const props = defineProps({
+    items: {
+        type: Array,
+        required: true,
+    },
+    callback: {
+        type: Function,
+        required: true,
+    },
+    close: {
+        type: Function,
+        required: true,
+    },
+});
 
 const input = ref(null);
 const inputValue = ref("");

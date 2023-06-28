@@ -11,16 +11,23 @@ export const store = createPinia();
 export const useOptionsStore = defineStore("options", {
     state() {
         return {
-            testTime: 15,
-            language: "english",
+            testTime: localStorage.getItem("testTime") || 15,
+            language: localStorage.getItem("language") || "english",
+            theme: localStorage.getItem("theme") || "default.css",
         };
     },
     actions: {
         setTestTime(newTime) {
             this.testTime = newTime;
+            localStorage.setItem("testTime", newTime);
         },
         setLanguage(newLanguage) {
             this.language = newLanguage;
+            localStorage.setItem("language", newLanguage);
+        },
+        setTheme(newTheme) {
+            this.theme = newTheme;
+            localStorage.setItem("theme", newTheme);
         },
     },
 });

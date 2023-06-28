@@ -8,7 +8,7 @@
             }
         "
         :callback="(newLanguage) => optionsStore.setLanguage(newLanguage)"
-        :items="this.languages"
+        :items="languages"
     />
     <PromptModal
         v-if="showingTimeModal"
@@ -156,6 +156,7 @@ import MiniSpinner from "@/components/MiniSpinner.vue";
 import Icon from "@/components/Icon.vue";
 import { useOptionsStore } from "@/store";
 import { mapStores } from "pinia";
+import languages from "@/data/languages.json";
 
 export default {
     components: { Results, SearchModal, PromptModal, Icon, MiniSpinner },
@@ -193,13 +194,12 @@ export default {
             testSeconds: 0,
             testFinished: false,
             testStarted: false,
-            languages: ["english", "spanish"], //not ideal method but will fix later...
         };
     },
     methods: {
         async fetchWords(language) {
             this.testLoading = true;
-            const res = await fetch(`./data/${language}.json`);
+            const res = await fetch(`./data/languages/${language}.json`);
             const data = await res.json();
             this.words = data.words.sort(() => Math.random() - 0.5);
             this.testLoading = false;
@@ -246,11 +246,16 @@ export default {
             this.focus = !this.focus;
         },
         handleKeyDown(e) {
+            const validKey =
+                e.key.length == 1 &&
+                e.code != "Space" &&
+                !e.altKey &&
+                !e.ctrlKey &&
+                !e.metaKey;
             if (
                 this.totalChars == 0 &&
                 this.currentWordElementIndex == 0 &&
-                e.key.length == 1 &&
-                e.key !== " "
+                validKey
             ) {
                 this.startTest();
             }
@@ -326,7 +331,7 @@ export default {
 
                     this.caretXPos -= 16;
                 }
-            } else if (e.key.length != 1 && e.key !== " ") {
+            } else if (!validKey) {
                 // Make sure ignored keycodes (ie. CTRL or ALT) do not get counted as characters
                 return;
             } else {
@@ -390,18 +395,9 @@ export default {
         },
     },
     computed: {
-        language() {
-            return this.optionsStore.language;
-        },
         ...mapStores(useOptionsStore),
     },
     watch: {
-        language: {
-            handler(newLanguage) {
-                this.fetchWords(newLanguage);
-            },
-            immediate: true,
-        },
         testLoading(newVal) {
             this.$nextTick(() => {
                 if (newVal == false) {
@@ -409,6 +405,14 @@ export default {
                 }
             });
         },
+    },
+    created() {
+        this.$watch(
+            () => this.optionsStore.language,
+            (newLanguage) => this.fetchWords(newLanguage),
+            { immediate: true }
+        );
+        this.languages = languages;
     },
 };
 </script>
@@ -496,7 +500,7 @@ export default {
     font-family: var(--mono-font);
     font-size: 18px;
     border-radius: 20px;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--accent-color);
     color: var(--secondary-color);
     opacity: 1;
     visibility: visible;

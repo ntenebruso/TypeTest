@@ -1,28 +1,69 @@
 <template>
+    <SearchModal
+        :items="themeNames"
+        :close="() => (showingThemeModal = false)"
+        :callback="
+            (name) =>
+                optionsStore.setTheme(
+                    themes.find((theme) => theme.name == name).file
+                )
+        "
+        v-if="showingThemeModal"
+    />
     <div class="app">
         <div class="header">
-            <router-link to="/">
-                <span class="header__title">TypeTest</span>
-            </router-link>
+            <div class="header__group">
+                <router-link to="/">
+                    <span class="header__title">TypeTest</span>
+                </router-link>
+                <button
+                    class="header__button"
+                    @click="() => (showingThemeModal = true)"
+                >
+                    <Icon icon="settings" />
+                </button>
+            </div>
             <div>
-                <router-link to="/login" v-if="!store.user" class="header__link"
+                <router-link
+                    to="/login"
+                    v-if="!userStore.user"
+                    class="header__link"
                     >Log in</router-link
                 >
                 <router-link to="/dashboard" v-else class="header__link">{{
-                    store.user.email
+                    userStore.user.email
                 }}</router-link>
             </div>
         </div>
         <router-view></router-view>
-        <Loader v-if="store.loading" />
+        <Loader v-if="userStore.loading" />
     </div>
 </template>
 
 <script setup>
 import Loader from "@/components/Loader.vue";
-import { useUserStore } from "@/store";
+import { useUserStore, useOptionsStore } from "@/store";
+import { watch, onBeforeMount, ref } from "vue";
+import Icon from "./components/Icon.vue";
+import SearchModal from "./components/SearchModal.vue";
+import themes from "@/data/themes.json";
 
-const store = useUserStore();
+const userStore = useUserStore();
+const optionsStore = useOptionsStore();
+const showingThemeModal = ref(false);
+
+const themeNames = themes.map((theme) => theme.name);
+
+onBeforeMount(() => {
+    watch(
+        () => optionsStore.theme,
+        (newTheme) => {
+            const themeLinkElement = document.getElementById("theme");
+            themeLinkElement.href = `./data/themes/${newTheme}`;
+        },
+        { immediate: true }
+    );
+});
 </script>
 
 <style scoped>
@@ -37,7 +78,7 @@ const store = useUserStore();
 }
 
 .header {
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--accent-color);
     padding: 10px 20px;
     border-radius: 20px;
     display: flex;
@@ -46,10 +87,26 @@ const store = useUserStore();
     margin-top: 20px;
 }
 
+.header__group {
+    display: flex;
+    align-items: center;
+}
+
 .header__title {
     font-size: 40px;
     font-weight: bold;
     color: var(--primary-color);
+}
+
+.header__button {
+    color: var(--secondary-color);
+    margin-left: 15px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.header__button:hover {
+    color: var(--text-color);
 }
 
 .header__link {
