@@ -22,6 +22,15 @@
                 >
                     <Icon icon="settings" />
                 </button>
+                <button
+                    class="header__button"
+                    style="margin-left: 15px"
+                    @click="clearSettings"
+                    aria-label="Reset all settings"
+                    aria-label-bottom
+                >
+                    <Icon icon="x-circle" />
+                </button>
             </div>
             <div>
                 <router-link
@@ -53,6 +62,11 @@ const optionsStore = useOptionsStore();
 const showingThemeModal = ref(false);
 
 const themeNames = themes.map((theme) => theme.name);
+
+function clearSettings() {
+    localStorage.clear();
+    location.reload();
+}
 
 onBeforeMount(() => {
     watch(

@@ -27,6 +27,7 @@ body {
 }
 
 [aria-label]:after {
+    content: attr(aria-label);
     opacity: 0;
     transform: translateX(-50%);
     left: 50%;
@@ -41,7 +42,6 @@ body {
     background: #000;
     border-radius: 2px;
     color: var(--text-color);
-    content: attr(aria-label);
     padding: 20px 10px;
     position: absolute;
     white-space: nowrap;
@@ -49,9 +49,17 @@ body {
     line-height: 0;
 }
 
+[aria-label-bottom]:after {
+    top: 80%;
+}
+
 [aria-label]:hover:after {
     opacity: 1;
     transform: translate(-50%, -25%);
+}
+
+[aria-label-bottom]:hover:after {
+    transform: translate(-50%, 25%);
 }
 
 a {

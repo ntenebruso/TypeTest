@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { defineEmits, onMounted, ref, nextTick } from "vue";
+import { onMounted, ref, nextTick } from "vue";
 
 const props = defineProps(["close"]);
 const emit = defineEmits(["keydown"]);

@@ -52,7 +52,7 @@
                             optionsStore.testTime != 60,
                     }"
                 >
-                    <Icon size="20" icon="tool" />
+                    <Icon :size="20" icon="tool" />
                 </button>
             </div>
             <div class="settings__group">
@@ -61,7 +61,7 @@
                     style="display: flex; align-items: center"
                     @click="() => (showingSearchModal = true)"
                 >
-                    <Icon size="17" icon="globe" style="margin-right: 5px" />
+                    <Icon :size="17" icon="globe" style="margin-right: 5px" />
                     {{ optionsStore.language }}
                 </button>
             </div>
