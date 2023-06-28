@@ -5,33 +5,33 @@
                 <h3>Sign Up</h3>
                 <input
                     required
-                    class="form__input"
+                    class="input input--form"
                     type="email"
                     placeholder="Email"
                     v-model="signupEmail"
                 />
                 <input
                     required
-                    class="form__input"
+                    class="input input--form"
                     type="password"
                     placeholder="Password"
                     v-model="signupPassword"
                 />
                 <button class="button" type="submit">Sign Up</button>
-                <p v-if="loginError">{{ loginError }}</p>
+                <p v-if="signupError">{{ signupError }}</p>
             </form>
             <form class="form" @submit.prevent="logIn">
                 <h3>Log In</h3>
                 <input
                     required
-                    class="form__input"
+                    class="input input--form"
                     type="email"
                     placeholder="Email"
                     v-model="loginEmail"
                 />
                 <input
                     required
-                    class="form__input"
+                    class="input input--form"
                     type="password"
                     placeholder="Password"
                     v-model="loginPassword"
@@ -86,7 +86,7 @@ onMounted(async () => {
 <style scoped>
 .forms {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 100px;
 }
 
@@ -96,20 +96,7 @@ onMounted(async () => {
     align-items: center;
 }
 
-.form__input {
-    display: block;
-    padding: 10px 15px;
-    font-size: 20px;
-    font-family: var(--main-font);
-    background: rgba(0, 0, 0, 0.1);
-    border: none;
-    outline: none;
-    color: var(--fg-color);
-    border-radius: 5px;
-    margin: 5px 0;
-}
-
-.form__input::placeholder {
-    color: var(--sub-color);
+.input--form {
+    width: 300px;
 }
 </style>

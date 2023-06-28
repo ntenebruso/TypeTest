@@ -12,7 +12,7 @@
     background: linear-gradient(
         0deg,
         rgba(0, 0, 0, 0) 33%,
-        var(--fg-color) 100%
+        var(--primary-color) 100%
     );
     box-sizing: border-box;
     animation: rotation 1s linear infinite;

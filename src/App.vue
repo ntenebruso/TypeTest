@@ -49,7 +49,7 @@ const store = useUserStore();
 .header__title {
     font-size: 40px;
     font-weight: bold;
-    color: var(--fg-color);
+    color: var(--primary-color);
 }
 
 .header__link {

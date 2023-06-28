@@ -10,6 +10,19 @@
         :callback="(newLanguage) => optionsStore.setLanguage(newLanguage)"
         :items="this.languages"
     />
+    <PromptModal
+        v-if="showingTimeModal"
+        :close="
+            () => {
+                showingTimeModal = false;
+                focusInput();
+            }
+        "
+        :callback="(newTestTime) => (optionsStore.testTime = newTestTime)"
+        prompt="Test time"
+        numeric="true"
+        :initialValue="optionsStore.testTime"
+    />
     <div class="container" v-if="!testFinished">
         <div class="settings" :class="{ 'settings--hidden': testStarted }">
             <div class="settings__group">
@@ -29,25 +42,32 @@
                 >
                     {{ index }}
                 </button>
+                <button
+                    @click="() => (showingTimeModal = true)"
+                    :class="{
+                        settings__button: true,
+                        'settings__button--selected':
+                            optionsStore.testTime != 15 &&
+                            optionsStore.testTime != 30 &&
+                            optionsStore.testTime != 60,
+                    }"
+                >
+                    <Icon size="20" icon="tool" />
+                </button>
             </div>
             <div class="settings__group">
                 <button
                     class="settings__button"
+                    style="display: flex; align-items: center"
                     @click="() => (showingSearchModal = true)"
                 >
-                    <span
-                        style="
-                            font-size: 10px;
-                            vertical-align: middle;
-                            margin-right: 3px;
-                        "
-                    >
-                        <Icon icon="globe" /> </span
-                    >{{ optionsStore.language }}
+                    <Icon size="17" icon="globe" style="margin-right: 5px" />
+                    {{ optionsStore.language }}
                 </button>
             </div>
         </div>
-        <div class="test">
+        <MiniSpinner v-if="testLoading" />
+        <div class="test" v-else>
             <div class="test__time" id="test-time" v-if="testStarted">
                 {{ testTime }}
             </div>
@@ -62,6 +82,7 @@
                         test__caret: true,
                         'test__caret--flashing': !testStarted,
                     }"
+                    v-show="focus"
                     :style="{ left: caretXPos + 5 + 'px' }"
                     ref="caret"
                 ></div>
@@ -130,16 +151,19 @@
 <script>
 import Results from "@/components/Results.vue";
 import SearchModal from "@/components/SearchModal.vue";
+import PromptModal from "@/components/PromptModal.vue";
+import MiniSpinner from "@/components/MiniSpinner.vue";
 import Icon from "@/components/Icon.vue";
 import { useOptionsStore } from "@/store";
 import { mapStores } from "pinia";
-import { computed } from "vue";
 
 export default {
-    components: { Results, SearchModal, Icon },
+    components: { Results, SearchModal, PromptModal, Icon, MiniSpinner },
     data() {
         return {
+            testLoading: true,
             showingSearchModal: false,
+            showingTimeModal: false,
             correctMap: [],
             extraChars: [],
             caretXPos: 0,
@@ -174,9 +198,11 @@ export default {
     },
     methods: {
         async fetchWords(language) {
+            this.testLoading = true;
             const res = await fetch(`./data/${language}.json`);
             const data = await res.json();
             this.words = data.words.sort(() => Math.random() - 0.5);
+            this.testLoading = false;
         },
         restart() {
             clearInterval(this.timerInterval);
@@ -369,13 +395,20 @@ export default {
         },
         ...mapStores(useOptionsStore),
     },
-    mounted() {
-        this.$refs["textInput"].focus();
-    },
-    created() {
-        this.$watch("language", this.fetchWords, {
+    watch: {
+        language: {
+            handler(newLanguage) {
+                this.fetchWords(newLanguage);
+            },
             immediate: true,
-        });
+        },
+        testLoading(newVal) {
+            this.$nextTick(() => {
+                if (newVal == false) {
+                    this.focusInput();
+                }
+            });
+        },
     },
 };
 </script>
@@ -391,7 +424,7 @@ export default {
 .button--restart {
     background: transparent;
     font-size: 25px;
-    color: var(--sub-color);
+    color: var(--secondary-color);
 }
 
 .test {
@@ -407,7 +440,7 @@ export default {
     line-height: 0;
     position: relative;
     bottom: 100px;
-    color: var(--sub-color);
+    color: var(--secondary-color);
     user-select: none;
 }
 
@@ -425,7 +458,7 @@ export default {
     height: 125px;
     position: relative;
     font-size: 27px;
-    color: var(--sub-color);
+    color: var(--secondary-color);
     font-family: var(--mono-font);
 }
 
@@ -446,11 +479,11 @@ export default {
 }
 
 .test__word--correct {
-    color: var(--correct-color) !important;
+    color: var(--test-correct-color) !important;
 }
 
 .test__word--incorrect {
-    color: var(--incorrect-color) !important;
+    color: var(--test-incorrect-color) !important;
 }
 
 .settings {
@@ -464,7 +497,7 @@ export default {
     font-size: 18px;
     border-radius: 20px;
     background: rgba(0, 0, 0, 0.2);
-    color: var(--sub-color);
+    color: var(--secondary-color);
     opacity: 1;
     visibility: visible;
     transition: opacity 0.1s linear, visibility 0.1s linear;
@@ -477,6 +510,7 @@ export default {
 
 .settings__group {
     display: flex;
+    align-items: center;
     column-gap: 10px;
 }
 
@@ -487,7 +521,7 @@ export default {
     width: 2.5px;
     margin-right: 10px;
     border-radius: 20px;
-    background: var(--sub-color);
+    background: var(--secondary-color);
 }
 
 .settings__button {
@@ -500,7 +534,7 @@ export default {
 }
 
 .settings__button--selected {
-    color: var(--fg-color);
+    color: var(--primary-color);
 }
 
 .restart-container {
@@ -515,7 +549,7 @@ export default {
     position: absolute;
     height: 32px;
     width: 2px;
-    background: var(--fg-color);
+    background: var(--primary-color);
     left: 0;
     top: 7px;
     transition: left 0.08s linear;

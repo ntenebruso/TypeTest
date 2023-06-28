@@ -203,7 +203,8 @@ onMounted(() => {
     gap: 50px;
     grid-template-areas:
         "stats chart"
-        "extra-stats extra-stats";
+        "extra-stats extra-stats"
+        "buttons buttons";
 }
 
 .stats {
@@ -221,13 +222,14 @@ onMounted(() => {
 
 .stats .bottom {
     font-size: 80px;
-    color: var(--fg-color);
+    color: var(--primary-color);
 }
 
 .button-container {
     display: flex;
     align-items: center;
     column-gap: 10px;
+    grid-area: buttons;
 }
 
 .chart {
@@ -251,6 +253,6 @@ onMounted(() => {
 
 .extra-stats .bottom {
     font-size: 40px;
-    color: var(--fg-color);
+    color: var(--primary-color);
 }
 </style>

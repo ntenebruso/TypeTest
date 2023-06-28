@@ -1,6 +1,5 @@
 <template>
-    <div class="overlay"></div>
-    <div class="modal">
+    <BaseModal :close="props.close" @keydown="handleKeyDown">
         <div class="modal__search">
             <Icon icon="search" />
             <input
@@ -8,7 +7,7 @@
                 class="modal__input"
                 v-model="inputValue"
                 type="text"
-                @keydown="handleKeyDown"
+                placeholder="Type here to search..."
             />
         </div>
         <div class="modal__list-wrapper">
@@ -26,11 +25,12 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </BaseModal>
 </template>
 
 <script setup>
 import Icon from "./Icon.vue";
+import BaseModal from "./BaseModal.vue";
 import { ref, computed, onMounted, nextTick } from "vue";
 
 const props = defineProps(["items", "callback", "close"]);
@@ -62,10 +62,6 @@ function handleKeyDown(e) {
         done();
         return;
     }
-
-    if (e.code == "Escape") {
-        props.close();
-    }
 }
 
 function done() {
@@ -81,35 +77,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.overlay {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.5);
-    width: 100vw;
-    height: 100vh;
-    z-index: 10;
-}
-
-.modal {
-    z-index: 20;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 10px;
-    background: var(--bg-color);
-    min-width: 700px;
-    overflow: hidden;
-}
-
 .modal__search {
     padding: 15px;
     display: flex;
     align-items: center;
-    color: var(--sub-color);
+    color: var(--secondary-color);
 }
 
 .modal__input {
@@ -117,11 +89,15 @@ onMounted(() => {
     margin-left: 5px;
     border: none;
     background: none;
-    color: var(--sub-color);
+    color: var(--secondary-color);
     font-size: 20px;
-    caret-color: var(--fg-color);
+    caret-color: var(--primary-color);
     font-family: var(--mono-font);
     outline: none;
+}
+
+.modal__input::placeholder {
+    color: var(--secondary-color);
 }
 
 .modal__list {
@@ -137,6 +113,6 @@ onMounted(() => {
 
 .modal__item--active {
     background: #fff;
-    color: var(--sub-color);
+    color: var(--secondary-color);
 }
 </style>

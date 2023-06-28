@@ -17,7 +17,7 @@
     border-top: 7px solid rgba(255, 255, 255, 0.2);
     border-right: 7px solid rgba(255, 255, 255, 0.2);
     border-bottom: 7px solid rgba(255, 255, 255, 0.2);
-    border-left: 7px solid #ffffff;
+    border-left: 7px solid var(--text-color);
     -webkit-transform: translateZ(0);
     -ms-transform: translateZ(0);
     transform: translateZ(0);
