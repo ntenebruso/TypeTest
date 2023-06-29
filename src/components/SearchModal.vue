@@ -58,17 +58,32 @@ const filteredItems = computed(() => {
 });
 
 function handleKeyDown(e) {
-    if (e.code == "ArrowUp" && selectedIndex.value > 0) {
-        selectedIndex.value--;
+    if (e.code == "ArrowUp") {
+        e.preventDefault();
+
+        if (selectedIndex.value > 0) {
+            selectedIndex.value--;
+        } else {
+            selectedIndex.value = filteredItems.value.length - 1;
+        }
+
         return;
     }
 
-    if (
-        e.code == "ArrowDown" &&
-        selectedIndex.value < filteredItems.value.length - 1
-    ) {
-        selectedIndex.value++;
+    if (e.code == "ArrowDown") {
+        e.preventDefault();
+
+        if (selectedIndex.value < filteredItems.value.length - 1) {
+            selectedIndex.value++;
+        } else {
+            selectedIndex.value = 0;
+        }
+
         return;
+    }
+
+    if (e.key.length == 1) {
+        selectedIndex.value = 0;
     }
 
     if (e.code == "Enter") {

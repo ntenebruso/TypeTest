@@ -41,13 +41,14 @@
             <button class="button" @click="props.restart">Try again</button>
             <button
                 v-if="store.user"
-                :disabled="saved"
+                :disabled="saved || loading"
                 class="button"
                 @click="saveResults"
             >
                 Save test
             </button>
             <p v-if="saved">Test saved!</p>
+            <p v-if="error">Error saving test.</p>
         </div>
     </div>
 </template>
@@ -61,7 +62,9 @@ import { useUserStore } from "@/store";
 
 const store = useUserStore();
 const chartCanvas = ref();
+const loading = ref(false);
 const saved = ref(false);
+const error = ref(false);
 
 const props = defineProps([
     "wpm",
@@ -76,7 +79,8 @@ const props = defineProps([
     "restart",
 ]);
 
-async function saveResults(e) {
+async function saveResults() {
+    loading.value = true;
     const docRef = doc(
         db,
         "users",
@@ -84,17 +88,23 @@ async function saveResults(e) {
         "tests",
         Date.now().toString()
     );
-    await setDoc(docRef, {
-        date: Date.now(),
-        wpm: props.wpm,
-        accuracy: props.accuracy,
-        accuracyStats: props.accuracyStats,
-        correctChars: props.correctChars,
-        incorrectChars: props.incorrectChars,
-        language: props.language[0].toUpperCase() + props.language.slice(1),
-        testType: `Test ${props.testTime}`,
-    });
-    saved.value = true;
+
+    try {
+        await setDoc(docRef, {
+            date: Date.now(),
+            wpm: props.wpm,
+            accuracy: props.accuracy,
+            accuracyStats: props.accuracyStats,
+            correctChars: props.correctChars,
+            incorrectChars: props.incorrectChars,
+            language: props.language[0].toUpperCase() + props.language.slice(1),
+            testType: `Test ${props.testTime}`,
+        });
+        saved.value = true;
+    } catch {
+        error.value = true;
+    }
+    loading.value = false;
 }
 
 onMounted(() => {

@@ -8,7 +8,12 @@
 <script setup>
 import { onMounted, ref, nextTick } from "vue";
 
-const props = defineProps(["close"]);
+const props = defineProps({
+    close: {
+        type: Function,
+        required: true,
+    },
+});
 const emit = defineEmits(["keydown"]);
 
 const modal = ref(null);
