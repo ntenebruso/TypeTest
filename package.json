@@ -9,8 +9,8 @@
         "release": "standard-version"
     },
     "dependencies": {
-        "@fontsource/dm-sans": "^4.5.9",
-        "@fontsource/roboto-mono": "^4.5.8",
+        "@fontsource/dm-sans": "^5.0.3",
+        "@fontsource/roboto-mono": "^5.0.3",
         "chart.js": "^4.1.1",
         "dayjs": "^1.11.7",
         "feather-icons": "^4.29.0",
