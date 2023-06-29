@@ -16,7 +16,11 @@
         <div class="extra-stats">
             <div class="group">
                 <div class="top">Test time</div>
-                <div class="bottom">{{ props.graphPoints.length }}</div>
+                <div class="bottom">{{ props.testTime }}s</div>
+            </div>
+            <div class="group">
+                <div class="top">Language</div>
+                <div class="bottom">{{ props.language }}</div>
             </div>
             <div class="group">
                 <div class="top">Words</div>
@@ -209,6 +213,7 @@ onMounted(() => {
 
 .stats {
     grid-area: stats;
+    display: grid;
 }
 
 .stats .group {
@@ -216,11 +221,12 @@ onMounted(() => {
 }
 
 .stats .top {
-    line-height: 0.5;
+    line-height: 1;
     font-size: 40px;
 }
 
 .stats .bottom {
+    margin-top: -5px;
     font-size: 80px;
     color: var(--color-ui-primary);
 }
@@ -234,25 +240,53 @@ onMounted(() => {
 
 .chart {
     min-width: 0;
+    width: 100%;
     grid-area: chart;
 }
 
 .extra-stats {
     grid-area: extra-stats;
-}
-
-.extra-stats {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, auto);
     justify-content: space-between;
 }
 
 .extra-stats .top {
-    line-height: 0.5;
+    line-height: 1;
     font-size: 20px;
 }
 
 .extra-stats .bottom {
+    margin-top: -5px;
     font-size: 40px;
     color: var(--color-ui-primary);
+}
+
+@media (max-width: 900px) {
+    .results {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "stats"
+            "chart"
+            "extra-stats"
+            "buttons";
+    }
+
+    .stats {
+        justify-content: center;
+        grid-template-columns: auto auto;
+        column-gap: 50px;
+    }
+}
+
+@media (max-width: 700px) {
+    .stats {
+        grid-template-columns: auto;
+    }
+
+    .extra-stats {
+        grid-template-columns: repeat(2, auto);
+        justify-content: space-around;
+    }
 }
 </style>

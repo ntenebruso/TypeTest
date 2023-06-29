@@ -492,7 +492,7 @@ export default {
 
 .settings {
     margin: 0 auto;
-    margin-top: 25px;
+    margin-top: -25px;
     display: inline-block;
     width: fit-content;
     display: flex;

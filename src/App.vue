@@ -39,9 +39,17 @@
                     class="header__link"
                     >Log in</router-link
                 >
-                <router-link to="/dashboard" v-else class="header__link">{{
-                    userStore.user.email
-                }}</router-link>
+                <router-link
+                    to="/dashboard"
+                    v-else
+                    class="header__link"
+                    style="display: flex; align-items: center"
+                >
+                    <Icon icon="user" />
+                    <span class="header__user">{{
+                        userStore.user.email
+                    }}</span></router-link
+                >
             </div>
         </div>
         <router-view></router-view>
@@ -92,6 +100,7 @@ optionsStore.$subscribe((mutation, state) => {
     grid-template-rows: auto 1fr auto;
     align-items: center;
     min-height: 100vh;
+    row-gap: 50px;
 }
 
 .header {
@@ -128,5 +137,15 @@ optionsStore.$subscribe((mutation, state) => {
 
 .header__link {
     font-size: 20px;
+}
+
+.header__user {
+    margin-left: 5px;
+}
+
+@media (max-width: 700px) {
+    .header__user {
+        display: none;
+    }
 }
 </style>

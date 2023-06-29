@@ -6,56 +6,60 @@
             <div class="saved-tests">
                 <h2 class="saved-tests__title">Saved tests</h2>
                 <MiniSpinner v-if="loading" />
-                <table class="data-table" width="100%" v-else-if="tests.length">
-                    <thead>
-                        <tr>
-                            <td class="data-table__item">WPM</td>
-                            <td class="data-table__item">Accuracy</td>
-                            <td class="data-table__item">Correct chars</td>
-                            <td class="data-table__item">Incorrect chars</td>
-                            <td class="data-table__item">Language</td>
-                            <td class="data-table__item">Test type</td>
-                            <td class="data-table__item">Date</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            class="data-table__row"
-                            v-for="test in tests"
-                            :key="test.id"
-                        >
-                            <td class="data-table__item">
-                                {{ test.data().wpm }}
-                            </td>
-                            <td class="data-table__item">
-                                {{ test.data().accuracy }}
-                            </td>
-                            <td class="data-table__item">
-                                {{ test.data().correctChars }}
-                            </td>
-                            <td class="data-table__item">
-                                {{ test.data().incorrectChars }}
-                            </td>
-                            <td class="data-table__item">
-                                {{ test.data().language || "N/A" }}
-                            </td>
-                            <td class="data-table__item">
-                                {{ test.data().testType }}
-                            </td>
-                            <td class="data-table__item">
-                                {{ formattedDate(test.data().date) }}
-                            </td>
-                            <td class="data-table__item">
-                                <button
-                                    class="button"
-                                    @click="deleteTest(test.id)"
-                                >
-                                    <Icon icon="trash" />
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div style="overflow: auto" v-else-if="tests.length">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <td class="data-table__item">WPM</td>
+                                <td class="data-table__item">Accuracy</td>
+                                <td class="data-table__item">Correct chars</td>
+                                <td class="data-table__item">
+                                    Incorrect chars
+                                </td>
+                                <td class="data-table__item">Language</td>
+                                <td class="data-table__item">Test type</td>
+                                <td class="data-table__item">Date</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                class="data-table__row"
+                                v-for="test in tests"
+                                :key="test.id"
+                            >
+                                <td class="data-table__item">
+                                    {{ test.data().wpm }}
+                                </td>
+                                <td class="data-table__item">
+                                    {{ test.data().accuracy }}
+                                </td>
+                                <td class="data-table__item">
+                                    {{ test.data().correctChars }}
+                                </td>
+                                <td class="data-table__item">
+                                    {{ test.data().incorrectChars }}
+                                </td>
+                                <td class="data-table__item">
+                                    {{ test.data().language || "N/A" }}
+                                </td>
+                                <td class="data-table__item">
+                                    {{ test.data().testType }}
+                                </td>
+                                <td class="data-table__item">
+                                    {{ formattedDate(test.data().date) }}
+                                </td>
+                                <td class="data-table__item">
+                                    <button
+                                        class="button"
+                                        @click="deleteTest(test.id)"
+                                    >
+                                        <Icon icon="trash" />
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <p v-else>No saved tests :0</p>
             </div>
         </div>
@@ -113,6 +117,7 @@ const formattedDate = (date) => dayjs(date).format("DD MMM YYYY h:mm A");
 .dashboard {
     align-self: start;
     padding: 100px 0 0 0;
+    overflow: auto;
 }
 
 .saved-tests {
@@ -124,6 +129,7 @@ const formattedDate = (date) => dayjs(date).format("DD MMM YYYY h:mm A");
 }
 
 .data-table {
+    width: 100%;
     border-collapse: collapse;
     font-size: 17px;
 }
