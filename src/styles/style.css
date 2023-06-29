@@ -10,15 +10,15 @@
 }
 
 ::selection {
-    background: var(--primary-color);
-    color: var(--secondary-color);
+    background: var(--color-ui-primary);
+    color: var(--color-text-secondary);
 }
 
 body {
     font-size: 20px;
     font-family: var(--main-font);
-    background: var(--bg-color);
-    color: var(--text-color);
+    background: var(--color-background);
+    color: var(--color-text-primary);
 }
 
 [aria-label] {
@@ -41,7 +41,7 @@ body {
     font-size: 20px;
     background: #000;
     border-radius: 2px;
-    color: var(--text-color);
+    color: var(--color-text-primary);
     padding: 20px 10px;
     position: absolute;
     white-space: nowrap;
@@ -63,12 +63,12 @@ body {
 }
 
 a {
-    color: var(--text-color);
+    color: var(--color-text-primary);
     text-decoration: none;
 }
 
 a:hover {
-    color: var(--primary-color);
+    color: var(--color-ui-primary);
 }
 
 h1 {
@@ -89,9 +89,9 @@ button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--accent-color);
+    background: var(--color-ui-tint);
     font-size: 20px;
-    color: var(--text-color);
+    color: var(--color-text-primary);
     padding: 5px 15px;
     border: none;
     font-family: var(--main-font);
@@ -102,14 +102,14 @@ button {
 }
 
 .button:disabled {
-    color: var(--secondary-color);
+    color: var(--color-text-secondary);
     cursor: default;
 }
 
 .button:hover:enabled,
 .button:focus:enabled {
-    background: var(--primary-color);
-    color: var(--secondary-color);
+    background: var(--color-ui-primary);
+    color: var(--color-text-secondary);
 }
 
 .input {
@@ -121,11 +121,11 @@ button {
     background: rgba(0, 0, 0, 0.1);
     border: none;
     outline: none;
-    color: var(--primary-color);
+    color: var(--color-ui-primary);
     border-radius: 5px;
     margin: 5px 0;
 }
 
 .input::placeholder {
-    color: var(--secondary-color);
+    color: var(--color-text-secondary);
 }

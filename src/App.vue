@@ -92,7 +92,7 @@ onBeforeMount(() => {
 }
 
 .header {
-    background: var(--accent-color);
+    background: var(--color-ui-tint);
     padding: 10px 20px;
     border-radius: 20px;
     display: flex;
@@ -109,18 +109,18 @@ onBeforeMount(() => {
 .header__title {
     font-size: 40px;
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--color-ui-primary);
 }
 
 .header__button {
-    color: var(--secondary-color);
+    color: var(--color-text-secondary);
     margin-left: 15px;
     cursor: pointer;
     transition: color 0.3s;
 }
 
 .header__button:hover {
-    color: var(--text-color);
+    color: var(--color-text-primary);
 }
 
 .header__link {

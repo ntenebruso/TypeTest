@@ -48,7 +48,7 @@ onMounted(() => {
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
-    background: var(--bg-color);
+    background: var(--color-background);
     width: 100%;
     max-width: 700px;
     overflow: hidden;

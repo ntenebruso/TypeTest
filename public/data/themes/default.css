@@ -1,11 +1,11 @@
 :root {
-    --bg-color: #1e1e1e;
-    --primary-color: #fe5e41;
-    --secondary-color: #3e3e3e;
-    --accent-color: #171717;
-    --text-color: #fff;
-    --test-correct-color: #dbdbdb;
-    --test-incorrect-color: #fe5e41;
+    --color-background: #1e1e1e;
+    --color-ui-primary: #fe5e41;
+    --color-ui-tint: #171717;
+    --color-text-primary: #fff;
+    --color-text-secondary: #3e3e3e;
+    --color-test-correct: #dbdbdb;
+    --color-test-incorrect: #fe5e41;
     --main-font: "DM Sans", sans-serif;
     --mono-font: "Roboto Mono", monospace;
 }

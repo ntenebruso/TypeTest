@@ -428,7 +428,7 @@ export default {
 .button--restart {
     background: transparent;
     font-size: 25px;
-    color: var(--secondary-color);
+    color: var(--color-text-secondary);
 }
 
 .test {
@@ -444,7 +444,7 @@ export default {
     line-height: 0;
     position: relative;
     bottom: 100px;
-    color: var(--secondary-color);
+    color: var(--color-text-secondary);
     user-select: none;
 }
 
@@ -462,7 +462,7 @@ export default {
     height: 125px;
     position: relative;
     font-size: 27px;
-    color: var(--secondary-color);
+    color: var(--color-text-secondary);
     font-family: var(--mono-font);
 }
 
@@ -483,11 +483,11 @@ export default {
 }
 
 .test__word--correct {
-    color: var(--test-correct-color) !important;
+    color: var(--color-test-correct) !important;
 }
 
 .test__word--incorrect {
-    color: var(--test-incorrect-color) !important;
+    color: var(--color-test-incorrect) !important;
 }
 
 .settings {
@@ -500,8 +500,8 @@ export default {
     font-family: var(--mono-font);
     font-size: 18px;
     border-radius: 20px;
-    background: var(--accent-color);
-    color: var(--secondary-color);
+    background: var(--color-ui-tint);
+    color: var(--color-text-secondary);
     opacity: 1;
     visibility: visible;
     transition: opacity 0.1s linear, visibility 0.1s linear;
@@ -525,7 +525,7 @@ export default {
     width: 2.5px;
     margin-right: 10px;
     border-radius: 20px;
-    background: var(--secondary-color);
+    background: var(--color-text-secondary);
 }
 
 .settings__button {
@@ -534,11 +534,11 @@ export default {
 }
 
 .settings__button:hover {
-    color: var(--text-color);
+    color: var(--color-text-primary);
 }
 
 .settings__button--selected {
-    color: var(--primary-color);
+    color: var(--color-ui-primary);
 }
 
 .restart-container {
@@ -553,7 +553,7 @@ export default {
     position: absolute;
     height: 32px;
     width: 2px;
-    background: var(--primary-color);
+    background: var(--color-ui-primary);
     left: 0;
     top: 7px;
     transition: left 0.08s linear;

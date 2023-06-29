@@ -222,7 +222,7 @@ onMounted(() => {
 
 .stats .bottom {
     font-size: 80px;
-    color: var(--primary-color);
+    color: var(--color-ui-primary);
 }
 
 .button-container {
@@ -253,6 +253,6 @@ onMounted(() => {
 
 .extra-stats .bottom {
     font-size: 40px;
-    color: var(--primary-color);
+    color: var(--color-ui-primary);
 }
 </style>

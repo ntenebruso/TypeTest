@@ -12,7 +12,7 @@
     background: linear-gradient(
         0deg,
         rgba(0, 0, 0, 0) 33%,
-        var(--primary-color) 100%
+        var(--color-ui-primary) 100%
     );
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
@@ -28,7 +28,7 @@
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    background: var(--bg-color);
+    background: var(--color-background);
 }
 @keyframes rotation {
     0% {

@@ -94,7 +94,7 @@ onMounted(() => {
     padding: 15px;
     display: flex;
     align-items: center;
-    color: var(--secondary-color);
+    color: var(--color-text-secondary);
 }
 
 .modal__input {
@@ -102,15 +102,15 @@ onMounted(() => {
     margin-left: 5px;
     border: none;
     background: none;
-    color: var(--secondary-color);
+    color: var(--color-text-secondary);
     font-size: 20px;
-    caret-color: var(--primary-color);
+    caret-color: var(--color-ui-primary);
     font-family: var(--mono-font);
     outline: none;
 }
 
 .modal__input::placeholder {
-    color: var(--secondary-color);
+    color: var(--color-text-secondary);
 }
 
 .modal__list {
@@ -126,6 +126,6 @@ onMounted(() => {
 
 .modal__item--active {
     background: #fff;
-    color: var(--secondary-color);
+    color: var(--color-text-secondary);
 }
 </style>
