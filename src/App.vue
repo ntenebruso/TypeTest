@@ -52,7 +52,7 @@
 <script setup>
 import Loader from "@/components/Loader.vue";
 import { useUserStore, useOptionsStore } from "@/store";
-import { watch, onBeforeMount, ref } from "vue";
+import { watch, ref } from "vue";
 import Icon from "./components/Icon.vue";
 import SearchModal from "./components/SearchModal.vue";
 import themes from "@/data/themes.json";
@@ -68,15 +68,18 @@ function clearSettings() {
     location.reload();
 }
 
-onBeforeMount(() => {
-    watch(
-        () => optionsStore.theme,
-        (newTheme) => {
-            const themeLinkElement = document.getElementById("theme");
-            themeLinkElement.href = `./data/themes/${newTheme}`;
-        },
-        { immediate: true }
-    );
+watch(
+    () => optionsStore.theme,
+    (newTheme) => {
+        const themeLinkElement = document.getElementById("theme");
+        themeLinkElement.href = `./data/themes/${newTheme}`;
+    },
+    { immediate: true }
+);
+
+optionsStore.$subscribe((mutation, state) => {
+    console.log("options changed", state);
+    localStorage.setItem("options", JSON.stringify(state));
 });
 </script>
 
