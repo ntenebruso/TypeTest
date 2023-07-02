@@ -1,15 +1,4 @@
 <template>
-    <SearchModal
-        :items="themeNames"
-        :close="() => (showingThemeModal = false)"
-        :callback="
-            (name) =>
-                optionsStore.setTheme(
-                    themes.find((theme) => theme.name == name).file
-                )
-        "
-        v-if="showingThemeModal"
-    />
     <div class="app">
         <div class="header">
             <div class="header__group">
@@ -18,7 +7,7 @@
                 </router-link>
                 <button
                     class="header__button"
-                    @click="() => (showingThemeModal = true)"
+                    @click="() => (showingCommandPalette = true)"
                 >
                     <Icon icon="settings" />
                 </button>
@@ -54,20 +43,22 @@
         </div>
         <router-view></router-view>
         <Loader v-if="userStore.loading" />
+        <CommandPalette :visible="showingCommandPalette" />
     </div>
 </template>
 
 <script setup>
 import Loader from "@/components/Loader.vue";
+import CommandPalette from "@/components/command/CommandPalette.vue";
 import { useUserStore, useOptionsStore } from "@/store";
 import { watch, ref } from "vue";
-import Icon from "./components/Icon.vue";
-import SearchModal from "./components/SearchModal.vue";
+import Icon from "@/components/Icon.vue";
+import SearchModal from "@/components/SearchModal.vue";
 import themes from "@/data/themes.json";
 
 const userStore = useUserStore();
 const optionsStore = useOptionsStore();
-const showingThemeModal = ref(false);
+const showingCommandPalette = ref(false);
 
 const themeNames = themes.map((theme) => theme.name);
 
