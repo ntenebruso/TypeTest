@@ -7,7 +7,7 @@
                 </router-link>
                 <button
                     class="header__button"
-                    @click="() => (showingCommandPalette = true)"
+                    @click="() => emitter.emit('openCommandPalette')"
                 >
                     <Icon icon="settings" />
                 </button>
@@ -43,7 +43,7 @@
         </div>
         <router-view></router-view>
         <Loader v-if="userStore.loading" />
-        <CommandPalette :visible="showingCommandPalette" />
+        <CommandPalette ref="commandPalette" />
     </div>
 </template>
 
@@ -53,14 +53,11 @@ import CommandPalette from "@/components/command/CommandPalette.vue";
 import { useUserStore, useOptionsStore } from "@/store";
 import { watch, ref } from "vue";
 import Icon from "@/components/Icon.vue";
-import SearchModal from "@/components/SearchModal.vue";
-import themes from "@/data/themes.json";
+import { useCommandEvent } from "./utils/useCommandEvent";
 
 const userStore = useUserStore();
 const optionsStore = useOptionsStore();
-const showingCommandPalette = ref(false);
-
-const themeNames = themes.map((theme) => theme.name);
+const emitter = useCommandEvent();
 
 function clearSettings() {
     localStorage.clear();

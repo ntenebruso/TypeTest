@@ -6,8 +6,8 @@
 
 <script setup>
 import { ref, onBeforeUnmount } from "vue";
-import { useCommandState } from "./useCommandState";
-import { useCommandEvent } from "./useCommandEvent";
+import { useCommandState } from "@/utils/useCommandState";
+import { useCommandEvent } from "@/utils/useCommandEvent";
 
 const { selectedIndex, childrenCount } = useCommandState();
 const emitter = useCommandEvent();

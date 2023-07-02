@@ -14,8 +14,8 @@
 
 <script setup>
 import { ref, inject, onMounted, onBeforeUnmount } from "vue";
-import { useCommandState } from "./useCommandState";
-import { useCommandEvent } from "./useCommandEvent";
+import { useCommandState } from "@/utils/useCommandState";
+import { useCommandEvent } from "@/utils/useCommandEvent";
 
 const emit = defineEmits(["select"]);
 

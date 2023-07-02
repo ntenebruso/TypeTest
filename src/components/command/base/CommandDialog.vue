@@ -16,18 +16,18 @@
                     <slot></slot>
                 </div>
             </div>
-            <div class="modal__overlay"></div>
+            <div class="modal__overlay" @click="() => emit('close')"></div>
         </div>
     </Teleport>
 </template>
 
 <script setup>
-import { useCommandEvent } from "./useCommandEvent";
+import { useCommandEvent } from "@/utils/useCommandEvent";
 import Icon from "@/components/Icon.vue";
-import { ref, onMounted, nextTick, onBeforeUnmount } from "vue";
+import { ref, onMounted, nextTick, onBeforeUnmount, watch } from "vue";
 
 const emitter = useCommandEvent();
-const emit = defineEmits(["selectItem"]);
+const emit = defineEmits(["selectItem", "close"]);
 
 const props = defineProps({
     visible: {
@@ -41,6 +41,10 @@ const inputValue = ref("");
 
 function handleKeyDown(e) {
     emitter.emit("dialogKeyDown", e);
+
+    if (e.code == "Escape") {
+        emit("close");
+    }
 }
 
 function handleSelect(selectedItem) {
@@ -49,11 +53,16 @@ function handleSelect(selectedItem) {
 
 emitter.on("select", handleSelect);
 
-onMounted(() => {
-    nextTick(() => {
-        input.value.focus();
-    });
-});
+watch(
+    () => props.visible,
+    (newVal) => {
+        if (newVal == true) {
+            nextTick(() => {
+                input.value.focus();
+            });
+        }
+    }
+);
 
 onBeforeUnmount(() => {
     emitter.off("select", handleSelect);

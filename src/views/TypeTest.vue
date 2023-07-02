@@ -1,15 +1,4 @@
 <template>
-    <SearchModal
-        v-if="showingSearchModal"
-        :close="
-            () => {
-                showingSearchModal = false;
-                focusInput();
-            }
-        "
-        :callback="(newLanguage) => optionsStore.setLanguage(newLanguage)"
-        :items="languages"
-    />
     <PromptModal
         v-if="showingTimeModal"
         :close="
@@ -20,7 +9,7 @@
         "
         :callback="(newTestTime) => (optionsStore.testTime = newTestTime)"
         prompt="Test time"
-        numeric="true"
+        :numeric="true"
         :initialValue="optionsStore.testTime"
     />
     <div class="container" v-if="!testFinished">
@@ -59,7 +48,9 @@
                 <button
                     class="settings__button"
                     style="display: flex; align-items: center"
-                    @click="() => (showingSearchModal = true)"
+                    @click="
+                        () => emitter.emit('openCommandPalette', 'LanguagePane')
+                    "
                 >
                     <Icon :size="17" icon="globe" style="margin-right: 5px" />
                     {{ optionsStore.language }}
@@ -154,6 +145,7 @@ import SearchModal from "@/components/SearchModal.vue";
 import PromptModal from "@/components/PromptModal.vue";
 import MiniSpinner from "@/components/MiniSpinner.vue";
 import Icon from "@/components/Icon.vue";
+import { useCommandEvent } from "@/utils/useCommandEvent";
 import { useOptionsStore } from "@/store";
 import { mapStores } from "pinia";
 import languages from "@/data/languages.json";
@@ -163,7 +155,6 @@ export default {
     data() {
         return {
             testLoading: true,
-            showingSearchModal: false,
             showingTimeModal: false,
             correctMap: [],
             extraChars: [],
@@ -205,14 +196,12 @@ export default {
             this.testLoading = false;
         },
         restart() {
+            this.$refs["textInput"].value = "";
+            this.$refs["wordsContainer"].style.marginTop = 0 + "px";
+            this.focusInput();
             clearInterval(this.timerInterval);
             Object.assign(this.$data, this.$options.data());
             this.fetchWords(this.optionsStore.language);
-            this.$nextTick(function () {
-                this.$refs["textInput"].value = "";
-                this.$refs["wordsContainer"].style.marginTop = 0 + "px";
-                this.focusInput();
-            });
         },
         startTest() {
             this.testTime = this.optionsStore.testTime;
@@ -413,6 +402,11 @@ export default {
             { immediate: true }
         );
         this.languages = languages;
+        this.emitter = useCommandEvent();
+        this.emitter.on("commandPaletteClose", this.focusInput);
+    },
+    unmounted() {
+        this.emitter.off("commandPaletteClose", this.focusInput);
     },
 };
 </script>
