@@ -24,7 +24,7 @@
 <script setup>
 import { useCommandEvent } from "@/utils/useCommandEvent";
 import Icon from "@/components/Icon.vue";
-import { ref, onMounted, nextTick, onBeforeUnmount, watch } from "vue";
+import { ref, onMounted, nextTick, onUnmounted, watch } from "vue";
 
 const emitter = useCommandEvent();
 const emit = defineEmits(["selectItem", "close"]);
@@ -51,8 +51,6 @@ function handleSelect(selectedItem) {
     emit("selectItem", selectedItem);
 }
 
-emitter.on("select", handleSelect);
-
 watch(
     () => props.visible,
     (newVal) => {
@@ -64,7 +62,9 @@ watch(
     }
 );
 
-onBeforeUnmount(() => {
+emitter.on("select", handleSelect);
+
+onUnmounted(() => {
     emitter.off("select", handleSelect);
 });
 </script>

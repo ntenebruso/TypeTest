@@ -10,7 +10,13 @@
 </template>
 
 <script setup>
-import { ref, shallowRef, defineAsyncComponent, onUnmounted } from "vue";
+import {
+    ref,
+    shallowRef,
+    defineAsyncComponent,
+    onUnmounted,
+    onMounted,
+} from "vue";
 import CommandDialog from "./base/CommandDialog.vue";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 
@@ -38,11 +44,18 @@ const inPane = ref(false);
 const activePane = shallowRef(null);
 
 function handleSelect(selectedItem) {
-    if (!inPane.value) {
+    if (!inPane.value && selectedItem.dataset.pane) {
         activePane.value = componentMap.get(selectedItem.dataset.pane);
         inPane.value = true;
     } else {
         close(true);
+    }
+}
+
+function handleKeyDown(e) {
+    if (e.code == "KeyP" && (e.ctrlKey || e.metaKey) && e.shiftKey) {
+        e.preventDefault();
+        open();
     }
 }
 
@@ -72,8 +85,13 @@ function close(full) {
 emitter.on("openCommandPalette", open);
 emitter.on("closeCommandPalette", close);
 
+onMounted(() => {
+    window.addEventListener("keydown", handleKeyDown);
+});
+
 onUnmounted(() => {
     emitter.off("openCommandPalette", open);
     emitter.off("closeCommandPalette", close);
+    window.removeEventListener("keydown", handleKeyDown);
 });
 </script>
