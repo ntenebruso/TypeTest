@@ -2,29 +2,19 @@
     <Teleport to="body">
         <div class="modal" @keydown="handleKeyDown" v-if="visible">
             <div class="modal__body">
-                <div class="modal__search">
-                    <Icon icon="search" />
-                    <input
-                        ref="input"
-                        class="modal__input"
-                        v-model="inputValue"
-                        type="text"
-                        placeholder="Type here to search..."
-                    />
-                </div>
-                <div class="modal__list-wrapper">
-                    <slot></slot>
-                </div>
+                <slot></slot>
             </div>
-            <div class="modal__overlay" @click="() => emit('close')"></div>
+            <div
+                class="modal__overlay"
+                @click="() => emit('close', true)"
+            ></div>
         </div>
     </Teleport>
 </template>
 
 <script setup>
 import { useCommandEvent } from "@/utils/useCommandEvent";
-import Icon from "@/components/Icon.vue";
-import { ref, onMounted, nextTick, onUnmounted, watch } from "vue";
+import { onMounted, onUnmounted } from "vue";
 
 const emitter = useCommandEvent();
 const emit = defineEmits(["selectItem", "close"]);
@@ -36,9 +26,6 @@ const props = defineProps({
     },
 });
 
-const input = ref(null);
-const inputValue = ref("");
-
 function handleKeyDown(e) {
     emitter.emit("dialogKeyDown", e);
 
@@ -48,21 +35,13 @@ function handleKeyDown(e) {
 }
 
 function handleSelect(selectedItem) {
+    emitter.emit("focusInput");
     emit("selectItem", selectedItem);
 }
 
-watch(
-    () => props.visible,
-    (newVal) => {
-        if (newVal == true) {
-            nextTick(() => {
-                input.value.focus();
-            });
-        }
-    }
-);
-
-emitter.on("select", handleSelect);
+onMounted(() => {
+    emitter.on("select", handleSelect);
+});
 
 onUnmounted(() => {
     emitter.off("select", handleSelect);
@@ -101,28 +80,5 @@ onUnmounted(() => {
     background: rgba(0, 0, 0, 0.5);
     width: 100%;
     height: 100%;
-}
-
-.modal__search {
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    color: var(--color-text-secondary);
-}
-
-.modal__input {
-    flex: 1;
-    margin-left: 5px;
-    border: none;
-    background: none;
-    color: var(--color-text-secondary);
-    font-size: 20px;
-    caret-color: var(--color-ui-primary);
-    font-family: var(--mono-font);
-    outline: none;
-}
-
-.modal__input::placeholder {
-    color: var(--color-text-secondary);
 }
 </style>

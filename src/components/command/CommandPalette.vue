@@ -4,6 +4,7 @@
         @close="close"
         :visible="visible"
     >
+        <CommandInput />
         <component v-if="inPane" :is="activePane" />
         <HomePane v-else />
     </CommandDialog>
@@ -18,6 +19,7 @@ import {
     onMounted,
 } from "vue";
 import CommandDialog from "./base/CommandDialog.vue";
+import CommandInput from "./base/CommandInput.vue";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 
 import HomePane from "./panes/HomePane.vue";

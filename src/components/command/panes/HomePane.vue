@@ -1,7 +1,11 @@
 <template>
     <CommandGroup ref="pane">
-        <CommandItem data-pane="ThemePane">Change theme...</CommandItem>
-        <CommandItem data-pane="LanguagePane">Change language...</CommandItem>
+        <CommandItem data-pane="ThemePane" label="Change theme"
+            >Change theme...</CommandItem
+        >
+        <CommandItem data-pane="LanguagePane" label="Change language"
+            >Change language...</CommandItem
+        >
     </CommandGroup>
 </template>
 

@@ -9,7 +9,7 @@ import { ref, onBeforeUnmount } from "vue";
 import { useCommandState } from "@/utils/useCommandState";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 
-const { selectedIndex, childrenCount } = useCommandState();
+const { selectedIndex, childrenCount, search } = useCommandState();
 const emitter = useCommandEvent();
 const emit = defineEmits(["selectItem"]);
 
@@ -55,8 +55,10 @@ function handleKeyDown(e) {
 emitter.on("dialogKeyDown", handleKeyDown);
 
 onBeforeUnmount(() => {
-    childrenCount.value = 0;
     selectedIndex.value = 0;
+    childrenCount.value = 0;
+    search.value = "";
+
     emitter.off("dialogKeyDown", handleKeyDown);
 });
 </script>

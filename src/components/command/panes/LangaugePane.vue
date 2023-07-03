@@ -4,6 +4,7 @@
             @select="handleSelect"
             v-for="language in languages"
             :data-language="language"
+            :label="language"
         >
             {{ language }}
         </CommandItem>

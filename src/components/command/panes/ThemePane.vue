@@ -4,6 +4,7 @@
             @select="handleSelect"
             v-for="theme in themes"
             :data-theme="theme.file"
+            :label="theme.name"
         >
             {{ theme.name }}
         </CommandItem>
