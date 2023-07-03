@@ -1,6 +1,6 @@
 <template>
     <div class="modal__search">
-        <Icon icon="search" />
+        <i class="fa-solid fa-magnifying-glass"></i>
         <input
             ref="input"
             class="modal__input"
@@ -13,7 +13,6 @@
 
 <script setup>
 import { onBeforeUnmount, onMounted, ref, nextTick } from "vue";
-import Icon from "@/components/Icon.vue";
 import { useCommandState } from "@/utils/useCommandState";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 

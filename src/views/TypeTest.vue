@@ -41,7 +41,7 @@
                             optionsStore.testTime != 60,
                     }"
                 >
-                    <Icon :size="20" icon="tool" />
+                    <i class="fa-solid fa-wrench"></i>
                 </button>
             </div>
             <div class="settings__group">
@@ -52,7 +52,10 @@
                         () => emitter.emit('openCommandPalette', 'LanguagePane')
                     "
                 >
-                    <Icon :size="17" icon="globe" style="margin-right: 5px" />
+                    <i
+                        class="fa-solid fa-language"
+                        style="margin-right: 5px"
+                    ></i>
                     {{ optionsStore.language }}
                 </button>
             </div>
@@ -118,7 +121,7 @@
             />
             <div class="restart-container">
                 <button class="button button--restart" @click="restart">
-                    <Icon icon="refresh-cw" />
+                    <i class="fa-solid fa-rotate-right"></i>
                 </button>
             </div>
         </div>
@@ -144,14 +147,13 @@ import Results from "@/components/Results.vue";
 import SearchModal from "@/components/SearchModal.vue";
 import PromptModal from "@/components/PromptModal.vue";
 import MiniSpinner from "@/components/MiniSpinner.vue";
-import Icon from "@/components/Icon.vue";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 import { useOptionsStore } from "@/store";
 import { mapStores } from "pinia";
 import languages from "@/data/languages.json";
 
 export default {
-    components: { Results, SearchModal, PromptModal, Icon, MiniSpinner },
+    components: { Results, SearchModal, PromptModal, MiniSpinner },
     data() {
         return {
             testLoading: true,

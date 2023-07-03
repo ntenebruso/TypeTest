@@ -9,7 +9,7 @@
                     class="header__button"
                     @click="() => emitter.emit('openCommandPalette')"
                 >
-                    <Icon icon="settings" />
+                    <i class="fa-solid fa-gear"></i>
                 </button>
                 <button
                     class="header__button"
@@ -18,7 +18,7 @@
                     aria-label="Reset all settings"
                     aria-label-bottom
                 >
-                    <Icon icon="x-circle" />
+                    <i class="fa-solid fa-circle-xmark"></i>
                 </button>
             </div>
             <div>
@@ -34,7 +34,7 @@
                     class="header__link"
                     style="display: flex; align-items: center"
                 >
-                    <Icon icon="user" />
+                    <i class="fa-regular fa-user"></i>
                     <span class="header__user">{{
                         userStore.user.email
                     }}</span></router-link
@@ -52,7 +52,6 @@ import Loader from "@/components/Loader.vue";
 import CommandPalette from "@/components/command/CommandPalette.vue";
 import { useUserStore, useOptionsStore } from "@/store";
 import { watch, ref } from "vue";
-import Icon from "@/components/Icon.vue";
 import { useCommandEvent } from "./utils/useCommandEvent";
 
 const userStore = useUserStore();
