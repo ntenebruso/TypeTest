@@ -1,7 +1,6 @@
 <template>
     <BaseModal :close="props.close" @keydown="handleKeyDown">
         <div class="modal__search">
-            <Icon icon="search" />
             <input
                 ref="input"
                 class="modal__input"
@@ -29,7 +28,6 @@
 </template>
 
 <script setup>
-import Icon from "./Icon.vue";
 import BaseModal from "./BaseModal.vue";
 import { ref, computed, onMounted, nextTick } from "vue";
 
