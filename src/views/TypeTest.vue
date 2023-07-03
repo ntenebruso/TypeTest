@@ -197,10 +197,10 @@ export default {
             this.words = data.words.sort(() => Math.random() - 0.5);
             this.testLoading = false;
         },
-        restart() {
+        async restart() {
             clearInterval(this.timerInterval);
             Object.assign(this.$data, this.$options.data());
-            this.fetchWords(this.optionsStore.language);
+            await this.fetchWords(this.optionsStore.language);
             this.$nextTick(() => {
                 this.$refs["textInput"].value = "";
                 this.$refs["wordsContainer"].style.marginTop = 0 + "px";
