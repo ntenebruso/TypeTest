@@ -46,12 +46,29 @@ const inPane = ref(false);
 const activePane = shallowRef(null);
 
 function handleSelect(selectedItem) {
-    if (!inPane.value && selectedItem.dataset.pane) {
+    if (selectedItem.dataset.pane && !inPane.value) {
         activePane.value = componentMap.get(selectedItem.dataset.pane);
         inPane.value = true;
-    } else {
-        close(true);
+        return;
     }
+
+    if (selectedItem.dataset.option) {
+        switch (selectedItem.dataset.option) {
+            case "reset-settings":
+                resetSettings();
+                break;
+        }
+    }
+
+    if (inPane.value) {
+        close(true);
+        return;
+    }
+}
+
+function resetSettings() {
+    localStorage.clear();
+    location.reload();
 }
 
 function handleKeyDown(e) {

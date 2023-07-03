@@ -11,15 +11,6 @@
                 >
                     <i class="fa-solid fa-gear"></i>
                 </button>
-                <button
-                    class="header__button"
-                    style="margin-left: 15px"
-                    @click="clearSettings"
-                    aria-label="Reset all settings"
-                    aria-label-bottom
-                >
-                    <i class="fa-solid fa-circle-xmark"></i>
-                </button>
             </div>
             <div>
                 <router-link
