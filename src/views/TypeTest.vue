@@ -198,12 +198,14 @@ export default {
             this.testLoading = false;
         },
         restart() {
-            this.$refs["textInput"].value = "";
-            this.$refs["wordsContainer"].style.marginTop = 0 + "px";
-            this.focusInput();
             clearInterval(this.timerInterval);
             Object.assign(this.$data, this.$options.data());
             this.fetchWords(this.optionsStore.language);
+            this.$nextTick(() => {
+                this.$refs["textInput"].value = "";
+                this.$refs["wordsContainer"].style.marginTop = 0 + "px";
+                this.focusInput();
+            });
         },
         startTest() {
             this.testTime = this.optionsStore.testTime;
