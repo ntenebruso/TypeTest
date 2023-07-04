@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/ntenebruso/TypeTest/compare/v2.2.5...v2.3.0) (2023-07-04)
+
+
+### Features
+
+* "Clear storage" button ([4e86e13](https://github.com/ntenebruso/TypeTest/commit/4e86e133a91cc85ae80a7af598a4bc533b674abc))
+* Adjust test times with command palette ([69b617a](https://github.com/ntenebruso/TypeTest/commit/69b617a821cd50cbd71a21a624f63568741f394f))
+* Command palette ([28812c2](https://github.com/ntenebruso/TypeTest/commit/28812c2cd232617c8776c506afa3a774fbf414f4))
+* Command palette search functionality ([68f0f26](https://github.com/ntenebruso/TypeTest/commit/68f0f26340fbe082334326053cb089ebc566b668))
+* Custom themes ([4f4c9a7](https://github.com/ntenebruso/TypeTest/commit/4f4c9a7e1f716ddf4eb8284b0e42dadf858b5cac))
+* Open command palette with keyboard shortcut ([1e39a79](https://github.com/ntenebruso/TypeTest/commit/1e39a7957c828f51978d8cf715c75ee2a6aa6f0d))
+* Test language is saved ([6b60a00](https://github.com/ntenebruso/TypeTest/commit/6b60a003971b78162a898add618862b1f56a0908))
+
+
+### Bug Fixes
+
+* Better data persistence ([e5cb7e8](https://github.com/ntenebruso/TypeTest/commit/e5cb7e82b2f8e38c60382234965ceee8d878caa3))
+* Improved accessibility ([0cb5b8c](https://github.com/ntenebruso/TypeTest/commit/0cb5b8c23f8b69a216251eb4e9a03d7d6f8ef533))
+* Improved responsiveness ([6dc0528](https://github.com/ntenebruso/TypeTest/commit/6dc0528a9aaad41443331f9eb3e86dede711de5c))
+* Input value not fully cleared after test restart ([ed139a2](https://github.com/ntenebruso/TypeTest/commit/ed139a28d88448063ffd1888435c03acd6706645))
+* Stylistic fixes ([247928e](https://github.com/ntenebruso/TypeTest/commit/247928e75af79e492ac7f32ae922e94dba947a37))
+* Test not restarting on results page ([fa9f350](https://github.com/ntenebruso/TypeTest/commit/fa9f350525146bc95aa4b94cbfccaf87351982b8))
+
 ### [2.2.5](https://github.com/ntenebruso/TypeTest/compare/v2.1.0...v2.2.5) (2023-06-27)
 
 
