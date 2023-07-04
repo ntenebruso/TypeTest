@@ -22,7 +22,6 @@ _Please note that this app is not available to the public yet!_
 
 # Features in Development
 
--   Adding custom test times
--   Theme switcher
+-   Switch to TypeScript
 -   Gross WPM calculation
 -   More languages (currently have english and spanish)

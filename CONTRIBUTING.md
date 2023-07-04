@@ -11,7 +11,7 @@ The following steps will teach you how to setup TypeTest for local development.
 Once you have cloned this repo, please cd into it and run:
 
 ```sh
-npm install
+yarn install
 ```
 
 ### Run the local development server
@@ -19,7 +19,7 @@ npm install
 The local development server supports live reloading and hot module replacement! To run it, execute the following command:
 
 ```sh
-npm run serve
+yarn run dev
 ```
 
 ### Build production files
@@ -27,11 +27,11 @@ npm run serve
 To build files for production, execute the following command:
 
 ```sh
-npm run build
+yarn run build
 ```
 
 Production files will be exported to the `dist` folder. To locally serve the production build, execute the following command:
 
 ```sh
-npm run serve-build
+npx serve dist
 ```
