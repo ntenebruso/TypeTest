@@ -35,7 +35,9 @@ function handleKeyDown(e) {
 }
 
 function handleSelect(selectedItem) {
-    emitter.emit("focusInput");
+    if (selectedItem.type == "list") {
+        emitter.emit("focusInput");
+    }
     emit("selectItem", selectedItem);
 }
 

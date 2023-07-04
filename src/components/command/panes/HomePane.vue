@@ -6,6 +6,9 @@
         <CommandItem data-pane="LanguagePane" label="Change language"
             >Change language...</CommandItem
         >
+        <CommandItem data-pane="TimePane" label="Change test time"
+            >Change test time...</CommandItem
+        >
         <CommandItem data-option="reset-settings" label="Reset all settings"
             >Reset all settings</CommandItem
         >

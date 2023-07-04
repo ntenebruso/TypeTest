@@ -19,6 +19,9 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useCommandState } from "@/utils/useCommandState";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 
+const { selectedIndex, childrenCount, search } = useCommandState();
+const emitter = useCommandEvent();
+
 const emit = defineEmits(["select"]);
 const props = defineProps({
     label: {
@@ -28,9 +31,6 @@ const props = defineProps({
 });
 
 const item = ref(null);
-
-const { selectedIndex, childrenCount, search } = useCommandState();
-const emitter = useCommandEvent();
 
 const showItem = computed(() =>
     props.label.toLowerCase().includes(search.value.toLowerCase())
@@ -42,6 +42,8 @@ childrenCount.value++;
 
 function handleSelect() {
     const selectedItem = {
+        type: "list",
+        value: props.label,
         index: selectedIndex.value,
         dataset: item.value.dataset,
     };

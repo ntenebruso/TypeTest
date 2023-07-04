@@ -1,50 +1,52 @@
 <template>
-    <div class="modal__search" v-if="!containsInput">
-        <i class="fa-solid fa-magnifying-glass"></i>
+    <div class="modal__command-input">
         <input
             ref="input"
             class="modal__input"
-            v-model="search"
             type="text"
-            placeholder="Type here to search..."
+            :placeholder="props.placeholder"
+            @keydown="handleKeyDown"
         />
     </div>
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref, watch, nextTick } from "vue";
+import { onMounted, ref } from "vue";
 import { useCommandState } from "@/utils/useCommandState";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 
-const { search, containsInput } = useCommandState();
+const { containsInput } = useCommandState();
 const emitter = useCommandEvent();
 
-const input = ref(null);
-
-function handleFocus() {
-    input.value.focus();
-}
-
-watch(containsInput, (newVal) => {
-    if (newVal == false) {
-        nextTick(() => {
-            input.value.focus();
-        });
-    }
+const emit = defineEmits(["select"]);
+const props = defineProps({
+    placeholder: {
+        type: String,
+        default: "enter value here",
+    },
 });
+
+const input = ref(null);
+containsInput.value = true;
+
+function handleKeyDown(e) {
+    if (e.code == "Enter") {
+        const selectedItem = {
+            type: "text",
+            value: e.target.value,
+        };
+        emit("select", selectedItem);
+        emitter.emit("select", selectedItem);
+    }
+}
 
 onMounted(() => {
     input.value.focus();
-    emitter.on("focusInput", handleFocus);
-});
-
-onBeforeUnmount(() => {
-    emitter.off("focusInput", handleFocus);
 });
 </script>
 
 <style scoped>
-.modal__search {
+.modal__command-input {
     padding: 15px;
     display: flex;
     align-items: center;

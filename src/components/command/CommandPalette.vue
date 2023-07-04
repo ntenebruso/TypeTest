@@ -41,27 +41,41 @@ componentMap.set(
         import("@/components/command/panes/LangaugePane.vue")
     )
 );
+componentMap.set(
+    "TimePane",
+    defineAsyncComponent(() =>
+        import("@/components/command/panes/TimePane.vue")
+    )
+);
 
 const inPane = ref(false);
 const activePane = shallowRef(null);
 
 function handleSelect(selectedItem) {
-    if (selectedItem.dataset.pane && !inPane.value) {
-        activePane.value = componentMap.get(selectedItem.dataset.pane);
-        inPane.value = true;
-        return;
-    }
+    if (selectedItem.type == "list") {
+        if (selectedItem.dataset.pane && !inPane.value) {
+            activePane.value = componentMap.get(selectedItem.dataset.pane);
+            inPane.value = true;
+            return;
+        }
 
-    if (selectedItem.dataset.option) {
-        switch (selectedItem.dataset.option) {
-            case "reset-settings":
-                resetSettings();
-                break;
+        if (selectedItem.dataset.option) {
+            switch (selectedItem.dataset.option) {
+                case "reset-settings":
+                    resetSettings();
+                    break;
+            }
         }
     }
 
     if (inPane.value) {
-        close(true);
+        if (
+            (selectedItem.type == "list" &&
+                !selectedItem.dataset.preventClose) ||
+            selectedItem.type == "text"
+        ) {
+            close(true);
+        }
         return;
     }
 }
