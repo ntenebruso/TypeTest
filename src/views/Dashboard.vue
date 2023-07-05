@@ -1,12 +1,12 @@
 <template>
     <div class="dashboard">
         <div>
-            <h1>Hello, {{ store.user.email }}</h1>
+            <h1>Hello, {{ store.user!.email }}</h1>
             <button class="button" @click="handleClick">Sign out</button>
             <div class="saved-tests">
                 <h2 class="saved-tests__title">Saved tests</h2>
                 <MiniSpinner v-if="loading" />
-                <div style="overflow: auto" v-else-if="tests.length">
+                <div style="overflow: auto" v-else-if="tests">
                     <table class="data-table">
                         <thead>
                             <tr>
@@ -66,11 +66,12 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/store";
 import MiniSpinner from "../components/MiniSpinner.vue";
 import { db } from "../firebase";
+import { QueryDocumentSnapshot } from "firebase/firestore";
 import {
     collection,
     getDocs,
@@ -82,19 +83,19 @@ import dayjs from "dayjs";
 import router from "@/router";
 
 const store = useUserStore();
-const tests = ref();
+const tests = ref<QueryDocumentSnapshot[] | null>(null);
 const loading = ref(true);
 
-const collRef = collection(db, "users", store.user.uid, "tests");
+const collRef = collection(db, "users", store.user!.uid, "tests");
 
-async function deleteTest(id) {
+async function deleteTest(id: string) {
     const docRef = doc(collRef, id);
     const docSnapshot = await getDoc(docRef);
     if (docSnapshot) {
         await deleteDoc(docRef);
 
-        const deletedIndex = tests.value.findIndex((test) => test.id == id);
-        tests.value.splice(deletedIndex, 1);
+        const deletedIndex = tests.value!.findIndex((test) => test.id == id);
+        tests.value!.splice(deletedIndex, 1);
     }
 }
 
@@ -109,7 +110,8 @@ async function handleClick() {
     router.push("/");
 }
 
-const formattedDate = (date) => dayjs(date).format("DD MMM YYYY h:mm A");
+const formattedDate = (date: string) =>
+    dayjs(date).format("DD MMM YYYY h:mm A");
 </script>
 
 <style scoped>

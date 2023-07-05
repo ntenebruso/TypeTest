@@ -38,32 +38,32 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Loader from "@/components/Loader.vue";
 import CommandPalette from "@/components/command/CommandPalette.vue";
 import { useUserStore, useOptionsStore } from "@/store";
-import { watch, ref } from "vue";
+import { watch } from "vue";
 import { useCommandEvent } from "./utils/useCommandEvent";
 
 const userStore = useUserStore();
 const optionsStore = useOptionsStore();
 const emitter = useCommandEvent();
 
-function clearSettings() {
-    localStorage.clear();
-    location.reload();
-}
-
 watch(
     () => optionsStore.theme,
     (newTheme) => {
-        const themeLinkElement = document.getElementById("theme");
-        themeLinkElement.href = `./data/themes/${newTheme}`;
+        const themeLinkElement = <HTMLAnchorElement>(
+            document.getElementById("theme")
+        );
+
+        if (themeLinkElement) {
+            themeLinkElement.href = `./data/themes/${newTheme}`;
+        }
     },
     { immediate: true }
 );
 
-optionsStore.$subscribe((mutation, state) => {
+optionsStore.$subscribe((_mutation, state) => {
     console.log("options changed", state);
     localStorage.setItem("options", JSON.stringify(state));
 });

@@ -43,7 +43,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/store";
 import { useRouter } from "vue-router";
@@ -63,7 +63,7 @@ async function signUp() {
     try {
         await store.createUser(signupEmail.value, signupPassword.value);
     } catch (error) {
-        signupError.value = error;
+        signupError.value = (error as Error).message;
     }
 }
 
@@ -72,7 +72,7 @@ async function logIn() {
         await store.signIn(loginEmail.value, loginPassword.value);
         router.push("/dashboard");
     } catch (error) {
-        loginError.value = error;
+        loginError.value = (error as Error).message;
     }
 }
 

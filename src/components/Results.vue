@@ -53,7 +53,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from "vue";
 import Chart from "chart.js/auto";
 import { db } from "@/firebase";
@@ -84,7 +84,7 @@ async function saveResults() {
     const docRef = doc(
         db,
         "users",
-        store.user.uid,
+        store.user!.uid,
         "tests",
         Date.now().toString()
     );
@@ -116,7 +116,7 @@ onMounted(() => {
     var ctx = chartCanvas.value.getContext("2d");
     Chart.defaults.font.family = "Roboto Mono";
 
-    var chart = new Chart(ctx, {
+    new Chart(ctx, {
         type: "line",
         data: {
             labels: chartLabels,

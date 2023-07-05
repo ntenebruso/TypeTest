@@ -10,7 +10,7 @@
     </CommandDialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {
     ref,
     shallowRef,
@@ -31,27 +31,27 @@ const visible = ref(false);
 const componentMap = new Map();
 componentMap.set(
     "ThemePane",
-    defineAsyncComponent(() =>
-        import("@/components/command/panes/ThemePane.vue")
+    defineAsyncComponent(
+        () => import("@/components/command/panes/ThemePane.vue")
     )
 );
 componentMap.set(
     "LanguagePane",
-    defineAsyncComponent(() =>
-        import("@/components/command/panes/LangaugePane.vue")
+    defineAsyncComponent(
+        () => import("@/components/command/panes/LangaugePane.vue")
     )
 );
 componentMap.set(
     "TimePane",
-    defineAsyncComponent(() =>
-        import("@/components/command/panes/TimePane.vue")
+    defineAsyncComponent(
+        () => import("@/components/command/panes/TimePane.vue")
     )
 );
 
 const inPane = ref(false);
 const activePane = shallowRef(null);
 
-function handleSelect(selectedItem) {
+function handleSelect(selectedItem: any) {
     if (selectedItem.type == "list") {
         if (selectedItem.dataset.pane && !inPane.value) {
             activePane.value = componentMap.get(selectedItem.dataset.pane);
@@ -85,14 +85,14 @@ function resetSettings() {
     location.reload();
 }
 
-function handleKeyDown(e) {
+function handleKeyDown(e: KeyboardEvent) {
     if (e.code == "KeyP" && (e.ctrlKey || e.metaKey) && e.shiftKey) {
         e.preventDefault();
         open();
     }
 }
 
-function open(pane) {
+function open(pane?: string) {
     visible.value = true;
 
     if (pane) {
@@ -103,7 +103,7 @@ function open(pane) {
     emitter.emit("commandPaletteOpen");
 }
 
-function close(full) {
+function close(full: boolean) {
     if (inPane.value && !full) {
         inPane.value = false;
         activePane.value = null;

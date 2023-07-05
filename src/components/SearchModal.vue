@@ -27,26 +27,17 @@
     </BaseModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BaseModal from "./BaseModal.vue";
 import { ref, computed, onMounted, nextTick } from "vue";
 
-const props = defineProps({
-    items: {
-        type: Array,
-        required: true,
-    },
-    callback: {
-        type: Function,
-        required: true,
-    },
-    close: {
-        type: Function,
-        required: true,
-    },
-});
+const props = defineProps<{
+    items: any[];
+    callback: Function;
+    close: Function;
+}>();
 
-const input = ref(null);
+const input = ref<HTMLInputElement | null>(null);
 const inputValue = ref("");
 
 const selectedIndex = ref(0);
@@ -55,7 +46,7 @@ const filteredItems = computed(() => {
     return props.items.filter((item) => item.includes(inputValue.value));
 });
 
-function handleKeyDown(e) {
+function handleKeyDown(e: KeyboardEvent) {
     if (e.code == "ArrowUp") {
         e.preventDefault();
 
@@ -97,7 +88,7 @@ function done() {
 
 onMounted(() => {
     nextTick(() => {
-        input.value.focus();
+        input.value!.focus();
     });
 });
 </script>

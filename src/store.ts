@@ -1,5 +1,6 @@
 import { defineStore, createPinia } from "pinia";
 import { auth, getCurrentUser } from "@/firebase";
+import { User } from "firebase/auth";
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
@@ -8,10 +9,16 @@ import {
 
 export const store = createPinia();
 
+interface OptionsState {
+    testTime: number;
+    language: string;
+    theme: string;
+}
+
 export const useOptionsStore = defineStore("options", {
-    state() {
+    state(): OptionsState {
         if (localStorage.getItem("options")) {
-            return JSON.parse(localStorage.getItem("options"));
+            return JSON.parse(localStorage.getItem("options")!);
         }
 
         return {
@@ -21,13 +28,13 @@ export const useOptionsStore = defineStore("options", {
         };
     },
     actions: {
-        setTestTime(newTime) {
+        setTestTime(newTime: number) {
             this.testTime = newTime;
         },
-        setLanguage(newLanguage) {
+        setLanguage(newLanguage: string) {
             this.language = newLanguage;
         },
-        setTheme(newTheme) {
+        setTheme(newTheme: string) {
             this.theme = newTheme;
         },
     },
@@ -36,13 +43,13 @@ export const useOptionsStore = defineStore("options", {
 export const useUserStore = defineStore("user", {
     state() {
         return {
-            user: null,
+            user: null as User | null,
             loading: true,
             initialized: false,
         };
     },
     actions: {
-        async createUser(email, password) {
+        async createUser(email: string, password: string) {
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
             } catch (error) {
@@ -51,7 +58,7 @@ export const useUserStore = defineStore("user", {
 
             this.user = auth.currentUser;
         },
-        async signIn(email, password) {
+        async signIn(email: string, password: string) {
             try {
                 await signInWithEmailAndPassword(auth, email, password);
             } catch (error) {

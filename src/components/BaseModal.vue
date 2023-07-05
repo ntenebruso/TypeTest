@@ -5,20 +5,17 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, nextTick } from "vue";
 
-const props = defineProps({
-    close: {
-        type: Function,
-        required: true,
-    },
-});
+const props = defineProps<{
+    close: Function;
+}>();
 const emit = defineEmits(["keydown"]);
 
-const modal = ref(null);
+const modal = ref<HTMLElement | null>(null);
 
-function handleKeyDown(e) {
+function handleKeyDown(e: KeyboardEvent) {
     emit("keydown", e);
     if (e.code == "Escape") {
         props.close();
@@ -28,7 +25,7 @@ function handleKeyDown(e) {
 
 onMounted(() => {
     nextTick(() => {
-        modal.value.focus();
+        modal.value!.focus();
     });
 });
 </script>

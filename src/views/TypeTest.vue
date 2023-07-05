@@ -49,7 +49,7 @@
                     class="settings__button"
                     style="display: flex; align-items: center"
                     @click="
-                        () => emitter.emit('openCommandPalette', 'LanguagePane')
+                        () => emitter!.emit('openCommandPalette', 'LanguagePane')
                     "
                 >
                     <i
@@ -138,11 +138,11 @@
         :incorrectChars="incorrectChars"
         :testTime="initialTestTime"
         :language="optionsStore.language"
-        :restart="restart.bind(this)"
+        :restart="() => restart"
     />
 </template>
 
-<script>
+<script lang="ts">
 import Results from "@/components/Results.vue";
 import SearchModal from "@/components/SearchModal.vue";
 import PromptModal from "@/components/PromptModal.vue";
@@ -150,47 +150,51 @@ import MiniSpinner from "@/components/MiniSpinner.vue";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 import { useOptionsStore } from "@/store";
 import { mapStores } from "pinia";
-import languages from "@/data/languages.json";
+
+function initialState() {
+    return {
+        testLoading: true,
+        showingTimeModal: false,
+        correctMap: [] as boolean[][],
+        extraChars: [] as string[][],
+        caretXPos: 0,
+        input: "",
+        inputValue: [] as string[],
+        words: [] as string[],
+        recomputeWords: 0,
+        focus: false,
+        currentWordElementIndex: 0,
+        currentLetterElementIndex: 0,
+        totalChars: 0,
+        correctWordChars: 0,
+        errorsPerWord: 0,
+        correctChars: 0,
+        incorrectChars: 0,
+        spaces: 0,
+        correctSpaces: 0,
+        wpm: 0,
+        accuracyStats: { correct: 0, incorrect: 0 },
+        errorsPerSecond: [] as number[],
+        accuracyPercent: 0,
+        liveWpm: [] as number[],
+        currentErrors: 0,
+        testTime: 0,
+        initialTestTime: 0,
+        timerInterval: null as ReturnType<typeof setInterval> | null,
+        testSeconds: 0,
+        testFinished: false,
+        testStarted: false,
+        emitter: null as ReturnType<typeof useCommandEvent> | null,
+    };
+}
 
 export default {
     components: { Results, SearchModal, PromptModal, MiniSpinner },
     data() {
-        return {
-            testLoading: true,
-            showingTimeModal: false,
-            correctMap: [],
-            extraChars: [],
-            caretXPos: 0,
-            input: "",
-            inputValue: [],
-            words: [],
-            recomputeWords: 0,
-            focus: false,
-            currentWordElementIndex: 0,
-            currentLetterElementIndex: 0,
-            totalChars: 0,
-            correctWordChars: 0,
-            errorsPerWord: 0,
-            correctChars: 0,
-            incorrectChars: 0,
-            spaces: 0,
-            correctSpaces: 0,
-            wpm: 0,
-            accuracyStats: { correct: 0, incorrect: 0 },
-            errorsPerSecond: [],
-            accuracyPercent: 0,
-            liveWpm: [],
-            currentErrors: 0,
-            testTime: 0,
-            initialTestTime: null,
-            timerInterval: null,
-            testSeconds: 0,
-            testFinished: false,
-            testStarted: false,
-        };
+        return initialState();
     },
     methods: {
-        async fetchWords(language) {
+        async fetchWords(language: string) {
             this.testLoading = true;
             const res = await fetch(`./data/languages/${language}.json`);
             const data = await res.json();
@@ -198,12 +202,13 @@ export default {
             this.testLoading = false;
         },
         async restart() {
-            clearInterval(this.timerInterval);
-            Object.assign(this.$data, this.$options.data());
+            clearInterval(this.timerInterval!);
+            Object.assign(this.$data, initialState());
             await this.fetchWords(this.optionsStore.language);
+            this.input = "";
             this.$nextTick(() => {
-                this.$refs["textInput"].value = "";
-                this.$refs["wordsContainer"].style.marginTop = 0 + "px";
+                (<HTMLElement>this.$refs["wordsContainer"]).style.marginTop =
+                    0 + "px";
                 this.focusInput();
             });
         },
@@ -224,7 +229,7 @@ export default {
                 this.currentErrors = 0;
                 this.testTime--;
                 if (this.testTime == 0) {
-                    clearInterval(this.timerInterval);
+                    clearInterval(this.timerInterval!);
                     this.finishTest();
                     console.log(this.errorsPerSecond);
                 }
@@ -232,13 +237,13 @@ export default {
             this.testStarted = true;
         },
         focusInput() {
-            this.$refs["textInput"].focus();
+            (<HTMLInputElement>this.$refs["textInput"]).focus();
             this.focus = true;
         },
         changeFocus() {
             this.focus = !this.focus;
         },
-        handleKeyDown(e) {
+        handleKeyDown(e: KeyboardEvent) {
             const validKey =
                 e.key.length == 1 &&
                 e.code != "Space" &&
@@ -281,14 +286,15 @@ export default {
                         this.accuracyStats.incorrect++;
                     }
                     this.currentWordElementIndex++;
-                    this.input = null;
+                    this.input = "";
                     this.inputValue = [];
                     this.currentLetterElementIndex = 0;
                     this.errorsPerWord = 0;
                     this.spaces++;
 
-                    var wordElement =
-                        this.$refs["prompt"].querySelectorAll("div#word");
+                    var wordElement = (<HTMLElement>(
+                        this.$refs["prompt"]
+                    )).querySelectorAll<HTMLElement>("div#word");
                     this.caretXPos =
                         wordElement[this.currentWordElementIndex].offsetLeft -
                         5;
@@ -296,11 +302,13 @@ export default {
                     if (
                         wordElement[this.currentWordElementIndex].offsetTop > 0
                     ) {
-                        this.$refs["wordsContainer"].style.marginTop =
+                        (<HTMLElement>(
+                            this.$refs["wordsContainer"]
+                        )).style.marginTop =
                             (parseInt(
-                                this.$refs[
-                                    "wordsContainer"
-                                ].style.marginTop.slice(0, -2)
+                                (<HTMLElement>(
+                                    this.$refs["wordsContainer"]
+                                )).style.marginTop.slice(0, -2)
                             ) || 0) -
                             wordElement[this.currentWordElementIndex]
                                 .offsetTop +
@@ -405,12 +413,11 @@ export default {
             (newLanguage) => this.fetchWords(newLanguage),
             { immediate: true }
         );
-        this.languages = languages;
         this.emitter = useCommandEvent();
         this.emitter.on("commandPaletteClose", this.focusInput);
     },
     unmounted() {
-        this.emitter.off("commandPaletteClose", this.focusInput);
+        this.emitter!.off("commandPaletteClose", this.focusInput);
     },
 };
 </script>

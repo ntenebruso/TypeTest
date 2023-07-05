@@ -34,7 +34,7 @@ const router = createRouter({
 });
 
 const DEFAULT_TITLE = "TypeTest";
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title + " | TypeTest";
     } else {

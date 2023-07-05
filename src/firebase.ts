@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -15,8 +15,8 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 
-export function getCurrentUser() {
-    return new Promise((resolve, reject) => {
+export function getCurrentUser(): Promise<User | null> {
+    return new Promise<User | null>((resolve, reject) => {
         const destroyListener = onAuthStateChanged(
             auth,
             (user) => {

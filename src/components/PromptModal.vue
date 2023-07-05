@@ -16,52 +16,40 @@
     </BaseModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, nextTick, ref } from "vue";
 import BaseModal from "./BaseModal.vue";
 
-const props = defineProps({
-    prompt: {
-        type: String,
-        required: true,
-    },
-    numeric: {
-        type: Boolean,
-        required: true,
-    },
-    initialValue: [String, Number],
-    callback: {
-        type: Function,
-        required: true,
-    },
-    close: {
-        type: Function,
-        required: true,
-    },
-});
+const props = defineProps<{
+    prompt: string;
+    numeric: boolean;
+    initialValue: string | number;
+    callback: Function;
+    close: Function;
+}>();
 
-const input = ref(null);
+const input = ref<HTMLInputElement | null>(null);
 const error = ref("");
 
-function handleKeyDown(e) {
+function handleKeyDown(e: KeyboardEvent) {
     if (e.code == "Enter") {
         done();
     }
 }
 
 function done() {
-    if (props.numeric && !/^\d+$/g.test(input.value.value)) {
+    if (props.numeric && !/^\d+$/g.test(input.value!.value)) {
         error.value = "Input must be a number.";
         return;
     } else {
-        props.callback(parseInt(input.value.value));
+        props.callback(parseInt(input.value!.value));
         props.close();
     }
 }
 
 onMounted(() => {
     nextTick(() => {
-        input.value.focus();
+        input.value!.focus();
     });
 });
 </script>
