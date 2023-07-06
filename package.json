@@ -3,7 +3,7 @@
     "version": "2.3.0",
     "private": true,
     "scripts": {
-        "dev": "vue-tsc --noEmit --allowJs --watch & vite",
+        "dev": "vue-tsc --noEmit --watch & vite",
         "build": "vue-tsc && vite build",
         "serve": "vite preview",
         "release": "standard-version"

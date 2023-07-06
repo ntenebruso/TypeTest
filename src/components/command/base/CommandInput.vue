@@ -11,7 +11,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch, nextTick } from "vue";
 import { useCommandState } from "@/utils/useCommandState";
 import { useCommandEvent } from "@/utils/useCommandEvent";
@@ -19,22 +19,22 @@ import { useCommandEvent } from "@/utils/useCommandEvent";
 const { search, containsInput } = useCommandState();
 const emitter = useCommandEvent();
 
-const input = ref(null);
+const input = ref<HTMLInputElement | null>(null);
 
 function handleFocus() {
-    input.value.focus();
+    input.value!.focus();
 }
 
 watch(containsInput, (newVal) => {
     if (newVal == false) {
         nextTick(() => {
-            input.value.focus();
+            input.value!.focus();
         });
     }
 });
 
 onMounted(() => {
-    input.value.focus();
+    input.value!.focus();
     emitter.on("focusInput", handleFocus);
 });
 

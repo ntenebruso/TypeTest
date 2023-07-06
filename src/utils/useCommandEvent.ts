@@ -1,13 +1,14 @@
 import mitt from "mitt";
+import { CommandItem } from "@/types";
 
 type Events = {
-    commandPaletteOpen: any;
-    commandPaletteClose: any;
-    openCommandPalette: string;
-    closeCommandPalette: boolean;
-    select: any;
+    commandPaletteOpen: undefined;
+    commandPaletteClose: undefined;
+    openCommandPalette: string | undefined;
+    closeCommandPalette: boolean | undefined;
+    select: CommandItem;
     dialogKeyDown: KeyboardEvent;
-    focusInput: any;
+    focusInput: undefined;
 };
 
 const emitter = mitt<Events>();

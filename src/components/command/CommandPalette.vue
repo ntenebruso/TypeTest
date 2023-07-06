@@ -17,10 +17,12 @@ import {
     defineAsyncComponent,
     onUnmounted,
     onMounted,
+    type Component,
 } from "vue";
 import CommandDialog from "./base/CommandDialog.vue";
 import CommandInput from "./base/CommandInput.vue";
 import { useCommandEvent } from "@/utils/useCommandEvent";
+import { CommandItem } from "@/types";
 
 import HomePane from "./panes/HomePane.vue";
 
@@ -28,7 +30,7 @@ const emitter = useCommandEvent();
 
 const visible = ref(false);
 
-const componentMap = new Map();
+const componentMap = new Map<string, Component>();
 componentMap.set(
     "ThemePane",
     defineAsyncComponent(
@@ -49,12 +51,12 @@ componentMap.set(
 );
 
 const inPane = ref(false);
-const activePane = shallowRef(null);
+const activePane = shallowRef<Component | null>(null);
 
-function handleSelect(selectedItem: any) {
+function handleSelect(selectedItem: CommandItem) {
     if (selectedItem.type == "list") {
         if (selectedItem.dataset.pane && !inPane.value) {
-            activePane.value = componentMap.get(selectedItem.dataset.pane);
+            activePane.value = componentMap.get(selectedItem.dataset.pane)!;
             inPane.value = true;
             return;
         }
@@ -72,7 +74,7 @@ function handleSelect(selectedItem: any) {
         if (
             (selectedItem.type == "list" &&
                 !selectedItem.dataset.preventClose) ||
-            selectedItem.type == "text"
+            selectedItem.type == "input"
         ) {
             close(true);
         }
@@ -96,14 +98,14 @@ function open(pane?: string) {
     visible.value = true;
 
     if (pane) {
-        activePane.value = componentMap.get(pane);
+        activePane.value = componentMap.get(pane) || null;
         inPane.value = true;
     }
 
     emitter.emit("commandPaletteOpen");
 }
 
-function close(full: boolean) {
+function close(full?: boolean) {
     if (inPane.value && !full) {
         inPane.value = false;
         activePane.value = null;

@@ -15,7 +15,7 @@
     </CommandGroup>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import CommandGroup from "@/components/command/base/CommandGroup.vue";
 import CommandItem from "@/components/command/base/CommandItem.vue";
 </script>

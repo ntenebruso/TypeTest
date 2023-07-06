@@ -1,6 +1,6 @@
 <template>
     <Teleport to="body">
-        <div class="modal" @keydown="handleKeyDown" v-if="visible">
+        <div class="modal" @keydown="handleKeyDown" v-if="props.visible">
             <div class="modal__body">
                 <slot></slot>
             </div>
@@ -12,29 +12,30 @@
     </Teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useCommandEvent } from "@/utils/useCommandEvent";
+import { CommandItem } from "@/types";
 import { onMounted, onUnmounted } from "vue";
 
 const emitter = useCommandEvent();
-const emit = defineEmits(["selectItem", "close"]);
+const emit = defineEmits<{
+    (e: "selectItem", selectedItem: CommandItem): void;
+    (e: "close", overlayClicked: boolean): void;
+}>();
 
-const props = defineProps({
-    visible: {
-        type: Boolean,
-        default: true,
-    },
-});
+const props = defineProps<{
+    visible: boolean;
+}>();
 
-function handleKeyDown(e) {
+function handleKeyDown(e: KeyboardEvent) {
     emitter.emit("dialogKeyDown", e);
 
     if (e.code == "Escape") {
-        emit("close");
+        emit("close", false);
     }
 }
 
-function handleSelect(selectedItem) {
+function handleSelect(selectedItem: CommandItem) {
     if (selectedItem.type == "list") {
         emitter.emit("focusInput");
     }

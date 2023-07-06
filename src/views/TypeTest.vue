@@ -7,7 +7,7 @@
                 focusInput();
             }
         "
-        :callback="(newTestTime) => (optionsStore.testTime = newTestTime)"
+        :callback="(newTestTime: number) => (optionsStore.testTime = newTestTime)"
         prompt="Test time"
         :numeric="true"
         :initialValue="optionsStore.testTime"

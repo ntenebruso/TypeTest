@@ -10,30 +10,30 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { CommandInputItem } from "@/types";
 import { useCommandState } from "@/utils/useCommandState";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 
 const { containsInput } = useCommandState();
 const emitter = useCommandEvent();
 
-const emit = defineEmits(["select"]);
-const props = defineProps({
-    placeholder: {
-        type: String,
-        default: "enter value here",
-    },
-});
+const emit = defineEmits<{
+    (e: "select", selectedItem: CommandInputItem): void;
+}>();
+const props = defineProps<{
+    placeholder: string;
+}>();
 
-const input = ref(null);
+const input = ref<HTMLInputElement | null>(null);
 containsInput.value = true;
 
-function handleKeyDown(e) {
+function handleKeyDown(e: KeyboardEvent) {
     if (e.code == "Enter") {
-        const selectedItem = {
-            type: "text",
-            value: e.target.value,
+        const selectedItem: CommandInputItem = {
+            type: "input",
+            value: (<HTMLInputElement>e.target!).value,
         };
         emit("select", selectedItem);
         emitter.emit("select", selectedItem);
@@ -41,7 +41,7 @@ function handleKeyDown(e) {
 }
 
 onMounted(() => {
-    input.value.focus();
+    input.value!.focus();
 });
 </script>
 

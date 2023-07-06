@@ -14,23 +14,23 @@
     </li>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { CommandListItem } from "@/types";
 import { useCommandState } from "@/utils/useCommandState";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 
 const { selectedIndex, childrenCount, search } = useCommandState();
 const emitter = useCommandEvent();
 
-const emit = defineEmits(["select"]);
-const props = defineProps({
-    label: {
-        type: String,
-        default: "",
-    },
-});
+const emit = defineEmits<{
+    (e: "select", selectedItem: CommandListItem): void;
+}>();
+const props = defineProps<{
+    label: string;
+}>();
 
-const item = ref(null);
+const item = ref<HTMLLIElement | null>(null);
 
 const showItem = computed(() =>
     props.label.toLowerCase().includes(search.value.toLowerCase())
@@ -41,22 +41,22 @@ index.value = childrenCount.value;
 childrenCount.value++;
 
 function handleSelect() {
-    const selectedItem = {
+    const selectedItem: CommandListItem = {
         type: "list",
         value: props.label,
         index: selectedIndex.value,
-        dataset: item.value.dataset,
+        dataset: item.value!.dataset,
     };
     emit("select", selectedItem);
     emitter.emit("select", selectedItem);
 }
 
 onMounted(() => {
-    item.value.addEventListener("select", handleSelect);
+    item.value!.addEventListener("select", handleSelect);
 });
 
 onBeforeUnmount(() => {
-    item.value.removeEventListener("select", handleSelect);
+    item.value!.removeEventListener("select", handleSelect);
 });
 </script>
 

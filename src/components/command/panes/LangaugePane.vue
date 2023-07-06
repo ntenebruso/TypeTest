@@ -11,8 +11,9 @@
     </CommandGroup>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useOptionsStore } from "@/store";
+import { CommandListItem } from "@/types";
 import CommandGroup from "@/components/command/base/CommandGroup.vue";
 import CommandItem from "@/components/command/base/CommandItem.vue";
 
@@ -20,7 +21,7 @@ import languages from "@/data/languages.json";
 
 const optionsStore = useOptionsStore();
 
-function handleSelect(item) {
-    optionsStore.setLanguage(item.dataset.language);
+function handleSelect(item: CommandListItem) {
+    optionsStore.setLanguage(item.dataset.language || "english");
 }
 </script>

@@ -18,18 +18,19 @@
     </CommandGroup>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import CommandGroup from "../base/CommandGroup.vue";
 import CommandItem from "../base/CommandItem.vue";
 import CommandInputItem from "../base/CommandInputItem.vue";
 import { useOptionsStore } from "@/store";
+import { CommandItem as CommandItemType } from "@/types";
 
 const optionsStore = useOptionsStore();
 
 const custom = ref(false);
 
-function handleSelect(selectedItem) {
+function handleSelect(selectedItem: CommandItemType) {
     if (selectedItem.type == "list" && selectedItem.dataset.custom) {
         custom.value = true;
         return;

@@ -5,19 +5,22 @@
     <slot v-else></slot>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from "vue";
+import { CommandItem } from "@/types";
 import { useCommandState } from "@/utils/useCommandState";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 
 const { selectedIndex, childrenCount, search, containsInput } =
     useCommandState();
 const emitter = useCommandEvent();
-const emit = defineEmits(["selectItem"]);
+const emit = defineEmits<{
+    (e: "selectItem", selectedItem: CommandItem): void;
+}>();
 
-const modalList = ref(null);
+const modalList = ref<HTMLUListElement | null>(null);
 
-function handleKeyDown(e) {
+function handleKeyDown(e: KeyboardEvent) {
     if (!containsInput.value) {
         if (e.code == "ArrowUp") {
             e.preventDefault();
@@ -49,14 +52,14 @@ function handleKeyDown(e) {
 
         if (e.code == "Enter") {
             const event = new Event("select");
-            modalList.value
-                .querySelector("[data-selected=true]")
+            modalList
+                .value!.querySelector("[data-selected=true]")!
                 .dispatchEvent(event);
         }
     }
 }
 
-function handleSelect(selectedItem) {
+function handleSelect(selectedItem: CommandItem) {
     emit("selectItem", selectedItem);
 }
 
