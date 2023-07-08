@@ -49,7 +49,7 @@
                     class="settings__button"
                     style="display: flex; align-items: center"
                     @click="
-                        () => emitter!.emit('openCommandPalette', 'LanguagePane')
+                        () => $options.emitter!.emit('openCommandPalette', 'LanguagePane')
                     "
                 >
                     <i
@@ -138,7 +138,7 @@
         :incorrectChars="incorrectChars"
         :testTime="initialTestTime"
         :language="optionsStore.language"
-        :restart="() => restart"
+        :restart="() => restart()"
     />
 </template>
 
@@ -184,7 +184,6 @@ function initialState() {
         testSeconds: 0,
         testFinished: false,
         testStarted: false,
-        emitter: null as ReturnType<typeof useCommandEvent> | null,
     };
 }
 
@@ -413,11 +412,13 @@ export default {
             (newLanguage) => this.fetchWords(newLanguage),
             { immediate: true }
         );
-        this.emitter = useCommandEvent();
-        this.emitter.on("commandPaletteClose", this.focusInput);
+    },
+    mounted() {
+        this.$options.emitter = useCommandEvent();
+        this.$options.emitter.on("commandPaletteClose", this.focusInput);
     },
     unmounted() {
-        this.emitter!.off("commandPaletteClose", this.focusInput);
+        this.$options.emitter!.off("commandPaletteClose", this.focusInput);
     },
 };
 </script>
