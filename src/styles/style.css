@@ -49,13 +49,13 @@ body {
     line-height: 0;
 }
 
-[aria-label-bottom]:after {
-    top: 80%;
-}
-
 [aria-label]:hover:after {
     opacity: 1;
     transform: translate(-50%, -25%);
+}
+
+[aria-label-bottom]:after {
+    top: 80%;
 }
 
 [aria-label-bottom]:hover:after {

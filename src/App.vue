@@ -8,6 +8,8 @@
                 <button
                     class="header__button"
                     @click="() => emitter.emit('openCommandPalette')"
+                    aria-label="Settings (CTRL+SHIFT+P)"
+                    aria-label-bottom
                 >
                     <i class="fa-solid fa-gear"></i>
                 </button>

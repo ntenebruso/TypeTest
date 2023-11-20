@@ -20,16 +20,45 @@ const emit = defineEmits<{
 
 const modalList = ref<HTMLUListElement | null>(null);
 
+function getValidItems() {
+    const allItems =
+        <NodeListOf<HTMLElement>>(
+            modalList.value?.querySelectorAll(
+                "[command-item='']:not([aria-disabled='true'])"
+            )
+        ) || [];
+    return Array.from(allItems);
+}
+
+function getSelectedItem() {
+    const selectedItem = modalList.value?.querySelector(
+        "[command-item=''][data-selected='true']"
+    );
+    return selectedItem;
+}
+
+function changeSelectionBy(change: number) {
+    const selectedItem = getSelectedItem();
+    const items = getValidItems();
+
+    const index = items.findIndex((item) => item == selectedItem);
+
+    const newSelected = items[index + change];
+
+    if (newSelected) {
+        selectedIndex.value = parseInt(newSelected.dataset.index!);
+    } else {
+        if (change > 0) selectedIndex.value = 0;
+        else selectedIndex.value = childrenCount.value - 1;
+    }
+}
+
 function handleKeyDown(e: KeyboardEvent) {
     if (!containsInput.value) {
         if (e.code == "ArrowUp") {
             e.preventDefault();
 
-            if (selectedIndex.value > 0) {
-                selectedIndex.value--;
-            } else {
-                selectedIndex.value = childrenCount.value - 1;
-            }
+            changeSelectionBy(-1);
 
             return;
         }
@@ -37,11 +66,7 @@ function handleKeyDown(e: KeyboardEvent) {
         if (e.code == "ArrowDown") {
             e.preventDefault();
 
-            if (selectedIndex.value < childrenCount.value - 1) {
-                selectedIndex.value++;
-            } else {
-                selectedIndex.value = 0;
-            }
+            changeSelectionBy(1);
 
             return;
         }

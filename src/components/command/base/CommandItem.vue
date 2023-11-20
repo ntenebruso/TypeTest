@@ -5,10 +5,13 @@
             'modal__item--active': selectedIndex == index,
         }"
         :data-selected="selectedIndex == index"
+        :data-index="index"
         @mouseenter="() => (selectedIndex = index)"
         @click="handleSelect"
         ref="item"
         v-show="showItem"
+        :aria-disabled="!showItem"
+        command-item=""
     >
         <slot></slot>
     </li>
