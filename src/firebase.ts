@@ -16,14 +16,9 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 export function getCurrentUser(): Promise<User | null> {
-    return new Promise<User | null>((resolve, reject) => {
-        const destroyListener = onAuthStateChanged(
-            auth,
-            (user) => {
-                resolve(user);
-            },
-            reject
-        );
-        destroyListener();
+    return new Promise<User | null>((resolve) => {
+        onAuthStateChanged(auth, (user) => {
+            resolve(user);
+        });
     });
 }

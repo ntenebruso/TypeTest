@@ -78,10 +78,15 @@ export const useUserStore = defineStore("user", {
         },
         async fetchUser() {
             if (!this.initialized) {
-                this.initialized = true;
-                this.user = await getCurrentUser();
-                console.log("fetching user");
-                this.loading = false;
+                try {
+                    this.initialized = true;
+                    this.user = await getCurrentUser();
+                    console.log("fetching user");
+                    this.loading = false;
+                } catch (error) {
+                    console.error(error);
+                    throw error;
+                }
             }
         },
     },
