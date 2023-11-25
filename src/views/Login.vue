@@ -62,8 +62,9 @@ const signupError = ref("");
 async function signUp() {
     try {
         await store.createUser(signupEmail.value, signupPassword.value);
-    } catch (error) {
-        signupError.value = (error as Error).message;
+        router.push("/dashboard");
+    } catch (error: any) {
+        signupError.value = error.message;
     }
 }
 
@@ -71,8 +72,8 @@ async function logIn() {
     try {
         await store.signIn(loginEmail.value, loginPassword.value);
         router.push("/dashboard");
-    } catch (error) {
-        loginError.value = (error as Error).message;
+    } catch (error: any) {
+        loginError.value = error.message;
     }
 }
 

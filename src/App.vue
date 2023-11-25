@@ -34,8 +34,8 @@
                 >
             </div>
         </div>
-        <router-view></router-view>
         <Loader v-if="userStore.loading" />
+        <router-view v-else></router-view>
         <CommandPalette ref="commandPalette" />
     </div>
 </template>

@@ -1,11 +1,6 @@
 import { defineStore, createPinia } from "pinia";
-import { auth, getCurrentUser } from "@/firebase";
-import { User } from "firebase/auth";
-import {
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    signOut,
-} from "firebase/auth";
+import { supabase } from "@/supabase";
+import { User } from "@supabase/supabase-js";
 
 export const store = createPinia();
 
@@ -50,29 +45,29 @@ export const useUserStore = defineStore("user", {
     },
     actions: {
         async createUser(email: string, password: string) {
-            try {
-                await createUserWithEmailAndPassword(auth, email, password);
-            } catch (error) {
-                throw error;
-            }
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+            });
 
-            this.user = auth.currentUser;
+            if (error) throw error;
+
+            this.user = data.user;
         },
         async signIn(email: string, password: string) {
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (error) {
-                throw error;
-            }
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
 
-            this.user = auth.currentUser;
+            if (error) throw error;
+
+            this.user = data.user;
         },
         async signOut() {
-            try {
-                await signOut(auth);
-            } catch (error) {
-                throw error;
-            }
+            const { error } = await supabase.auth.signOut();
+
+            if (error) throw error;
 
             this.$reset();
         },
@@ -80,7 +75,7 @@ export const useUserStore = defineStore("user", {
             if (!this.initialized) {
                 try {
                     this.initialized = true;
-                    this.user = await getCurrentUser();
+                    this.user = (await supabase.auth.getUser()).data.user;
                     console.log("fetching user");
                     this.loading = false;
                 } catch (error) {

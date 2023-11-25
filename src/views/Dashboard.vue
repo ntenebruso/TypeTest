@@ -6,7 +6,7 @@
             <div class="saved-tests">
                 <h2 class="saved-tests__title">Saved tests</h2>
                 <MiniSpinner v-if="loading" />
-                <div style="overflow: auto" v-else-if="tests">
+                <div style="overflow: auto" v-else-if="tests!.length > 0">
                     <table class="data-table">
                         <thead>
                             <tr>
@@ -28,25 +28,25 @@
                                 :key="test.id"
                             >
                                 <td class="data-table__item">
-                                    {{ test.data().wpm }}
+                                    {{ test.wpm }}
                                 </td>
                                 <td class="data-table__item">
-                                    {{ test.data().accuracy }}
+                                    {{ test.accuracy }}
                                 </td>
                                 <td class="data-table__item">
-                                    {{ test.data().correctChars }}
+                                    {{ test.correctchars }}
                                 </td>
                                 <td class="data-table__item">
-                                    {{ test.data().incorrectChars }}
+                                    {{ test.incorrectchars }}
                                 </td>
                                 <td class="data-table__item">
-                                    {{ test.data().language || "N/A" }}
+                                    {{ test.language }}
                                 </td>
                                 <td class="data-table__item">
-                                    {{ test.data().testType }}
+                                    {{ test.testtime }}
                                 </td>
                                 <td class="data-table__item">
-                                    {{ formattedDate(test.data().date) }}
+                                    {{ formattedDate(test.date) }}
                                 </td>
                                 <td class="data-table__item">
                                     <button
@@ -70,39 +70,32 @@
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/store";
 import MiniSpinner from "../components/MiniSpinner.vue";
-import { db } from "../firebase";
-import { QueryDocumentSnapshot } from "firebase/firestore";
-import {
-    collection,
-    getDocs,
-    doc,
-    getDoc,
-    deleteDoc,
-} from "@firebase/firestore";
+import { supabase } from "@/supabase";
 import dayjs from "dayjs";
 import router from "@/router";
+import { Database } from "@/database.types";
 
 const store = useUserStore();
-const tests = ref<QueryDocumentSnapshot[] | null>(null);
+const tests = ref<Database["public"]["Tables"]["tests"]["Row"][] | null>(null);
 const loading = ref(true);
 
-const collRef = collection(db, "users", store.user!.uid, "tests");
-
 async function deleteTest(id: string) {
-    const docRef = doc(collRef, id);
-    const docSnapshot = await getDoc(docRef);
-    if (docSnapshot) {
-        await deleteDoc(docRef);
-
-        const deletedIndex = tests.value!.findIndex((test) => test.id == id);
-        tests.value!.splice(deletedIndex, 1);
-    }
+    await supabase.from("tests").delete().eq("id", id);
+    const deletedIndex = tests.value!.findIndex((test) => test.id == id);
+    tests.value!.splice(deletedIndex, 1);
 }
 
 onMounted(async () => {
-    const querySnapshot = await getDocs(collRef);
+    const { data, error } = await supabase
+        .from("tests")
+        .select()
+        .eq("userid", store.user!.id)
+        .order("date", { ascending: false });
+
+    if (error) console.error(error);
+
     loading.value = false;
-    tests.value = querySnapshot.docs.reverse();
+    tests.value = data;
 });
 
 async function handleClick() {
@@ -110,7 +103,7 @@ async function handleClick() {
     router.push("/");
 }
 
-const formattedDate = (date: string) =>
+const formattedDate = (date: number) =>
     dayjs(date).format("DD MMM YYYY h:mm A");
 </script>
 

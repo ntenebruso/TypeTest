@@ -56,9 +56,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import Chart from "chart.js/auto";
-import { db } from "@/firebase";
-import { doc, setDoc } from "firebase/firestore";
 import { useUserStore } from "@/store";
+import { supabase } from "@/supabase";
 
 const store = useUserStore();
 const chartCanvas = ref();
@@ -81,30 +80,28 @@ const props = defineProps([
 
 async function saveResults() {
     loading.value = true;
-    const docRef = doc(
-        db,
-        "users",
-        store.user!.uid,
-        "tests",
-        Date.now().toString()
-    );
-
-    try {
-        await setDoc(docRef, {
-            date: Date.now(),
-            wpm: props.wpm,
-            accuracy: props.accuracy,
-            accuracyStats: props.accuracyStats,
-            correctChars: props.correctChars,
-            incorrectChars: props.incorrectChars,
-            language: props.language[0].toUpperCase() + props.language.slice(1),
-            testType: `Test ${props.testTime}`,
-        });
-        saved.value = true;
-    } catch {
-        error.value = true;
-    }
+    const doc = {
+        userid: store.user!.id,
+        date: Date.now(),
+        wpm: props.wpm,
+        accuracy: props.accuracy,
+        correctwords: props.accuracyStats.correct,
+        incorrectwords: props.accuracyStats.incorrect,
+        correctchars: props.correctChars,
+        incorrectchars: props.incorrectChars,
+        language: props.language,
+        testtime: props.testTime,
+    };
+    console.log(doc);
+    const { error: saveError } = await supabase.from("tests").insert(doc);
     loading.value = false;
+
+    if (saveError) {
+        error.value = true;
+        return;
+    }
+
+    saved.value = true;
 }
 
 onMounted(() => {
