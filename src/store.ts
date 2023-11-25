@@ -73,15 +73,11 @@ export const useUserStore = defineStore("user", {
         },
         async fetchUser() {
             if (!this.initialized) {
-                try {
-                    this.initialized = true;
-                    this.user = (await supabase.auth.getUser()).data.user;
-                    console.log("fetching user");
-                    this.loading = false;
-                } catch (error) {
-                    console.error(error);
-                    throw error;
-                }
+                this.initialized = true;
+                const { data } = await supabase.auth.getUser();
+                this.user = data.user;
+                console.log("fetching user");
+                this.loading = false;
             }
         },
     },

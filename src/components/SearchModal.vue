@@ -33,8 +33,8 @@ import { ref, computed, onMounted, nextTick } from "vue";
 
 const props = defineProps<{
     items: any[];
-    callback: Function;
-    close: Function;
+    callback: (value: string) => void;
+    close: () => void;
 }>();
 
 const input = ref<HTMLInputElement | null>(null);

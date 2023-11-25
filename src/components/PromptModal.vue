@@ -8,6 +8,7 @@
                     :value="props.initialValue"
                     ref="input"
                     class="input input--modal"
+                    :placeholder="props.placeholder"
                 />
                 <p v-if="error">{{ error }}</p>
                 <button class="button button--modal" @click="done">Ok</button>
@@ -20,13 +21,25 @@
 import { onMounted, nextTick, ref } from "vue";
 import BaseModal from "./BaseModal.vue";
 
-const props = defineProps<{
+interface NumericPrompt {
     prompt: string;
-    numeric: boolean;
-    initialValue: string | number;
-    callback: Function;
-    close: Function;
-}>();
+    numeric: true;
+    placeholder?: string;
+    initialValue?: number;
+    callback: (value: number) => void;
+    close: () => void;
+}
+
+interface RegularPrompt {
+    prompt: string;
+    numeric: false;
+    placeholder?: string;
+    initialValue?: string;
+    callback: (value: string) => void;
+    close: () => void;
+}
+
+const props = defineProps<NumericPrompt | RegularPrompt>();
 
 const input = ref<HTMLInputElement | null>(null);
 const error = ref("");
@@ -38,11 +51,22 @@ function handleKeyDown(e: KeyboardEvent) {
 }
 
 function done() {
-    if (props.numeric && !/^\d+$/g.test(input.value!.value)) {
-        error.value = "Input must be a number.";
-        return;
+    const inputValue = input.value!.value;
+    if (props.numeric) {
+        if (!/^\d+$/g.test(inputValue)) {
+            error.value = "Input must be a number.";
+            return;
+        }
+
+        props.callback(parseInt(inputValue));
+        props.close();
     } else {
-        props.callback(parseInt(input.value!.value));
+        if (inputValue.trim().length == 0) {
+            error.value = "Input must not be empty";
+            return;
+        }
+
+        props.callback(input.value!.value);
         props.close();
     }
 }

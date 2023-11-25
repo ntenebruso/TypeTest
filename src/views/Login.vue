@@ -1,8 +1,16 @@
 <template>
+    <PromptModal
+        prompt="Reset password"
+        :numeric="false"
+        :callback="updatePassword"
+        :close="() => (modalOpen = false)"
+        placeholder="Account email"
+        v-if="modalOpen"
+    ></PromptModal>
     <div class="container">
         <div class="forms">
             <form class="form" @submit.prevent="signUp">
-                <h3>Sign Up</h3>
+                <h2>Sign Up</h2>
                 <input
                     required
                     class="input input--form"
@@ -17,11 +25,13 @@
                     placeholder="Password"
                     v-model="signupPassword"
                 />
-                <button class="button" type="submit">Sign Up</button>
+                <button class="button button--form" type="submit">
+                    Sign Up
+                </button>
                 <p v-if="signupError">{{ signupError }}</p>
             </form>
             <form class="form" @submit.prevent="logIn">
-                <h3>Log In</h3>
+                <h2>Log In</h2>
                 <input
                     required
                     class="input input--form"
@@ -36,7 +46,16 @@
                     placeholder="Password"
                     v-model="loginPassword"
                 />
-                <button class="button" type="submit">Log In</button>
+                <button class="button button--form" type="submit">
+                    Log In
+                </button>
+                <button
+                    class="button button--form"
+                    @click="() => (modalOpen = true)"
+                    type="button"
+                >
+                    Forgot Password
+                </button>
                 <p v-if="loginError">{{ loginError }}</p>
             </form>
         </div>
@@ -44,9 +63,11 @@
 </template>
 
 <script setup lang="ts">
+import PromptModal from "@/components/PromptModal.vue";
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/store";
 import { useRouter } from "vue-router";
+import { supabase } from "@/supabase";
 
 const store = useUserStore();
 const router = useRouter();
@@ -58,6 +79,8 @@ const loginPassword = ref("");
 
 const loginError = ref("");
 const signupError = ref("");
+
+const modalOpen = ref(false);
 
 async function signUp() {
     try {
@@ -75,6 +98,19 @@ async function logIn() {
     } catch (error: any) {
         loginError.value = error.message;
     }
+}
+
+async function updatePassword(email: string) {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: import.meta.env.VITE_SITE_URL + "/dashboard/update",
+    });
+
+    if (error) {
+        loginError.value = "Link could not be sent.";
+        return;
+    }
+
+    loginError.value = `Reset link was successfully sent to ${email}.`;
 }
 
 onMounted(async () => {
@@ -99,5 +135,11 @@ onMounted(async () => {
 
 .input--form {
     width: 300px;
+}
+
+.button--form {
+    display: block;
+    width: 300px;
+    margin: 5px 0;
 }
 </style>

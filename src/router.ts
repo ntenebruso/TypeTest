@@ -28,7 +28,16 @@ const router = createRouter({
                 title: "Dashboard",
                 authRequired: true,
             },
-            component: () => import("./views/Dashboard.vue"),
+            component: () => import("./views/UserDashboard.vue"),
+        },
+        {
+            name: "update-password",
+            path: "/dashboard/update",
+            meta: {
+                title: "Update password",
+                authRequired: true,
+            },
+            component: () => import("./views/UpdatePassword.vue"),
         },
     ],
 });

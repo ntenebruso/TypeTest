@@ -59,7 +59,7 @@ watch(
         );
 
         if (themeLinkElement) {
-            themeLinkElement.href = `./data/themes/${newTheme}`;
+            themeLinkElement.href = `/data/themes/${newTheme}`;
         }
     },
     { immediate: true }

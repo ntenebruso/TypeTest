@@ -2,7 +2,14 @@
     <div class="dashboard">
         <div>
             <h1>Hello, {{ store.user!.email }}</h1>
-            <button class="button" @click="handleClick">Sign out</button>
+            <div class="button-group">
+                <button class="button" @click="handleClick">Sign out</button>
+                <router-link to="/dashboard/update"
+                    ><button class="button">
+                        Change password
+                    </button></router-link
+                >
+            </div>
             <div class="saved-tests">
                 <h2 class="saved-tests__title">Saved tests</h2>
                 <MiniSpinner v-if="loading" />
@@ -72,9 +79,10 @@ import { useUserStore } from "@/store";
 import MiniSpinner from "../components/MiniSpinner.vue";
 import { supabase } from "@/supabase";
 import dayjs from "dayjs";
-import router from "@/router";
+import { useRouter } from "vue-router";
 import { Database } from "@/database.types";
 
+const router = useRouter();
 const store = useUserStore();
 const tests = ref<Database["public"]["Tables"]["tests"]["Row"][] | null>(null);
 const loading = ref(true);
@@ -112,6 +120,11 @@ const formattedDate = (date: number) =>
     align-self: start;
     padding: 100px 0 0 0;
     overflow: auto;
+}
+
+.button-group {
+    display: flex;
+    column-gap: 10px;
 }
 
 .saved-tests {

@@ -9,7 +9,7 @@
 import { onMounted, ref, nextTick } from "vue";
 
 const props = defineProps<{
-    close: Function;
+    close: () => void;
 }>();
 const emit = defineEmits(["keydown"]);
 
