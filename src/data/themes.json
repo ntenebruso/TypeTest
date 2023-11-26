@@ -14,5 +14,9 @@
     {
         "name": "nord light",
         "file": "nord-light.css"
+    },
+    {
+        "name": "catppuccin",
+        "file": "catppuccin.css"
     }
 ]

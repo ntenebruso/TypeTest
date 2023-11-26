@@ -1,0 +1,11 @@
+:root {
+    --color-background: #1e1e2e;
+    --color-ui-primary: #94e2d5;
+    --color-ui-tint: #11111b;
+    --color-text-primary: #cdd6f4;
+    --color-text-secondary: #45475a;
+    --color-test-correct: #94e2d5;
+    --color-test-incorrect: #d20f39;
+    --main-font: "DM Sans", sans-serif;
+    --mono-font: "Roboto Mono", monospace;
+}
