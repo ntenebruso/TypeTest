@@ -150,6 +150,7 @@ import MiniSpinner from "@/components/MiniSpinner.vue";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 import { useOptionsStore } from "@/store";
 import { mapStores } from "pinia";
+import { Fragment } from "vue";
 
 function initialState() {
     return {
@@ -261,6 +262,11 @@ export default {
             if (e.code == "Space") {
                 // If space is pressed, move onto next word and update caret
                 e.preventDefault();
+
+                var wordElement = (<HTMLElement>(
+                    this.$refs["prompt"]
+                )).querySelectorAll<HTMLElement>("div#word");
+
                 if (this.input) {
                     if (
                         this.errorsPerWord == 0 &&
@@ -291,9 +297,6 @@ export default {
                     this.errorsPerWord = 0;
                     this.spaces++;
 
-                    var wordElement = (<HTMLElement>(
-                        this.$refs["prompt"]
-                    )).querySelectorAll<HTMLElement>("div#word");
                     this.caretXPos =
                         wordElement[this.currentWordElementIndex].offsetLeft -
                         5;

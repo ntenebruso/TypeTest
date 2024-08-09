@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import Chart from "chart.js/auto";
 import { useUserStore } from "@/store";
 import { supabase } from "@/supabase";
@@ -64,6 +64,8 @@ const chartCanvas = ref();
 const loading = ref(false);
 const saved = ref(false);
 const error = ref(false);
+
+let chart: Chart;
 
 const props = defineProps([
     "wpm",
@@ -113,7 +115,7 @@ onMounted(() => {
     var ctx = chartCanvas.value.getContext("2d");
     Chart.defaults.font.family = "Roboto Mono";
 
-    new Chart(ctx, {
+    chart = new Chart(ctx, {
         type: "line",
         data: {
             labels: chartLabels,
@@ -204,6 +206,10 @@ onMounted(() => {
             },
         },
     });
+});
+
+onUnmounted(() => {
+    chart.destroy();
 });
 </script>
 

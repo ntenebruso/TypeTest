@@ -10,6 +10,7 @@
                 v-model="passwordModel"
             />
             <button type="submit" class="button">Update password</button>
+            <p v-if="passwordError">{{ passwordError }}</p>
         </form>
     </div>
 </template>
@@ -21,6 +22,7 @@ import { supabase } from "@/supabase";
 
 const router = useRouter();
 
+const passwordError = ref("");
 const passwordModel = ref("");
 
 async function updatePassword() {
@@ -28,9 +30,8 @@ async function updatePassword() {
         password: passwordModel.value,
     });
 
-    if (error) alert("Error updating password.");
-
-    router.push("/dashboard");
+    if (error) passwordError.value = error.message;
+    else router.push("/dashboard");
 }
 </script>
 

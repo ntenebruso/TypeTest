@@ -88,7 +88,10 @@ function resetSettings() {
 }
 
 function handleKeyDown(e: KeyboardEvent) {
-    if (e.code == "KeyP" && (e.ctrlKey || e.metaKey) && e.shiftKey) {
+    if (
+        (e.code == "KeyP" && (e.ctrlKey || e.metaKey) && e.shiftKey) ||
+        e.code == "F1"
+    ) {
         e.preventDefault();
         open();
     }
