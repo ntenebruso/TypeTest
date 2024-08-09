@@ -82,7 +82,11 @@
                 ></div>
                 <div class="test__words" ref="wordsContainer">
                     <div
-                        class="test__word"
+                        :class="{
+                            'test__word--incorrect':
+                                wordMap[i] != null && wordMap[i] == false,
+                            test__word: true,
+                        }"
                         id="word"
                         v-for="(word, i) in words"
                         :key="i"
@@ -91,16 +95,18 @@
                             v-for="(letter, j) in word.split('')"
                             :key="j"
                             :class="{
-                                'test__word--correct':
-                                    correctMap[i] && correctMap[i][j] == true,
-                                'test__word--incorrect':
-                                    correctMap[i] && correctMap[i][j] == false,
+                                'test__letter--correct':
+                                    characterMap[i] &&
+                                    characterMap[i][j] == true,
+                                'test__letter--incorrect':
+                                    characterMap[i] &&
+                                    characterMap[i][j] == false,
                             }"
                             >{{ letter }}</span
                         >
                         <span
-                            v-if="extraChars[i]"
-                            v-for="(letter, j) in extraChars[i]"
+                            v-if="extraCharacters[i]"
+                            v-for="(letter, j) in extraCharacters[i]"
                             :key="j"
                             class="test__word--incorrect test__word--extra"
                         >
@@ -130,12 +136,13 @@
     <Results
         v-if="testFinished"
         :wpm="wpm"
-        :graphPoints="liveWpm"
+        :liveWpm="liveWpm"
         :accuracy="accuracyPercent"
-        :accuracyStats="accuracyStats"
         :errorsPerSecond="errorsPerSecond"
         :correctChars="correctChars"
         :incorrectChars="incorrectChars"
+        :correctWords="correctWords"
+        :incorrectWords="incorrectWords"
         :testTime="initialTestTime"
         :language="optionsStore.language"
         :restart="() => restart()"
@@ -150,41 +157,92 @@ import MiniSpinner from "@/components/MiniSpinner.vue";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 import { useOptionsStore } from "@/store";
 import { mapStores } from "pinia";
-import { Fragment } from "vue";
 
 function initialState() {
     return {
-        testLoading: true,
-        showingTimeModal: false,
-        correctMap: [] as boolean[][],
-        extraChars: [] as string[][],
-        caretXPos: 0,
-        input: "",
-        inputValue: [] as string[],
-        words: [] as string[],
-        recomputeWords: 0,
-        focus: false,
-        currentWordElementIndex: 0,
-        currentLetterElementIndex: 0,
-        totalChars: 0,
-        correctWordChars: 0,
-        errorsPerWord: 0,
-        correctChars: 0,
-        incorrectChars: 0,
-        spaces: 0,
-        correctSpaces: 0,
-        wpm: 0,
-        accuracyStats: { correct: 0, incorrect: 0 },
-        errorsPerSecond: [] as number[],
-        accuracyPercent: 0,
-        liveWpm: [] as number[],
-        currentErrors: 0,
-        testTime: 0,
-        initialTestTime: 0,
-        timerInterval: null as ReturnType<typeof setInterval> | null,
-        testSeconds: 0,
+        //// VISUAL TEST STATE ////
+        /** Test finished state (show results if true) */
         testFinished: false,
+
+        /** Test progress state */
         testStarted: false,
+
+        /** Test loading state */
+        testLoading: true,
+
+        /** Current state of the test input element's focus */
+        focus: false,
+
+        /** Current x position of the caret */
+        caretXPos: 0,
+
+        /** Time modal display state */
+        showingTimeModal: false,
+
+        //// TEST WORD/CHARACTER TRACKING ////
+        /** The test's words */
+        words: [] as string[],
+
+        /** The current word input */
+        input: [] as string[],
+
+        /** Array of words, represented as booleans (`true` = correct, `false` = incorrect) */
+        wordMap: [] as boolean[],
+
+        /** 2D array of words and characters inside the word, represented as booleans (`true` = correct, `false` = incorrect) */
+        characterMap: [] as boolean[][],
+
+        /** 2D array of words and extra characters entered in the current word */
+        extraCharacters: [] as string[][],
+
+        /** Index of the word the tester is currently on */
+        currentWordIndex: 0,
+
+        /** Index of the letter the tester is currently on, relative to the current word */
+        currentLetterIndex: 0,
+
+        /** The number of characters entered in the test */
+        totalChars: 0,
+
+        /** The number of correct characters entered in the test */
+        correctChars: 0,
+
+        /** The number of incorrect characters entered in the test */
+        incorrectChars: 0,
+
+        /** The number of correct words entered in the test */
+        correctWords: 0,
+
+        /** The number of incorrect words entered in the test */
+        incorrectWords: 0,
+
+        /** The number of errors at the current second of the test */
+        currentErrors: 0,
+
+        /** An array containing the WPM at each second of the test */
+        liveWpm: [] as number[],
+
+        /** Array of errors at each second of the test taken */
+        errorsPerSecond: [] as number[],
+
+        /** The final WPM of the test, calculated after the test finishes */
+        wpm: 0,
+
+        /** The overall accuracy at the test, calculated after the test finishes */
+        accuracyPercent: 0,
+
+        //// TEST PROGRESS ////
+        /** How much time is left in the test */
+        testTime: 0,
+
+        /** How much time the test begins with */
+        initialTestTime: 0,
+
+        /** The test timer */
+        timerInterval: null as ReturnType<typeof setInterval> | null,
+
+        /** How much time has elapsed in the test */
+        testSeconds: 0,
     };
 }
 
@@ -205,7 +263,7 @@ export default {
             clearInterval(this.timerInterval!);
             Object.assign(this.$data, initialState());
             await this.fetchWords(this.optionsStore.language);
-            this.input = "";
+            this.input = [];
             this.$nextTick(() => {
                 (<HTMLElement>this.$refs["wordsContainer"]).style.marginTop =
                     0 + "px";
@@ -220,9 +278,7 @@ export default {
                 this.testSeconds++;
                 this.liveWpm.push(
                     Math.round(
-                        ((this.correctWordChars + this.spaces) *
-                            (60 / this.testSeconds)) /
-                            5
+                        (this.correctChars * (60 / this.testSeconds)) / 5
                     )
                 );
                 this.errorsPerSecond.push(this.currentErrors);
@@ -245,14 +301,10 @@ export default {
         },
         handleKeyDown(e: KeyboardEvent) {
             const validKey =
-                e.key.length == 1 &&
-                e.code != "Space" &&
-                !e.altKey &&
-                !e.ctrlKey &&
-                !e.metaKey;
+                e.key.length == 1 && !e.altKey && !e.ctrlKey && !e.metaKey;
             if (
                 this.totalChars == 0 &&
-                this.currentWordElementIndex == 0 &&
+                this.currentWordIndex == 0 &&
                 validKey
             ) {
                 this.startTest();
@@ -269,41 +321,37 @@ export default {
 
                 if (this.input) {
                     if (
-                        this.errorsPerWord == 0 &&
-                        this.input.length ==
-                            this.words[this.currentWordElementIndex].length
+                        this.input.join("") == this.words[this.currentWordIndex]
                     ) {
-                        this.correctSpaces++;
-                        this.accuracyStats.correct++;
-                        this.correctWordChars += this.inputValue.length;
+                        this.correctWords++;
+                        this.correctChars++; // count the correct space character
+
+                        this.wordMap[this.currentWordIndex] = true;
+                        console.log(this.wordMap);
                     } else {
                         if (
                             this.input.length <
-                            this.words[this.currentWordElementIndex].length
+                            this.words[this.currentWordIndex].length
                         ) {
                             this.currentErrors +=
-                                this.words[this.currentWordElementIndex]
-                                    .length - this.input.length;
+                                this.words[this.currentWordIndex].length -
+                                this.input.length;
                             this.incorrectChars +=
-                                this.words[this.currentWordElementIndex]
-                                    .length - this.input.length;
+                                this.words[this.currentWordIndex].length -
+                                this.input.length;
                         }
-                        this.accuracyStats.incorrect++;
+                        this.incorrectWords++;
+
+                        this.wordMap[this.currentWordIndex] = false;
                     }
-                    this.currentWordElementIndex++;
-                    this.input = "";
-                    this.inputValue = [];
-                    this.currentLetterElementIndex = 0;
-                    this.errorsPerWord = 0;
-                    this.spaces++;
+                    this.currentWordIndex++;
+                    this.input = [];
+                    this.currentLetterIndex = 0;
 
                     this.caretXPos =
-                        wordElement[this.currentWordElementIndex].offsetLeft -
-                        5;
+                        wordElement[this.currentWordIndex].offsetLeft - 5;
 
-                    if (
-                        wordElement[this.currentWordElementIndex].offsetTop > 0
-                    ) {
+                    if (wordElement[this.currentWordIndex].offsetTop > 0) {
                         (<HTMLElement>(
                             this.$refs["wordsContainer"]
                         )).style.marginTop =
@@ -312,89 +360,84 @@ export default {
                                     this.$refs["wordsContainer"]
                                 )).style.marginTop.slice(0, -2)
                             ) || 0) -
-                            wordElement[this.currentWordElementIndex]
-                                .offsetTop +
+                            wordElement[this.currentWordIndex].offsetTop +
                             "px";
                     }
                 }
             } else if (e.code == "Backspace") {
-                // If backspace is pressed, handle moving caret and update inputValue
-                if (this.currentLetterElementIndex > 0) {
-                    if (
-                        this.currentLetterElementIndex >
-                        this.words[this.currentWordElementIndex].length
-                    ) {
-                        this.extraChars[this.currentWordElementIndex].pop();
-                    } else {
-                        this.correctMap[this.currentWordElementIndex].pop();
-                    }
-                    this.currentLetterElementIndex--;
+                // If backspace is pressed, handle moving caret and update input
+                e.preventDefault();
 
-                    this.inputValue.pop();
+                if (this.currentLetterIndex > 0) {
+                    if (
+                        this.currentLetterIndex >
+                        this.words[this.currentWordIndex].length
+                    ) {
+                        this.extraCharacters[this.currentWordIndex].pop();
+                    } else {
+                        this.characterMap[this.currentWordIndex].pop();
+                    }
+                    this.currentLetterIndex--;
+
+                    this.input.pop();
 
                     this.caretXPos -= 16;
                 }
-            } else if (!validKey) {
-                // Make sure ignored keycodes (ie. CTRL or ALT) do not get counted as characters
-                return;
             } else {
+                // Make sure ignored keycodes (ie. CTRL or ALT) do not get counted as characters
+                if (!validKey) return;
+
                 // If the entered key is an actual character, handle the logic such as updating caret and checking if the character is correct
-                this.inputValue.push(e.key);
+                e.preventDefault();
+
+                this.input.push(e.key);
                 this.totalChars++;
 
                 if (
-                    this.inputValue.length >
-                    this.words[this.currentWordElementIndex].length
+                    this.input.length > this.words[this.currentWordIndex].length
                 ) {
-                    this.extraChars[this.currentWordElementIndex] =
-                        this.extraChars[this.currentWordElementIndex] || [];
-                    this.extraChars[this.currentWordElementIndex].push(e.key);
+                    this.extraCharacters[this.currentWordIndex] =
+                        this.extraCharacters[this.currentWordIndex] || [];
+                    this.extraCharacters[this.currentWordIndex].push(e.key);
 
                     this.currentErrors++;
                     this.incorrectChars++;
-                    this.errorsPerWord++;
                 } else if (
-                    this.inputValue[this.currentLetterElementIndex] ==
-                    this.words[this.currentWordElementIndex][
-                        this.currentLetterElementIndex
-                    ]
+                    this.input[this.currentLetterIndex] ==
+                    this.words[this.currentWordIndex][this.currentLetterIndex]
                 ) {
-                    this.correctMap[this.currentWordElementIndex] =
-                        this.correctMap[this.currentWordElementIndex] || [];
-                    this.correctMap[this.currentWordElementIndex].push(true);
+                    this.characterMap[this.currentWordIndex] =
+                        this.characterMap[this.currentWordIndex] || [];
+                    this.characterMap[this.currentWordIndex].push(true);
                     this.correctChars++;
                 } else if (
-                    this.inputValue[this.currentLetterElementIndex] !=
-                    this.words[this.currentWordElementIndex][
-                        this.currentLetterElementIndex
-                    ]
+                    this.input[this.currentLetterIndex] !=
+                    this.words[this.currentWordIndex][this.currentLetterIndex]
                 ) {
-                    this.correctMap[this.currentWordElementIndex] =
-                        this.correctMap[this.currentWordElementIndex] || [];
-                    this.correctMap[this.currentWordElementIndex].push(false);
+                    this.characterMap[this.currentWordIndex] =
+                        this.characterMap[this.currentWordIndex] || [];
+                    this.characterMap[this.currentWordIndex].push(false);
                     this.currentErrors++;
                     this.incorrectChars++;
-                    this.errorsPerWord++;
                 }
 
                 this.caretXPos += 16;
 
-                this.currentLetterElementIndex++;
+                this.currentLetterIndex++;
             }
+            (<HTMLInputElement>this.$refs["textInput"]).value =
+                this.input.join("");
         },
         finishTest() {
-            this.testFinished = true;
             this.wpm = Math.round(
-                ((this.correctWordChars + this.correctSpaces) *
-                    (60 / this.initialTestTime)) /
-                    5
+                (this.correctChars * (60 / this.initialTestTime)) / 5
             );
             this.accuracyPercent = Math.round(
-                (this.accuracyStats.correct /
-                    (this.accuracyStats.incorrect +
-                        this.accuracyStats.correct)) *
+                (this.correctWords /
+                    (this.incorrectWords + this.correctWords)) *
                     100
             );
+            this.testFinished = true;
         },
     },
     computed: {
@@ -491,11 +534,15 @@ export default {
     margin: 0 5px;
 }
 
-.test__word--correct {
+.test__word--incorrect {
+    border-bottom: 2px solid var(--color-test-incorrect);
+}
+
+.test__letter--correct {
     color: var(--color-test-correct) !important;
 }
 
-.test__word--incorrect {
+.test__letter--incorrect {
     color: var(--color-test-incorrect) !important;
 }
 

@@ -25,9 +25,7 @@
             <div class="group">
                 <div class="top">Words</div>
                 <div class="bottom" aria-label="correct/incorrect">
-                    {{ props.accuracyStats.correct }}/{{
-                        props.accuracyStats.incorrect
-                    }}
+                    {{ props.correctWords }}/{{ props.incorrectWords }}
                 </div>
             </div>
             <div class="group">
@@ -67,18 +65,19 @@ const error = ref(false);
 
 let chart: Chart;
 
-const props = defineProps([
-    "wpm",
-    "graphPoints",
-    "accuracy",
-    "accuracyStats",
-    "errorsPerSecond",
-    "correctChars",
-    "incorrectChars",
-    "testTime",
-    "language",
-    "restart",
-]);
+const props = defineProps<{
+    wpm: number;
+    liveWpm: number[];
+    accuracy: number;
+    errorsPerSecond: number[];
+    correctChars: number;
+    incorrectChars: number;
+    correctWords: number;
+    incorrectWords: number;
+    testTime: number;
+    language: string;
+    restart: () => void;
+}>();
 
 async function saveResults() {
     loading.value = true;
@@ -87,8 +86,8 @@ async function saveResults() {
         date: Date.now(),
         wpm: props.wpm,
         accuracy: props.accuracy,
-        correctwords: props.accuracyStats.correct,
-        incorrectwords: props.accuracyStats.incorrect,
+        correctwords: props.correctWords,
+        incorrectwords: props.incorrectWords,
         correctchars: props.correctChars,
         incorrectchars: props.incorrectChars,
         language: props.language,
@@ -108,7 +107,7 @@ async function saveResults() {
 
 onMounted(() => {
     var chartLabels = [];
-    for (let i = 0; i < props.graphPoints.length; i++) {
+    for (let i = 0; i < props.liveWpm.length; i++) {
         chartLabels.push(i + 1);
     }
 
@@ -122,7 +121,7 @@ onMounted(() => {
             datasets: [
                 {
                     label: "wpm",
-                    data: props.graphPoints,
+                    data: props.liveWpm,
                     order: 2,
                     fill: "origin",
                 },
