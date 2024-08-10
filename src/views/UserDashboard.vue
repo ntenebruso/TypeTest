@@ -60,7 +60,7 @@
                                         class="button"
                                         @click="deleteTest(test.id)"
                                     >
-                                        <i class="fa-solid fa-trash"></i>
+                                        <Trash />
                                     </button>
                                 </td>
                             </tr>
@@ -81,6 +81,7 @@ import { supabase } from "@/supabase";
 import dayjs from "dayjs";
 import { useRouter } from "vue-router";
 import { Database } from "@/database.types";
+import { Trash } from "lucide-vue-next";
 
 const router = useRouter();
 const store = useUserStore();

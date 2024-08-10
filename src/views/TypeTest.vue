@@ -40,8 +40,9 @@
                             optionsStore.testTime != 30 &&
                             optionsStore.testTime != 60,
                     }"
+                    style="width: 24px; height: 24px"
                 >
-                    <i class="fa-solid fa-wrench"></i>
+                    <Wrench />
                 </button>
             </div>
             <div class="settings__group">
@@ -52,10 +53,7 @@
                         () => $options.emitter!.emit('openCommandPalette', 'LanguagePane')
                     "
                 >
-                    <i
-                        class="fa-solid fa-language"
-                        style="margin-right: 5px"
-                    ></i>
+                    <BookA style="margin-right: 2px" />
                     {{ optionsStore.language }}
                 </button>
             </div>
@@ -127,7 +125,7 @@
             />
             <div class="restart-container">
                 <button class="button button--restart" @click="restart">
-                    <i class="fa-solid fa-rotate-right"></i>
+                    <RotateCw />
                 </button>
             </div>
         </div>
@@ -154,6 +152,7 @@ import Results from "@/components/Results.vue";
 import SearchModal from "@/components/SearchModal.vue";
 import PromptModal from "@/components/PromptModal.vue";
 import MiniSpinner from "@/components/MiniSpinner.vue";
+import { Wrench, RotateCw, BookA } from "lucide-vue-next";
 import { useCommandEvent } from "@/utils/useCommandEvent";
 import { useOptionsStore } from "@/store";
 import { mapStores } from "pinia";
@@ -247,7 +246,15 @@ function initialState() {
 }
 
 export default {
-    components: { Results, SearchModal, PromptModal, MiniSpinner },
+    components: {
+        Results,
+        SearchModal,
+        PromptModal,
+        MiniSpinner,
+        Wrench,
+        RotateCw,
+        BookA,
+    },
     data() {
         return initialState();
     },

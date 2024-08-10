@@ -12,10 +12,10 @@
     "dependencies": {
         "@fontsource/dm-sans": "^5.0.17",
         "@fontsource/roboto-mono": "^5.0.15",
-        "@fortawesome/fontawesome-free": "^6.4.2",
         "@supabase/supabase-js": "^2.38.5",
         "chart.js": "^4.4.0",
         "dayjs": "^1.11.10",
+        "lucide-vue-next": "^0.427.0",
         "mitt": "^3.0.0",
         "nprogress": "^0.2.0",
         "pinia": "^2.1.7",

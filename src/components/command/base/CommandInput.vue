@@ -1,6 +1,6 @@
 <template>
     <div class="modal__search" v-if="!containsInput">
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <ChevronRight />
         <input
             ref="input"
             class="modal__input"
@@ -15,6 +15,7 @@
 import { onBeforeUnmount, onMounted, ref, watch, nextTick } from "vue";
 import { useCommandState } from "@/utils/useCommandState";
 import { useCommandEvent } from "@/utils/useCommandEvent";
+import { ChevronRight } from "lucide-vue-next";
 
 const { search, containsInput } = useCommandState();
 const emitter = useCommandEvent();

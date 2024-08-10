@@ -11,7 +11,7 @@
                     aria-label="Settings (CTRL+SHIFT+P)"
                     aria-label-bottom
                 >
-                    <i class="fa-solid fa-gear"></i>
+                    <Settings />
                 </button>
             </div>
             <div>
@@ -27,7 +27,7 @@
                     class="header__link"
                     style="display: flex; align-items: center"
                 >
-                    <i class="fa-regular fa-user"></i>
+                    <User />
                     <span class="header__user">{{
                         userStore.user.email
                     }}</span></router-link
@@ -46,6 +46,7 @@ import CommandPalette from "@/components/command/CommandPalette.vue";
 import { useUserStore, useOptionsStore } from "@/store";
 import { watch } from "vue";
 import { useCommandEvent } from "./utils/useCommandEvent";
+import { Settings, User } from "lucide-vue-next";
 
 const userStore = useUserStore();
 const optionsStore = useOptionsStore();
@@ -109,6 +110,8 @@ optionsStore.$subscribe((_mutation, state) => {
     margin-left: 15px;
     cursor: pointer;
     transition: color 0.3s;
+    width: 24px;
+    height: 24px;
 }
 
 .header__button:hover {
