@@ -108,7 +108,7 @@
                             v-if="extraCharacters[i]"
                             v-for="(letter, j) in extraCharacters[i]"
                             :key="j"
-                            class="test__word--incorrect test__word--extra"
+                            class="test__letter--incorrect test__letter--extra"
                         >
                             {{ letter }}
                         </span>
