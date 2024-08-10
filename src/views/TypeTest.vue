@@ -535,7 +535,9 @@ export default {
 }
 
 .test__word--incorrect {
-    border-bottom: 2px solid var(--color-test-incorrect);
+    text-decoration: underline;
+    text-decoration-color: var(--color-test-incorrect);
+    text-decoration-thickness: 2px;
 }
 
 .test__letter--correct {
