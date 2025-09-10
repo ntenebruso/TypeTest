@@ -14,14 +14,19 @@
     -   WPM and error count interactive chart
     -   User account system and leaderboard
 
-Example:
+![Typing Analysis](thumbnails/home.png)
+*Analysis*
 
-![Typing Analysis](thumbnails/analysis.jpg)
+![Dashboard](thumbnails/dashboard.png)
+*User Dashboard*
 
-_Please note that this app is not available to the public yet!_
+![Themes](thumbnails/demo1.gif)
+*Different themes*
+
+![Analysis](thumbnails/demo2.gif)
+*Full type test + analysis*
 
 # Features in Development
 
--   Switch to TypeScript
 -   Gross WPM calculation
 -   More languages (currently have english and spanish)
